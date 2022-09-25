@@ -1,0 +1,19 @@
+<?php
+namespace Controllers;
+
+use View\View;
+
+class AddUser
+{
+    private $view;
+
+    public function __construct()
+    {
+        $this->view = new View(__DIR__ . '/../Templates');
+    }
+    public function main()
+    {
+        $this->view->renderHtml('AddUser.php');
+    }
+
+}
