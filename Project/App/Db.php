@@ -1,6 +1,6 @@
 <?php
 
-namespace DbServices;
+namespace App;
 
 class Db
 {

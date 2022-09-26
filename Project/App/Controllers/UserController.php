@@ -1,19 +1,19 @@
 <?php
-namespace Controllers;
+namespace App\Controllers;
 
-use View\View;
+use App\View;
 
-class AddUser
+class User
 {
     private $view;
 
     public function __construct()
     {
-        $this->view = new View(__DIR__ . '/../ViewTemplates');
+        $this->view = new View(__DIR__ . '/../../Views');
     }
-    public function main()
+    public function add()
     {
-        $this->view->renderHtml('Add.php');
+        $this->view->renderHtml(self::class . '/Add.php');
     }
 
 }

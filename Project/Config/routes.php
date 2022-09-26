@@ -1,5 +1,5 @@
 <?php
 return [
-    '~^/main/add$~' => [\Controllers\MainController::class, 'add'],
-    '~^/$~' => [\Controllers\MainController::class, 'main']
+    '~^/main/add$~' => [App\Controllers\MainController::class, 'add'],
+    '~^/$~' => [App\Controllers\MainController::class, 'main']
 ];

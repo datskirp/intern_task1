@@ -6,10 +6,12 @@ spl_autoload_register(function (string $className) {
 
 $route = $_SERVER['REQUEST_URI'];
 
+#echo __DIR__ . PHP_EOL;
+
 #$pattern = '~^/hello/(.*)$~';
 #($pattern, $route, $matches);
 
-$routes = require __DIR__ . '/../Router/routes.php';
+$routes = require __DIR__ . '/../Config/routes.php';
 
 $isRouteFound = false;
 foreach ($routes as $pattern => $controllerAndAction) {

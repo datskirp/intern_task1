@@ -1,7 +1,7 @@
 <?php
-namespace Controllers;
+namespace App\Controllers;
 
-use View\View;
+use App\View;
 
 class MainController
 {
@@ -9,16 +9,16 @@ class MainController
 
     public function __construct()
     {
-        $this->view = new View(__DIR__ . '/../ViewTemplates');
+        $this->view = new View(__DIR__ . '/../../Views');
     }
     public function main()
     {
-        $this->view->renderHtml('MainController.php');
+        $this->view->renderHtml('Main.php');
     }
 
     public function add()
     {
-        $this->view->renderHtml('Add.php');
+        $this->view->renderHtml('User/Add.php');
     }
 
 }

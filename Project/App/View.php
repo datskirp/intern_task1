@@ -1,14 +1,14 @@
 <?php
 
-namespace View;
+namespace App;
 
 class View
 {
-    private $templatesDir;
+    private $viewsDir;
 
-    public function __construct(string $templatesDir)
+    public function __construct(string $viewsDir)
     {
-        $this->templatesDir = $templatesDir;
+        $this->viewsDir = $viewsDir;
     }
 
     public function renderHtml(string $template, array $vars = [])
@@ -16,7 +16,7 @@ class View
         extract($vars);
 
         ob_start();
-        include $this->templatesDir . '/' . $template;
+        include $this->viewsDir . '/' . $template;
         $buffer = ob_get_contents();
         ob_end_clean();
 
