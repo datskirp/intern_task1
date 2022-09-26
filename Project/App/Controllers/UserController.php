@@ -13,7 +13,7 @@ class AddUser
     }
     public function main()
     {
-        $this->view->renderHtml('AddUser.php');
+        $this->view->renderHtml('Add.php');
     }
 
 }

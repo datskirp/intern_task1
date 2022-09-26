@@ -3,7 +3,7 @@ namespace Controllers;
 
 use View\View;
 
-class Main
+class MainController
 {
     private $view;
 
@@ -13,12 +13,12 @@ class Main
     }
     public function main()
     {
-        $this->view->renderHtml('Main.php');
+        $this->view->renderHtml('MainController.php');
     }
 
     public function add()
     {
-        $this->view->renderHtml('AddUser.php');
+        $this->view->renderHtml('Add.php');
     }
 
 }
