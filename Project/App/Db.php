@@ -8,14 +8,20 @@ class Db
 
     public function __construct()
     {
-        $dbInit = (require __DIR__ . '/../DbSettings.php')['db'];
+        $dbInit = (require __DIR__ . '/../Config/DbSettings.php')['db'];
 
         $this->pdo = new \PDO(
-            'mysql:host=' . $dbInit['host'] . ';dbname=' . $dbInit['dbname'],
+            'mysql:host=' . $dbInit['host'] . '; dbname=' . $dbInit['dbname'],
             $dbInit['user'],
             $dbInit['password']
         );
         $this->pdo->exec('SET NAMES UTF8');
+    }
+
+    public function insertRecord(string $sql):bool
+    {
+        $sth = $this->pdo->prepare($sql);
+        return $sth->execute();
     }
     public function query(string $sql, $params = []): ?array
     {
@@ -29,3 +35,5 @@ class Db
         return $sth->fetchAll();
     }
 }
+
+$a = new Db();

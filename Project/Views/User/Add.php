@@ -12,14 +12,25 @@
         <br><br>
         <label>Name <input type="text" name="name"></label>
         <br><br>
+        <label>
         Gender
-        <select>
+        <select name="gender">
             <option value="male">Male</option>
             <option value="female">Female</option>
         </select>
+        </label>
+        <br><br>
+        <label>
+        Status
+        <select name="status">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+        </select>
+        </label>
         <br><br>
         <input type="submit" value="Add user">
     </form>
+    <?php if(!empty($status))  echo '<br>' . $status;?>
 </div>
 
 </body>
