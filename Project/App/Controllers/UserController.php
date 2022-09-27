@@ -25,12 +25,9 @@ class UserController
 
     public function delete()
     {
-
-        $ids['ids'] = implode(", ", array_keys($_POST));
-
-        $this->db->getUsersCount() == count($_POST) ? $this->user->deleteUserAllFromDb() :
-            $this->user->deleteUserFromDb($ids);
-        $this->view->renderHtml('User/Deleted.html', ['deletedCount' => count($_POST)]);
+        $ids = array_keys($_POST);
+        $this->user->deleteUserFromDb($ids);
+        $this->view->renderHtml('User/Deleted.php', ['deletedCount' => count($_POST)]);
 
     }
 

@@ -35,13 +35,9 @@ class UserModel
 
     public function deleteUserFromDb(array $ids): bool
     {
-        $sql = 'DELETE FROM `users` WHERE `id` IN (:ids)';
+        $idPlaceHolders = str_repeat('?, ', count($ids) -1);
+        $sql = sprintf('DELETE FROM `users` WHERE `id` IN (%s?)', $idPlaceHolders);
         return $this->db->deleteRecord($sql, $ids);
-    }
-    public function deleteUserAllFromDb(): bool
-    {
-        $sql = 'DELETE FROM `users`';
-        return $this->db->deleteRecord($sql);
     }
 
     public function viewUserAllFromDb(): ?array
