@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User delete</title>
+    <title>User updated</title>
 </head>
 <body>
 <div style="text-align: center;">
@@ -11,7 +11,7 @@
     <a href="/main/delete">Delete user</a>&nbsp;&nbsp;
     <a href="/main/view">View all users</a>
     <br><br>
-    There are no users in the database
+    User ( <?= $name ?> ) was updated!
 </div>
 </body>
 </html>

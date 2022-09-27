@@ -26,9 +26,11 @@ class UserModel
         return $this->db->getRecord($sql, ['id' => $id]);
     }
 
-    public function editUserInDb()
+    public function editUserInDb(array $userData): bool
     {
-
+        $sql = 'UPDATE `users` SET `email` = :email, `name` = :name, 
+                   `gender` = :gender, `status` = :status WHERE id = :id';
+        return $this->db->editRecord($sql, $userData);
     }
 
     public function deleteUserFromDb(array $ids): bool

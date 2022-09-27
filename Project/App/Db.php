@@ -35,7 +35,13 @@ class Db
         return $this->pdo->query('SELECT COUNT(*) FROM `users`')->fetchColumn();
     }
 
-    public function insertRecord(string $sql, array $values):bool
+    public function insertRecord(string $sql, array $values): bool
+    {
+        $sth = $this->pdo->prepare($sql);
+        return $sth->execute($values);
+    }
+
+    public function editRecord(string $sql, array $values): bool
     {
         $sth = $this->pdo->prepare($sql);
         return $sth->execute($values);

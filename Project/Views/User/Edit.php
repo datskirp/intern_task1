@@ -13,6 +13,8 @@
     <br>
     <p>Use a form below to edit user information</p>
     <form action="/user/edit-user" method="post">
+        <label>Id <input type="text" name="id" value="<?= $id ?>" readonly="readonly"</label>
+        <br><br>
         <label>Email <input type="text" name="email" value="<?= $email ?>"></label>
         <br><br>
         <label>Name <input type="text" name="name" value="<?= $name ?>"></label>

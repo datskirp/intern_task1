@@ -36,7 +36,8 @@ class UserController
 
     public function edit()
     {
-
+        $this->user->editUserInDb($_POST);
+        $this->view->renderHtml('User/Edited.php', ['name' => $_POST['name']]);
     }
 
     public function getUserInfo()
