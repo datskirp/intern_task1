@@ -16,24 +16,37 @@ class Db
             $dbInit['password']
         );
         $this->pdo->exec('SET NAMES UTF8');
+
+        $this->resetAutoIncrement();
     }
 
-    public function insertRecord(string $sql):bool
+    public function getUsersCount()
     {
-        $sth = $this->pdo->prepare($sql);
-        return $sth->execute();
+        return $this->pdo->query('SELECT COUNT(*) FROM `users`')->fetchColumn();
     }
-    public function query(string $sql, $params = []): ?array
+
+    public function insertRecord(string $sql, array $values):bool
     {
         $sth = $this->pdo->prepare($sql);
-        $result = $sth->execute($params);
+        return $sth->execute($values);
+    }
+    public function getAll(): ?array
+    {
+        $result = $this->pdo->query('SELECT * FROM `users`');
 
-        if (false === $result) {
-            return null;
+        return $result ? $result->fetchAll() : null;
+    }
+
+    public function deleteRecord(string $sql, array $ids = []): bool
+    {
+        $sth = $this->pdo->prepare($sql);
+        return $sth->execute($ids);
+    }
+
+    private function resetAutoIncrement()
+    {
+        if ($this->getAll() === null) {
+            $this->pdo->query('ALTER TABLE `users` AUTO_INCREMENT =1');
         }
-
-        return $sth->fetchAll();
     }
 }
-
-$a = new Db();

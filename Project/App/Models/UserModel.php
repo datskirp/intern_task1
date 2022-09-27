@@ -6,19 +6,18 @@ use App\Db;
 
 class UserModel
 {
-    public $db;
+    private $db;
 
     public function __construct()
     {
         $this->db = new Db();
     }
+
     public function addUserToDb(array $userData): bool
     {
-        echo "inside addusertodb";
-        $sql = sprintf('INSERT INTO users VALUES (%s, %s, %s, %s)',
-                        $userData['email'], $userData['name'], $userData['gender'], $userData['status']
-                    );
-        return $this->db->insertRecord($sql);
+        $sql = 'INSERT INTO `users` (`email`, `name`, `gender`, `status`) 
+                     VALUES (:email, :name, :gender, :status)';
+        return $this->db->insertRecord($sql, $userData);
     }
 
     public function editUserInDb()
@@ -26,13 +25,19 @@ class UserModel
 
     }
 
-    public function deleteUserFromDb()
+    public function deleteUserFromDb(array $ids): bool
     {
-
+        $sql = 'DELETE FROM `users` WHERE `id` IN (:ids)';
+        return $this->db->deleteRecord($sql, $ids);
+    }
+    public function deleteUserAllFromDb(): bool
+    {
+        $sql = 'DELETE FROM `users`';
+        return $this->db->deleteRecord($sql);
     }
 
-    public function viewUserAllFromDb()
+    public function viewUserAllFromDb(): ?array
     {
-
+        return $this->db->getAll();
     }
 }
