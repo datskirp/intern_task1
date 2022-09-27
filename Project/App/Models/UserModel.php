@@ -20,6 +20,12 @@ class UserModel
         return $this->db->insertRecord($sql, $userData);
     }
 
+    public function getUserInfo(string $id): array
+    {
+        $sql = 'SELECT * FROM users WHERE id = :id';
+        return $this->db->getRecord($sql, ['id' => $id]);
+    }
+
     public function editUserInDb()
     {
 

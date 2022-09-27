@@ -2,9 +2,13 @@
 
 namespace App;
 
+use http\Env\Request;
+use http\Exception;
+
 class Db
 {
     private $pdo;
+    private static $instance;
 
     public function __construct()
     {
@@ -15,9 +19,15 @@ class Db
             $dbInit['user'],
             $dbInit['password']
         );
-        $this->pdo->exec('SET NAMES UTF8');
+    }
 
-        $this->resetAutoIncrement();
+    public static function getInstance(): self
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
     }
 
     public function getUsersCount()
@@ -30,6 +40,13 @@ class Db
         $sth = $this->pdo->prepare($sql);
         return $sth->execute($values);
     }
+
+    public function getRecord(string $sql, array $values): array
+    {
+        $sth = $this->pdo->prepare($sql);
+        $sth->execute($values);
+        return $sth->fetch(\PDO::FETCH_ASSOC);
+    }
     public function getAll(): ?array
     {
         $result = $this->pdo->query('SELECT * FROM `users`');
@@ -41,12 +58,5 @@ class Db
     {
         $sth = $this->pdo->prepare($sql);
         return $sth->execute($ids);
-    }
-
-    private function resetAutoIncrement()
-    {
-        if ($this->getAll() === null) {
-            $this->pdo->query('ALTER TABLE `users` AUTO_INCREMENT =1');
-        }
     }
 }

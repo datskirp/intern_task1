@@ -7,10 +7,12 @@ use App\Db;
 class MainController
 {
     private $view;
+    private $db;
 
     public function __construct()
     {
         $this->view = new View(__DIR__ . '/../../Views');
+        $this->db = Db::getInstance();
     }
     public function main()
     {
@@ -23,10 +25,19 @@ class MainController
     }
     public function delete()
     {
-        $user = new Db();
-        $users = $user->getAll();
+        $users = $this->db->getAll();
         if ($users) {
             $this->view->renderHtml('User/Delete.php', ['users' => $users]);
+            return;
+        }
+        $this->view->renderHtml('User/NoUsers.html');
+    }
+
+    public function edit()
+    {
+        $users = $this->db->getAll();
+        if ($users) {
+            $this->view->renderHtml('User/EditPickUser.php', ['users' => $users]);
             return;
         }
         $this->view->renderHtml('User/NoUsers.html');

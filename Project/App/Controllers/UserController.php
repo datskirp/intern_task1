@@ -15,26 +15,37 @@ class UserController
     {
         $this->view = new View(__DIR__ . '/../../Views');
         $this->user = new UserModel();
-        $this->db = new Db();
+        $this->db = Db::getInstance();
     }
     public function add()
     {
-        if ($this->user->addUserToDb($_POST) ) {
-            $this->view->renderHtml('User/Add.php', ['status' => $_POST['name'] .' has been added']);
-        }
+        $this->user->addUserToDb($_POST);
+        $this->view->renderHtml('User/Add.php', ['status' => $_POST['name']]);
     }
 
     public function delete()
     {
 
         $ids['ids'] = implode(", ", array_keys($_POST));
-         $this->db->getUsersCount() == count($_POST) ? $this->user->deleteUserAllFromDb() :
+
+        $this->db->getUsersCount() == count($_POST) ? $this->user->deleteUserAllFromDb() :
             $this->user->deleteUserFromDb($ids);
         $this->view->renderHtml('User/Deleted.html', ['deletedCount' => count($_POST)]);
 
     }
 
-    public function View()
+    public function edit()
+    {
+
+    }
+
+    public function getUserInfo()
+    {
+        $record = $this->user->getUserInfo($_POST['id']);
+        $this->view->renderHtml('User/Edit.php', $record);
+    }
+
+    public function view()
     {
         $users = $this->user->viewUserAllFromDb();
         if ($users) {

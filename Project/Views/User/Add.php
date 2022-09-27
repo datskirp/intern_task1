@@ -6,6 +6,11 @@
 </head>
 <body>
 <div style="text-align: center;">
+    <a href="/main/add">Add user</a>&nbsp;&nbsp;
+    <a href="/main/edit">Edit user</a>&nbsp;&nbsp;
+    <a href="/main/delete">Delete user</a>&nbsp;&nbsp;
+    <a href="/main/view">View all users</a>
+    <br>
     <h1>Use a form below to add a user</h1>
     <form action="/user/add-to-database" method="post">
         <label>Email <input type="text" name="email"></label>
@@ -30,8 +35,8 @@
         <br><br>
         <input type="submit" value="Add user">
     </form>
-    <?php if(!empty($status))  echo '<br>' . $status;?>
+    <br>
+    <?php if(!empty($status)) echo "'$status' has been added." ?>
 </div>
-
 </body>
 </html>
