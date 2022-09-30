@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Add user</title>
-    <link href="../../www/dist/style.css" rel="stylesheet">
+    <link href="../../css/style.css" rel="stylesheet">
 </head>
 <body>
 <div style="text-align: center">
-    <div class="content-center">
+    <div>
     <a href="/">Main</a>
     <br>
 

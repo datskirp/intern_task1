@@ -12,13 +12,9 @@ class Router
             $args[] = $route[$i] ?? '';
         }
         $route = count($route) <= 3  ? $route : array_slice($route, 0, 3);
-        var_dump($route);
-        var_dump($args);
         foreach ($routes as $path => $controllerAndAction) {
             $path = explode('/', $path);
             if ($path == $route) {
-                var_dump($path);
-                var_dump($args);
                 $controllerAndAction[] = $args;
                 return $controllerAndAction;
             }
