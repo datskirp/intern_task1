@@ -6,16 +6,14 @@
     <link href="../../www/dist/style.css" rel="stylesheet">
 </head>
 <body>
-<div class="flex justify-center">
+<div style="text-align: center">
     <div class="content-center">
-    <a href="/main/add">Add user</a>&nbsp;&nbsp;
-    <a href="/main/edit">Edit user</a>&nbsp;&nbsp;
-    <a href="/main/delete">Delete user</a>&nbsp;&nbsp;
-    <a href="/main/view">View all users</a>
+    <a href="/">Main</a>
     <br>
-    </div>
-    <h1 style="color: crimson;">Use a form below to add a user</h1>
-    <form action="/user/add-to-database" method="post">
+
+    <h1>Use a form below to add a user</h1>
+
+    <form action="/user/add" method="post">
         <label>Email <input type="text" name="email"></label>
         <br><br>
         <label>Name <input type="text" name="name"></label>

@@ -29,19 +29,25 @@
         <th>Gender</th>
         <th>Status</th>
     </tr>
-    <?php foreach ($users as $user): ?>
-        <tr>
-            <td><?= $user['id'] ?></td>
-            <td><?= $user['email'] ?></td>
-            <td><?= $user['name'] ?></td>
-            <td><?= $user['gender'] ?></td>
-            <td><?= $user['status'] ?></td>
-            <td><a href ='/edit/<?= $user['id'] ?>'</a>edit |
-                <a href = '/delete/<?= $user['id'] ?>'</a>delete
-            </td>
-        </tr>
-    <?php endforeach; ?>
+    <?php if (!is_null($users)):
+            foreach ($users as $user): ?>
+                <tr>
+                    <td><?= $user['id'] ?></td>
+                    <td><?= $user['email'] ?></td>
+                    <td><?= $user['name'] ?></td>
+                    <td><?= $user['gender'] ?></td>
+                    <td><?= $user['status'] ?></td>
+                    <td><a href ='/user/edit/<?= $user['id'] ?>'</a>edit |
+                        <a href = '/user/delete/<?= $user['id'] ?>'</a>delete
+                    </td>
+                </tr>
+            <?php endforeach; ?>
 </table>
+    <?php else: ?>
+        There are no users in the database
+    <?php endif; ?>
 </div>
+<?php if (isset($args['status'])): echo $args['status'];
+      endif; ?>
 </body>
 </html>

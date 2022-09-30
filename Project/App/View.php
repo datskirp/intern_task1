@@ -4,22 +4,20 @@ namespace App;
 
 class View
 {
-    private $viewsDir;
+    private $dir;
 
-    public function __construct(string $viewsDir)
+    public function __construct(string $dir)
     {
-        $this->viewsDir = $viewsDir;
+        $this->dir = $dir;
     }
 
-    public function renderHtml(string $template, array $vars = [])
+    public function renderHtml(string $template, array $vars = []): void
     {
         extract($vars);
-
         ob_start();
-        include $this->viewsDir . '/' . $template;
+        include $this->dir . '/' . $template;
         $buffer = ob_get_contents();
         ob_end_clean();
-
         echo $buffer;
     }
 

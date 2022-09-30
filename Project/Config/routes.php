@@ -1,7 +1,9 @@
 <?php
 return [
-    '/' => [App\Controllers\UserController::class, 'view'],
+    '/' => [App\Controllers\UserController::class, 'viewAll'],
     '/add' => [App\Controllers\UserController::class, 'addForm'],
-    '/edit' => [App\Controllers\UserController::class, 'edit'],
-    '/user/delete' => [App\Controllers\UserController::class, 'delete']
+    '/user/add' => [App\Controllers\UserController::class, 'add'],
+    '/user/edit' => [App\Controllers\UserController::class, 'editForm'],
+    '/user/delete' => [App\Controllers\UserController::class, 'delete'],
+    '/edit' => [App\Controllers\UserController::class, 'edit']
 ];

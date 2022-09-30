@@ -2,60 +2,61 @@
 namespace App\Controllers;
 
 use App\View;
-use App\Models\UserModel;
-use App\Db;
+use App\Models\User;
 
 class UserController
 {
     private $view;
     private $user;
-    private $db;
 
     public function __construct()
     {
         $this->view = new View(__DIR__ . '/../../Views');
-        $this->user = new UserModel();
-        $this->db = Db::getInstance();
+        $this->user = new User();
     }
-    public function addForm()
+
+    public function addForm(): void
     {
         $this->view->renderHtml('User/Add.php');
     }
-    public function add()
+
+    public function add(): void
     {
         $_POST['id'] = time();
-        $this->user->addUserToDb($_POST);
-        $this->view->renderHtml('User/Add.php', ['status' => $_POST['name']]);
+        $status = $this->user->add($_POST);
+        $_POST['status'] = $status ? 'User ' . $_POST['id'] . ' was added' : 'There was an error adding a user';
+        $this->viewAll($_POST);
     }
 
-    public function delete()
+    public function delete(string $id): void
     {
-        $ids = array_keys($_POST);
-        $this->user->deleteUserFromDb($ids);
-        $this->view->renderHtml('User/Deleted.php', ['deletedCount' => count($_POST)]);
+        $status=  $this->user->delete($id);
+        $msg = $status ? 'User ' . $id . ' was deleted' : 'There was an error deleting a user';
+        $this->viewAll(['status' => $msg]);
 
     }
 
-    public function edit()
+    public function editForm(string $id): void
     {
-        $this->user->editUserInDb($_POST);
-        $this->view->renderHtml('User/Edited.php', ['name' => $_POST['name']]);
+        $this->view->renderHtml('User/Edit.php', $this->getUserInfo($id));
     }
 
-    public function getUserInfo()
+    public function edit(): void
     {
-        $record = $this->user->getUserInfo($_POST['id']);
-        $this->view->renderHtml('User/Edit.php', $record);
+        $status= $this->user->edit($_POST);
+        $msg = $status ? 'User ' . $_POST['id'] . ' was updated' : 'There was an error updating a user';
+        $this->viewAll(['status' => $msg]);
     }
 
-    public function view()
+    public function getUserInfo(string $id): array
     {
-        $users = $this->user->viewUserAllFromDb();
-        if ($users) {
-            $this->view->renderHtml('User/ViewAll.php', ['users' => $users]);
-            return;
-        }
-        $this->view->renderHtml('User/NoUsers.html');
+        return $this->user->getUserInfo($id);
+    }
+
+    public function viewAll(array $args = []): void
+    {
+        $users = $this->user->getAll();
+        $this->view->renderHtml('User/ViewAll.php', ['users' => $users, 'args' => $args]);
     }
 
 }

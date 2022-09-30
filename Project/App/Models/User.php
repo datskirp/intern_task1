@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Db;
 
-class UserModel
+class User
 {
     private $db;
 
@@ -13,35 +13,33 @@ class UserModel
         $this->db = new Db();
     }
 
-    public function addUserToDb(array $userData): bool
+    public function add(array $userData): bool
     {
-        var_dump($userData);
         $sql = 'INSERT INTO `users` (`id`, `email`, `name`, `gender`, `status`) 
                      VALUES (:id, :email, :name, :gender, :status)';
-        return $this->db->insertRecord($sql, $userData);
+        return $this->db->changeRecord($sql, $userData);
     }
 
     public function getUserInfo(string $id): array
     {
         $sql = 'SELECT * FROM users WHERE id = :id';
-        return $this->db->getRecord($sql, ['id' => $id]);
+        return $this->db->getRecord($sql, ['id' => (int) $id]);
     }
 
-    public function editUserInDb(array $userData): bool
+    public function edit(array $userData): bool
     {
         $sql = 'UPDATE `users` SET `email` = :email, `name` = :name, 
                    `gender` = :gender, `status` = :status WHERE id = :id';
-        return $this->db->editRecord($sql, $userData);
+        return $this->db->changeRecord($sql, $userData);
     }
 
-    public function deleteUserFromDb(array $ids): bool
+    public function delete(string $id): bool
     {
-        $idPlaceHolders = str_repeat('?, ', count($ids) -1);
-        $sql = sprintf('DELETE FROM `users` WHERE `id` IN (%s?)', $idPlaceHolders);
-        return $this->db->deleteRecord($sql, $ids);
+        $sql = 'DELETE FROM `users` WHERE `id` = :id';
+        return $this->db->deleteRecord($sql, (int) $id);
     }
 
-    public function viewUserAllFromDb(): ?array
+    public function getAll(): ?array
     {
         return $this->db->getAll();
     }

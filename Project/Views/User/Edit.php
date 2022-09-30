@@ -6,13 +6,10 @@
 </head>
 <body>
 <div style="text-align: center;">
-    <a href="/main/add">Add user</a>&nbsp;&nbsp;
-    <a href="/main/edit">Edit user</a>&nbsp;&nbsp;
-    <a href="/main/delete">Delete user</a>&nbsp;&nbsp;
-    <a href="/main/view">View all users</a>
+    <a href="/">Main</a>
     <br>
     <p>Use a form below to edit user information</p>
-    <form action="/user/edit-user" method="post">
+    <form action="/edit" method="post">
         <label>Id <input type="text" name="id" value="<?= $id ?>" readonly="readonly"</label>
         <br><br>
         <label>Email <input type="text" name="email" value="<?= $email ?>"></label>
