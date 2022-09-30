@@ -15,8 +15,9 @@ class UserModel
 
     public function addUserToDb(array $userData): bool
     {
-        $sql = 'INSERT INTO `users` (`email`, `name`, `gender`, `status`) 
-                     VALUES (:email, :name, :gender, :status)';
+        var_dump($userData);
+        $sql = 'INSERT INTO `users` (`id`, `email`, `name`, `gender`, `status`) 
+                     VALUES (:id, :email, :name, :gender, :status)';
         return $this->db->insertRecord($sql, $userData);
     }
 

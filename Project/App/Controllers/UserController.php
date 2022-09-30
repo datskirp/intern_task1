@@ -17,8 +17,13 @@ class UserController
         $this->user = new UserModel();
         $this->db = Db::getInstance();
     }
+    public function addForm()
+    {
+        $this->view->renderHtml('User/Add.php');
+    }
     public function add()
     {
+        $_POST['id'] = time();
         $this->user->addUserToDb($_POST);
         $this->view->renderHtml('User/Add.php', ['status' => $_POST['name']]);
     }

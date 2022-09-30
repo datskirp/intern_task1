@@ -17,10 +17,7 @@
 </head>
 <body>
 <div style="text-align: center;">
-    <a href="/main/add">Add user</a>&nbsp;&nbsp;
-<a href="/main/edit">Edit user</a>&nbsp;&nbsp;
-<a href="/main/delete">Delete user</a>&nbsp;&nbsp;
-<a href="/main/view">View all users</a>
+    <a href="/add">Add user</a>
 <br>
 <br>
 
@@ -39,6 +36,9 @@
             <td><?= $user['name'] ?></td>
             <td><?= $user['gender'] ?></td>
             <td><?= $user['status'] ?></td>
+            <td><a href ='/edit/<?= $user['id'] ?>'</a>edit |
+                <a href = '/delete/<?= $user['id'] ?>'</a>delete
+            </td>
         </tr>
     <?php endforeach; ?>
 </table>
