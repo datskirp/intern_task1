@@ -4,7 +4,7 @@ namespace App;
 
 class Db
 {
-    private $pdo;
+    private object $pdo;
 
     public function __construct()
     {
@@ -36,7 +36,7 @@ class Db
         return $result->fetchAll() ?? null;
     }
 
-    public function deleteRecord(string $sql, int $id): bool
+    public function deleteRecord(string $sql, string $id): bool
     {
         $sth = $this->pdo->prepare($sql);
         return $sth->execute(['id' => $id]);

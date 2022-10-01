@@ -4,7 +4,7 @@ namespace App;
 
 class View
 {
-    private $dir;
+    private string $dir;
 
     public function __construct(string $dir)
     {

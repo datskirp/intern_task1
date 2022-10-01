@@ -1,8 +1,11 @@
 <?php
+
 use App\Router;
+
 spl_autoload_register(function (string $className) {
     require_once __DIR__ . '/../' . str_replace('\\', '/', $className) . '.php';
 });
+
 $router = new Router();
 if (!is_null($router->getController())){
     $controllerName = $router->getController()[0];
@@ -11,9 +14,10 @@ if (!is_null($router->getController())){
     $controller = new $controllerName();
     if ($args){
         $controller->$controllerAction(...$args);
-        return;
     }
-    $controller->$controllerAction();
+    else {
+        $controller->$controllerAction();
+    }
 } else {
     echo 'Page is not found.';
 }

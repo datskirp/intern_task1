@@ -6,7 +6,7 @@ use App\Db;
 
 class User
 {
-    private $db;
+    private  Db $db;
 
     public function __construct()
     {
@@ -23,7 +23,7 @@ class User
     public function getUserInfo(string $id): array
     {
         $sql = 'SELECT * FROM users WHERE id = :id';
-        return $this->db->getRecord($sql, ['id' => (int) $id]);
+        return $this->db->getRecord($sql, ['id' => $id]);
     }
 
     public function edit(array $userData): bool
@@ -36,7 +36,7 @@ class User
     public function delete(string $id): bool
     {
         $sql = 'DELETE FROM `users` WHERE `id` = :id';
-        return $this->db->deleteRecord($sql, (int) $id);
+        return $this->db->deleteRecord($sql, $id);
     }
 
     public function getAll(): ?array
