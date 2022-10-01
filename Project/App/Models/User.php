@@ -2,17 +2,8 @@
 
 namespace App\Models;
 
-use App\Db;
-
-class User
+class User extends Base
 {
-    private  Db $db;
-
-    public function __construct()
-    {
-        $this->db = new Db();
-    }
-
     public function add(array $userData): bool
     {
         $sql = 'INSERT INTO `users` (`id`, `email`, `name`, `gender`, `status`) 

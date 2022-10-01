@@ -1,20 +1,8 @@
 <?php
 namespace App\Controllers;
 
-use App\View;
-use App\Models\User;
-
-class UserController
+class UserController extends BaseController
 {
-    private View $view;
-    private User $user;
-
-    public function __construct()
-    {
-        $this->view = new View(__DIR__ . '/../../Views');
-        $this->user = new User();
-    }
-
     public function addForm(): void
     {
         $this->view->renderHtml('User/Add.php');
