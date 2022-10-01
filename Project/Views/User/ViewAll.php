@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../www/css/style.css">
-    <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
     <title>View all users</title>
 </head>
 <body class="bg-gray-300">
@@ -13,7 +13,7 @@
         <div class="flex flex-row justify-center">
             <nav class="bg-gray-200 shadow-lg">
                 <a href="/add">
-                    <button class="bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded">Add user</button>
+                    <button class="bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 w-44 rounded">Add user</button>
                 </a>
             </nav>
         </div>
@@ -30,21 +30,25 @@
                 </tr>
                 <?php
                 foreach ($users as $user): ?>
-                    <tr>
+                    <tr
+                        <?php if (isset($args['id']) && $args['id'] == $user['id']) echo ' class="bg-green-200"'; ?>
+                    >
                         <td class="border-2 px-2 py-2 text-center"><?= $user['id'] ?></td>
                         <td class="border-2 px-2 py-2 text-center"><?= $user['email'] ?></td>
                         <td class="border-2 px-2 py-2 text-center"><?= $user['name'] ?></td>
                         <td class="border-2 px-2 py-2 text-center"><?= $user['gender'] ?></td>
                         <td class="border-2 px-2 py-2 text-center"><?= $user['status'] ?></td>
-                        <td class="border-2 px-2 py-2 text-center"><a href ='/user/edit/<?= $user['id'] ?>'</a>edit |
-                            <a href = '/user/delete/<?= $user['id'] ?>'</a>delete
+                        <td class="border-2 px-2 py-2 text-center">
+                            <a class="text-blue-500 underline hover:text-blue-800" href='/user/edit/<?= $user['id'] ?>'>edit |</a>
+                            <a class="text-blue-500 underline hover:text-blue-800" href='/user/delete/<?= $user['id'] ?>'>delete</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
+                <br>
             </table>
-        <?php else: echo '<h1 class="text-red-300">There are no users in the database</h1>';
+        <?php else: echo '<h2 class="text-red-300">There are no users in the database</h2>';
             endif; ?>
-        <?php if (isset($args['status'])): echo $args['status'];
+        <?php if (isset($args['status'])): echo "<p class='text-center text-green-400'>" . $args['status'] . "</p>";
             endif; ?>
     </div>
 </div>
