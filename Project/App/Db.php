@@ -8,7 +8,7 @@ class Db
 
     public function __construct()
     {
-        $dbInit = (require __DIR__ . '/../Config/DbSettings.php')['db'];
+        $dbInit = (require __DIR__ . '/../Config/db.php')['db'];
 
         $this->pdo = new \PDO(
             'mysql:host=' . $dbInit['host'] . '; dbname=' . $dbInit['dbname'],
@@ -33,8 +33,7 @@ class Db
     public function getAll(): ?array
     {
         $result = $this->pdo->query('SELECT * FROM `users`');
-
-        return $result ? $result->fetchAll() : null;
+        return $result->fetchAll() ?? null;
     }
 
     public function deleteRecord(string $sql, int $id): bool

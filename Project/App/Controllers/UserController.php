@@ -6,8 +6,8 @@ use App\Models\User;
 
 class UserController
 {
-    private $view;
-    private $user;
+    private View $view;
+    private User $user;
 
     public function __construct()
     {

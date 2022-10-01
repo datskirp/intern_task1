@@ -20,16 +20,16 @@
     <a href="/add">Add user</a>
 <br>
 <br>
-
-<table class="center">
-    <tr>
-        <th>id</th>
-        <th>Email</th>
-        <th>Name</th>
-        <th>Gender</th>
-        <th>Status</th>
-    </tr>
-    <?php if (!is_null($users)):
+    <?php if (!is_null($users) && !empty($users)): ?>
+        <table class="center">
+            <tr>
+                <th>id</th>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Status</th>
+            </tr>
+    <?php
             foreach ($users as $user): ?>
                 <tr>
                     <td><?= $user['id'] ?></td>
@@ -42,10 +42,9 @@
                     </td>
                 </tr>
             <?php endforeach; ?>
-</table>
-    <?php else: ?>
-        There are no users in the database
-    <?php endif; ?>
+        </table>
+    <?php else: echo '<h3>There are no users in the database</h3>';
+          endif; ?>
 </div>
 <?php if (isset($args['status'])): echo $args['status'];
       endif; ?>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db:3306
--- Generation Time: Sep 27, 2022 at 03:10 PM
+-- Generation Time: Oct 01, 2022 at 02:39 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.0.19
 
@@ -28,12 +28,21 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `users` (
-  `id` int NOT NULL,
+  `id` bigint NOT NULL,
   `email` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `gender` varchar(30) NOT NULL,
   `status` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `email`, `name`, `gender`, `status`) VALUES
+(1664562464, 'first@net.com', 'John Dow', 'female', 'inactive'),
+(1664566198, 'second@nice.org', 'John Dow', 'male', 'active'),
+(1664570063, 'third@paske.com', 'Totally New', 'male', 'inactive');
 
 --
 -- Indexes for dumped tables
@@ -45,16 +54,6 @@ CREATE TABLE `users` (
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
