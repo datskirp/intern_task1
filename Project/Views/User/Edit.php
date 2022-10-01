@@ -19,7 +19,7 @@
         </div>
         <br>
         <div class="text-left border-0 px-4 py-4">
-            <p class="text-center font-bold underline">Use a form below edit user's info</p>
+            <p class="text-center font-bold underline">Use the form below edit user's info</p>
             <br>
             <form action="/edit" method="post">
                 <div class="mb-4">

@@ -31,7 +31,7 @@
                 <?php
                 foreach ($users as $user): ?>
                     <tr
-                        <?php if (isset($args['id']) && $args['id'] == $user['id']) echo ' class="bg-green-200"'; ?>
+                        <?php if (isset($args['userData']['id']) && $args['userData']['id'] == $user['id']) echo ' class="bg-green-200"'; ?>
                     >
                         <td class="border-2 px-2 py-2 text-center"><?= $user['id'] ?></td>
                         <td class="border-2 px-2 py-2 text-center"><?= $user['email'] ?></td>

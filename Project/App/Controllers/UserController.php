@@ -12,15 +12,15 @@ class UserController extends BaseController
     {
         $_POST['id'] = time();
         $status = $this->user->add($_POST);
-        $_POST['status'] = $status ? 'User ' . $_POST['id'] . ' was added' : 'There was an error adding a user';
-        $this->viewAll($_POST);
+        $msg = $status ? 'User ' . $status['id'] . ' was added' : 'There was an error adding a user';
+        $this->viewAll(['status' => $msg, 'userData' => $status]);
     }
 
     public function delete(string $id): void
     {
-        $status=  $this->user->delete($id);
+        $status =  $this->user->delete($id);
         $msg = $status ? 'User ' . $id . ' was deleted' : 'There was an error deleting a user';
-        $this->viewAll(['status' => $msg]);
+        $this->viewAll(['status' => $msg, 'userData' => $status]);
 
     }
 
@@ -32,8 +32,8 @@ class UserController extends BaseController
     public function edit(): void
     {
         $status= $this->user->edit($_POST);
-        $msg = $status ? 'User ' . $_POST['id'] . ' was updated' : 'There was an error updating a user';
-        $this->viewAll(['status' => $msg]);
+        $msg = $status ? 'User ' . $status['id'] . ' was updated' : 'There was an error updating a user';
+        $this->viewAll(['status' => $msg, 'userData' => $status]);
     }
 
     public function getUserInfo(string $id): array

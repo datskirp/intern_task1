@@ -12,12 +12,7 @@ if (!is_null($router->getController())){
     $controllerAction = $router->getController()[1];
     $args = $router->getController()[2];
     $controller = new $controllerName();
-    if ($args){
-        $controller->$controllerAction(...$args);
-    }
-    else {
-        $controller->$controllerAction();
-    }
+    $args ? $controller->$controllerAction(...$args) : $controller->$controllerAction();
 } else {
     echo 'Page is not found.';
 }
