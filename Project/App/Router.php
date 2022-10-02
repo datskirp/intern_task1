@@ -3,22 +3,37 @@ namespace App;
 
 class Router
 {
-    public function getController(): ?array
+    private function getRoute(): string
+    {
+        return trim($_SERVER['REQUEST_URI'],'/' );
+    }
+    private function getController(): ?array
     {
         $routes = require __DIR__ . '/../Config/routes.php';
-        $route = explode('/', $_SERVER['REQUEST_URI']);
-        $args = [];
-        for ($i = 3; $i < count($route); $i++) {
-            $args[] = $route[$i] ?? '';
-        }
-        $route = count($route) <= 3  ? $route : array_slice($route, 0, 3);
-        foreach ($routes as $path => $controllerAndAction) {
-            $path = explode('/', $path);
-            if ($path == $route) {
-                $controllerAndAction[] = $args;
-                return $controllerAndAction;
+        foreach ($routes as $pattern => $controllerAndAction) {
+            preg_match($pattern, $this->getRoute(), $matches);
+            if (!empty($matches)) {
+                return [
+                    'controller' => $controllerAndAction[0],
+                    'action' => $controllerAndAction[1],
+                    'args' => $matches[1] ?? '',
+                ];
             }
         }
         return null;
+    }
+
+    public function runController(): void
+    {
+        $handler = $this->getController();
+        if (!is_null($handler)) {
+            $controller = new $handler['controller']();
+            $action = $handler['action'];
+            $args = $handler['args'];
+            $args ? $controller->$action($args) : $controller->$action();
+        }
+        else {
+            echo "Page is not found";
+        }
     }
 }

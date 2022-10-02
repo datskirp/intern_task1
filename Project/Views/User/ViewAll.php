@@ -31,7 +31,7 @@
                 <?php
                 foreach ($users as $user): ?>
                     <tr
-                        <?php if (isset($args['userData']['id']) && $args['userData']['id'] == $user['id']) echo ' class="bg-green-200"'; ?>
+                        <?php if (isset($args['userData']['id']) && $args['userData']['id'] == $user['id']) echo ' class="bg-green-100"'; ?>
                     >
                         <td class="border-2 px-2 py-2 text-center"><?= $user['id'] ?></td>
                         <td class="border-2 px-2 py-2 text-center"><?= $user['email'] ?></td>
@@ -46,9 +46,9 @@
                 <?php endforeach; ?>
                 <br>
             </table>
-        <?php else: echo '<h2 class="text-red-300">There are no users in the database</h2>';
+        <?php else: echo '<h2 class="text-red-800">There are no users in the database!</h2>';
             endif; ?>
-        <?php if (isset($args['status'])): echo "<p class='text-center text-green-400'>" . $args['status'] . "</p>";
+        <?php if (isset($args['status'])): echo "<p class='text-center text-green-600'>" . $args['status'] . "</p>";
             endif; ?>
     </div>
 </div>

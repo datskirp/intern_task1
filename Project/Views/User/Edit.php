@@ -21,7 +21,7 @@
         <div class="text-left border-0 px-4 py-4">
             <p class="text-center font-bold underline">Use the form below edit user's info</p>
             <br>
-            <form action="/edit" method="post">
+            <form action="/user/edit" method="post">
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="id">
                         ID
