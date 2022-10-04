@@ -11,9 +11,6 @@ class Router
     {
         $this->routes = (require __DIR__ . '/../Config/routes.php')[strtolower($_SERVER['REQUEST_METHOD'])];
         $this->path = trim($_SERVER['REQUEST_URI'], '/');
-        $this->routeArgs = null;
-        $this->controller = null;
-        $this->action = null;
     }
 
     public function findController(): array
