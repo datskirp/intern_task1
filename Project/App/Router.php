@@ -5,12 +5,13 @@ class Router
 {
     private $routes;
     private $path;
-    private $routeArgs = [];
+    private $routeArgs;
 
     public function __construct()
     {
         $this->routes = (require __DIR__ . '/../Config/routes.php')[strtolower($_SERVER['REQUEST_METHOD'])];
         $this->path = trim($_SERVER['REQUEST_URI'], '/');
+        $this->routeArgs = '';
     }
 
     public function findController(): array
@@ -27,11 +28,12 @@ class Router
                 for ($i = 1; $i < count($valueMatches); $i++) {
                     $values[] = $valueMatches[$i][0];
                 }
-                $this->routeArgs[] = array_combine($routeNames, $values);
+                $this->routeArgs = array_combine($routeNames, $values);
                 return $controllerAndAction;
             }
         }
-
+        echo "hello" . PHP_EOL;
+        $this->routeArgs = $this->path;
         return [\App\View::class, 'renderHtml'];
     }
 
@@ -41,7 +43,7 @@ class Router
         $controllerName = $controllerAndAction[0];
         $controllerAction = $controllerAndAction[1];
         $controller = new $controllerName();
-        $controller->$controllerAction(...$this->routeArgs);
+        $controller->$controllerAction($this->routeArgs);
     }
 
 }

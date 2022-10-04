@@ -12,7 +12,7 @@
     <div class="px-8 py-4 mt-4 text-left bg-white shadow-lg">
         <div class="flex flex-row justify-center">
             <nav class="bg-gray-200 shadow-lg">
-                <a href="/add">
+                <a href="/user/create">
                     <button class="bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 w-44 rounded">Add user</button>
                 </a>
             </nav>
