@@ -1,6 +1,8 @@
 <?php
 namespace App\Controllers;
 
+use App\Alert;
+
 class UserController extends BaseController
 {
     public function create(): void
@@ -41,9 +43,9 @@ class UserController extends BaseController
         return $this->user->getUserInfo($id);
     }
 
-    public function notFound(string $wrongURI)
+    public function notFound()
     {
-        $this->view->renderHtml('User/404.php', [$wrongURI]);
+        $this->view->renderHtml('User/404.php', [Alert::getAlertMsg()]);
     }
     public function index(array $args = []): void
     {

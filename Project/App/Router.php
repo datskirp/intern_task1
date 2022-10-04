@@ -1,6 +1,8 @@
 <?php
 namespace App;
 
+use App\Alert;
+
 class Router
 {
     private $routes;
@@ -32,8 +34,7 @@ class Router
                 return $controllerAndAction;
             }
         }
-        echo "hello" . PHP_EOL;
-        $this->routeArgs = $this->path;
+        Alert::setMsg($this->path . ' resource was not found!');
         return [\App\View::class, 'renderHtml'];
     }
 
@@ -42,6 +43,8 @@ class Router
         $controllerAndAction = $this->findController();
         $controllerName = $controllerAndAction[0];
         $controllerAction = $controllerAndAction[1];
+        var_dump($controllerName);
+        var_dump($controllerAction);
         $controller = new $controllerName();
         $controller->$controllerAction($this->routeArgs);
     }

@@ -13,9 +13,11 @@ class View
 
     public function renderHtml(string $template, array $vars = []): void
     {
+        //$content = include_once $this->dir . '/' . $template;
         extract($vars);
         ob_start();
-        include $this->dir . '/' . $template;
+        include_once $this->dir . '/User/Main.php';
+        include_once $this->dir . '/' . $template;
         $buffer = ob_get_contents();
         ob_end_clean();
         echo $buffer;

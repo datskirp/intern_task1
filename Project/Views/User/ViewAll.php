@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="css/style.css">
-    <title><?= $args['title']; ?></title>
-</head>
 <body class="bg-gray-300">
 <div class="flex flex-row justify-center items-center">
     <div class="px-8 py-4 mt-4 text-left bg-white shadow-lg">
@@ -52,6 +43,3 @@
             endif; ?>
     </div>
 </div>
-
-</body>
-</html>
