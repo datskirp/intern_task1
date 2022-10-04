@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="css/style.css">
-    <title><?= $args['title'] ?></title>
+    <title>App</title>
 </head>
 <body class="bg-gray-300">
 <body class="bg-gray-300">
@@ -14,7 +14,7 @@
         <div class="flex flex-row justify-center">
             <nav class="bg-gray-200 shadow-lg">
                 <a href="/">
-                    <button class="bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 w-44 rounded">Main</button>
+                    <button class="bg-blue-500 hover:border-blue-900 text-white font-bold py-2 w-44 border-2 rounded">Main</button>
                 </a>
             </nav>
         </div>
@@ -70,7 +70,7 @@
                 </select>
                 <br>
                 <div class="flex flex-row justify-center">
-                    <input class="bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 w-44 rounded" type="submit" value="Confirm Changes">
+                    <input class="bg-blue-500 hover:border-blue-900 text-white font-bold py-2 w-44 border-2 rounded" type="submit" value="Confirm Changes">
                 </div>
             </form>
         </div>

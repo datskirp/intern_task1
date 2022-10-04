@@ -47,7 +47,7 @@ class UserController extends BaseController
 
     public function edit(array $args): void
     {
-        $this->view->renderHtml('User/Edit.php', ['args' => [$this->getUserInfo($args['id'])]]);
+        $this->view->renderHtml('User/Edit.php', $this->getUserInfo($args['id']));
     }
 
     public function update(): void
