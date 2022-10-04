@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="css/style.css">
-    <title><?= $args['title'] ?></title>
-</head>
-<body class="bg-gray-300">
+<?php include __DIR__ . '/../header.php'; ?>
+    <body class="bg-gray-300">
     <div class="flex flex-row justify-center items-center">
         <div class="px-8 py-4 mt-4 text-left bg-white shadow-lg">
             <div class="flex flex-row justify-center">
@@ -18,19 +10,19 @@
                 </nav>
             </div>
             <br>
-            <div class="text-left border-0 px-4 py-4 w-80">
+            <div class="text-left border-0 px-4 py-4">
                 <p class="text-center font-bold underline">Use a form below to add a user</p>
                 <br>
-                <form action="/user/add" method="post" id="addUser" name="addUser" novalidate>
+                <form action="/user/add" method="post" novalidate>
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
-                            E-mail
-                        </label>
+                            Email
                             <input class="shadow appearance-none border rounded w-full
                                   py-2 px-3 text-gray-700 leading-tight focus:outline-none
                                   focus:shadow-outline"
                                    id="email" name="email" type="email" placeholder="email" required minlength="5">
-                            <span id="emailError" class="error text-xs text-red-500" aria-live="polite"></span>
+                            <span class="error break-all w-full p-0 inline" aria-live="polite"></span>
+                        </label>
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
@@ -38,8 +30,7 @@
                         </label>
                         <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700
                                   leading-tight focus:outline-none focus:shadow-outline"
-                               id="name" name="name" type="text" placeholder="name">
-                        <span id="nameError" class="text-xs text-red-500" aria-live="polite"></span>
+                               id="name" name="name" placeholder="name">
                     </div>
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="gender_id">Select gender</label>
                     <select class="form-select appearance-none block w-full px-3 py-1.5
@@ -62,12 +53,11 @@
                     </select>
                     <br>
                     <div class="flex flex-row justify-center">
-                        <input class="bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 w-44 rounded"
-                               type="submit" value="Add user" >
+                        <input class="bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 w-44 rounded" type="submit" value="Add user">
                     </div>
                 </form>
             </div>
         </div>
     </div>
-</body>
-</html>
+<?= 'dir from add.php - ' . __DIR__ . PHP_EOL; ?>
+<?php include __DIR__ . '/../footer.php'; ?>

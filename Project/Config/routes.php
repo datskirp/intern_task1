@@ -1,9 +1,17 @@
 <?php
-return [
-    '~^$~' => [App\Controllers\UserController::class, 'viewAll'],
-    '~^add$~' => [App\Controllers\UserController::class, 'addForm'],
-    '~^user/add$~' => [App\Controllers\UserController::class, 'add'],
-    '~^user/edit/(\d{10})$~' => [App\Controllers\UserController::class, 'editForm'],
-    '~^user/delete/(\d{10})$~' => [App\Controllers\UserController::class, 'delete'],
-    '~^user/edit$~' => [App\Controllers\UserController::class, 'edit']
+return ['get' => [
+            '/' => [App\Controllers\UserController::class, 'ViewAll'],
+            '/user/{id:\d+}' => [\App\Controllers\UserController::class, 'show'],
+            '/user/create' => [\App\Controllers\UserController::class, 'create'],
+            '/user/{id:\d+}/edit' => [\App\Controllers\UserController::class, 'edit'],
+        ],
+        'post' => [
+            '/user' => [\App\Controllers\UserController::class, 'store'],
+        ],
+        'put' => [
+            '/user/{id:\d+}' => [\App\Controllers\UserController::class, 'update'],
+        ],
+        'delete' => [
+            '/user/{id:\d+}' => [\App\Controllers\UserController::class, 'delete'],
+        ],
 ];
