@@ -11,12 +11,12 @@ class View
         $this->dir = $dir;
     }
 
-    public function renderHtml(string $template, array $vars = []): void
+    public function renderHtml(string $template, array $args = []): void
     {
         //$content = include_once $this->dir . '/' . $template;
-        extract($vars);
+        extract($args);
+        Alert::resetMsg();
         ob_start();
-        include_once $this->dir . '/User/Main.php';
         include_once $this->dir . '/' . $template;
         $buffer = ob_get_contents();
         ob_end_clean();

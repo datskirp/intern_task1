@@ -24,7 +24,7 @@ class User extends Base
         return $this->db->changeRecord($sql, $userData) ? $userData : null;
     }
 
-    public function delete(string $id): ?array
+    public function delete(int $id): ?array
     {
         $userData = $this->getUserInfo($id);
         $sql = 'DELETE FROM `users` WHERE `id` = :id';

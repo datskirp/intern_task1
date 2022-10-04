@@ -2,18 +2,20 @@
 namespace App;
 
 use App\Alert;
+use App\Response;
 
 class Router
 {
-    private $routes;
-    private $path;
-    private $routeArgs;
+    private array $routes;
+    private string $path;
+    private array $routeArgs;
+    private Response $response;
 
     public function __construct()
     {
         $this->routes = (require __DIR__ . '/../Config/routes.php')[strtolower($_SERVER['REQUEST_METHOD'])];
         $this->path = trim($_SERVER['REQUEST_URI'], '/');
-        $this->routeArgs = '';
+        $this->response = new Response();
     }
 
     public function findController(): array
@@ -43,10 +45,14 @@ class Router
         $controllerAndAction = $this->findController();
         $controllerName = $controllerAndAction[0];
         $controllerAction = $controllerAndAction[1];
-        var_dump($controllerName);
-        var_dump($controllerAction);
         $controller = new $controllerName();
         $controller->$controllerAction($this->routeArgs);
+    }
+
+    public function exitWithError(string $msg)
+    {
+        $this->response->redirect(__DIR__ . '/../Views/404.php');
+        echo '<p>' . $msg . '</p>';
     }
 
 }

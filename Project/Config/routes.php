@@ -4,6 +4,7 @@ return ['get' => [
             '/user/{id:\d+}' => [\App\Controllers\UserController::class, 'show'],
             '/user/create' => [\App\Controllers\UserController::class, 'create'],
             '/user/{id:\d+}/edit' => [\App\Controllers\UserController::class, 'edit'],
+            '/user/{id:\d+}' => [\App\Controllers\UserController::class, 'update'],
         ],
         'post' => [
             '/user' => [\App\Controllers\UserController::class, 'store'],

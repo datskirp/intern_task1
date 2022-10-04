@@ -1,10 +1,15 @@
+<?php include_once  __DIR__ . '/../header.php' ?>
+<head>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
 <body class="bg-gray-300">
 <div class="flex flex-row justify-center items-center">
     <div class="px-8 py-4 mt-4 text-left bg-white shadow-lg">
         <div class="flex flex-row justify-center">
             <nav class="bg-gray-200 shadow-lg">
                 <a href="/user/create">
-                    <button class="bg-blue-700 hover:bg-blue-400 text-white font-bold py-2 w-44 rounded">Add user</button>
+                    <button class="bg-blue-500 hover:border-blue-900 text-white font-bold py-2 w-44 border-2 rounded">Add user</button>
                 </a>
             </nav>
         </div>
@@ -30,8 +35,8 @@
                         <td class="border-2 px-2 py-2 text-center"><?= $user['gender'] ?></td>
                         <td class="border-2 px-2 py-2 text-center"><?= $user['status'] ?></td>
                         <td class="border-2 px-2 py-2 text-center">
-                            <a class="text-blue-500 underline hover:text-blue-800" href='/user/edit/<?= $user['id'] ?>'>edit |</a>
-                            <a class="text-blue-500 underline hover:text-blue-800" href='/user/delete/<?= $user['id'] ?>'>delete</a>
+                            <button id ="edit" class="bg-green-400 border-2 hover:border-green-800 text-white w-14 rounded">Edit</button>
+                            <button name="delete" class="bg-red-400 border-2 hover:border-red-800 text-white w-14 rounded" id="<?= $user['id'] ?>">Delete</button>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -43,3 +48,28 @@
             endif; ?>
     </div>
 </div>
+    <script>
+        document.getElementById("edit").onclick = function () {
+            location.href = "/user/<?= $user['id'] ?>/edit";
+        };
+        $("button[name='delete']").on("click", function deleteUser() {
+            var id = this.id;
+
+        $.ajax(
+
+            {
+
+                url: "user/"+id,
+
+                type: 'DELETE',
+
+                success: function (data){
+                    alert(data);
+                    window.location.replace("/");
+                }
+
+            })
+        });
+
+    </script>
+<?php include_once  __DIR__ . '/../footer.php' ?>

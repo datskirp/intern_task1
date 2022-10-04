@@ -4,7 +4,7 @@ namespace App;
 
 class Alert
 {
-    private static string $msg = '';
+    private static string $msg;
 
     public static function setMsg(string $msg)
     {
