@@ -13,8 +13,7 @@ class View
 
     public function renderHtml(string $template, array $args = []): void
     {
-        extract($args);
-        Alert::resetMsg();
+        extract($args, EXTR_SKIP);
         ob_start();
         include_once $this->dir . '/' . $template;
         $buffer = ob_get_contents();

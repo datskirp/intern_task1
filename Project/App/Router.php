@@ -3,6 +3,7 @@ namespace App;
 
 use App\Alert;
 use App\Response;
+use App\View;
 
 class Router
 {
@@ -18,8 +19,9 @@ class Router
         $this->response = new Response();
     }
 
-    public function findController(): array
+    public function run(): void
     {
+        $routeFound = false;
         foreach ($this->routes as $route => $controllerAndAction) {
             $route = trim($route, '/');
             $routeNames = [];
@@ -32,27 +34,26 @@ class Router
                 for ($i = 1; $i < count($valueMatches); $i++) {
                     $values[] = $valueMatches[$i][0];
                 }
+                $routeFound = true;
                 $this->routeArgs = array_combine($routeNames, $values);
-                return $controllerAndAction;
+                $controllerName = $controllerAndAction[0];
+                $controllerAction = $controllerAndAction[1];
+                $controller = new $controllerName();
+                $controller->$controllerAction($this->routeArgs);
             }
         }
-        Alert::setMsg($this->path . ' resource was not found!');
-        return [\App\View::class, 'renderHtml'];
-    }
+        if (!$routeFound) {
+            $this->response->redirect('/404');
+            $this->exitWithError('Url: ' . $this->path . ' you entered is not found!');
+        }
 
-    public function run(): void
-    {
-        $controllerAndAction = $this->findController();
-        $controllerName = $controllerAndAction[0];
-        $controllerAction = $controllerAndAction[1];
-        $controller = new $controllerName();
-        $controller->$controllerAction($this->routeArgs);
     }
 
     public function exitWithError(string $msg)
     {
-        $this->response->redirect(__DIR__ . '/../Views/404.php');
-        echo '<p>' . $msg . '</p>';
+        $this->response->statusCode(404);
+        $view = new View(__DIR__ . '/../Views');
+        $view->renderHtml('404.php', ['msg' => $msg]);
     }
 
 }

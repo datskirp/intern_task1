@@ -35,7 +35,7 @@
                         <td class="border-2 px-2 py-2 text-center"><?= $user['gender'] ?></td>
                         <td class="border-2 px-2 py-2 text-center"><?= $user['status'] ?></td>
                         <td class="border-2 px-2 py-2 text-center">
-                            <button id ="edit" class="bg-green-400 border-2 hover:border-green-800 text-white w-14 rounded">Edit</button>
+                            <button name="edit" id ="<?= $user['id'] ?>"  class="bg-green-400 border-2 hover:border-green-800 text-white w-14 rounded">Edit</button>
                             <button name="delete" class="bg-red-400 border-2 hover:border-red-800 text-white w-14 rounded" id="<?= $user['id'] ?>">Delete</button>
                         </td>
                     </tr>
@@ -49,25 +49,23 @@
     </div>
 </div>
     <script>
-        document.getElementById("edit").onclick = function () {
-            location.href = "/user/<?= $user['id'] ?>/edit";
-        };
-        $("button[name='delete']").on("click", function deleteUser() {
-            var id = this.id;
+        $("button[name='edit']").on("click", function () {
+            alert(this.id);
+            location.href = "/user/"+this.id+"/edit";
+        });
+        $("button[name='delete']").on("click", function () {
 
         $.ajax(
-
             {
-
-                url: "user/"+id,
-
-                type: 'DELETE',
-
-                success: function (data){
-                    alert(data);
-                    window.location.replace("/");
+                url: "user/"+this.id,
+                type: "DELETE",
+                dataType: "json",
+                success: function (response){
+                    if (response['status'] == 'true')
+                        window.location.replace(response['redirect_url']);
+                    else
+                        window.location.replace(response['redirect_url']);
                 }
-
             })
         });
 

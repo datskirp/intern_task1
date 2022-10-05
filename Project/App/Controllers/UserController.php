@@ -39,9 +39,20 @@ class UserController extends BaseController
         //$status ? Alert::setMsg('User ' . $args['id'] . ' was deleted') : $this->router->exitWithError("Can't delete user. There is no user with this id - ");
         //$this->response->redirect('/');
         //$this->index(['status' => $msg, 'userData' => $status, 'title' => 'Main']);
-
+        //$this->router->exitWithError(['User ID: ' . $args['id'] . ' was not deleted!']);
         //action was called with ajax and echo response is given
-        echo $status ? "yes, deleted" : "No, wasn't deleted";
+        //echo $status ? "User was deleted! (ID: %s, name: %s" : "No, wasn't deleted";
+        echo $status ?
+            json_encode([
+                'status' => 'true',
+                'redirect_url' => '/404',
+                'id' => $args['id'],
+            ]) :
+            json_encode([
+                'status' => 'false',
+                'redirect_url' => '/404',
+                'id' => $args['id'],
+            ]);
 
     }
 
