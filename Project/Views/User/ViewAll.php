@@ -5,7 +5,7 @@
 </head>
 <body class="bg-gray-300">
 <div class="flex flex-row justify-center items-center">
-    <div class="px-8 py-4 mt-4 text-left bg-white shadow-lg">
+    <div class="w-auto px-8 py-4 mt-4 text-left bg-white shadow-lg">
         <div class="flex flex-row justify-center">
             <nav class="bg-gray-200 shadow-lg">
                 <a href="/user/create">
@@ -14,7 +14,7 @@
             </nav>
         </div>
         <br>
-        <?php if (!is_null($users) && !empty($users)): ?>
+        <?php if (!empty($users)): ?>
             <table class="border-collapse border-t-2 table-auto shadow-lg">
                 <tr class="bg-gray-200">
                     <th class=" px-2 py-2 text-center">id</th>
@@ -44,30 +44,33 @@
             </table>
         <?php else: echo '<h2 class="text-red-800">There are no users in the database!</h2>';
             endif; ?>
-        <?php if (isset($args['status'])): echo "<p class='text-center text-green-600'>" . $args['status'] . "</p>";
-            endif; ?>
+            <p id="message" class='text-center text-red-500'>
     </div>
 </div>
     <script>
+        if (sessionStorage.getItem('msg'))
+            document.getElementById('message').textContent = sessionStorage.getItem('msg');
+        sessionStorage.clear();
         $("button[name='edit']").on("click", function () {
-            alert(this.id);
             location.href = "/user/"+this.id+"/edit";
         });
         $("button[name='delete']").on("click", function () {
-
-        $.ajax(
-            {
-                url: "user/"+this.id,
-                type: "DELETE",
-                dataType: "json",
-                success: function (response){
-                    if (response['status'] == 'true')
-                        window.location.replace(response['redirect_url']);
-                    else
-                        window.location.replace(response['redirect_url']);
-                }
+        if (confirm("Delete user?"))
+            $.ajax(
+                {
+                    url: "user/"+this.id,
+                    type: "DELETE",
+                    dataType: "json",
+                    success: function (response){
+                        if (response['status'] === 'true') {
+                            sessionStorage.setItem('msg', "User with ID: " + response['id'] + " was deleted!");
+                            window.location.replace(response['redirect_url']);
+                        }
+                        else
+                            $("#message").text("User with ID: "+response['id']+" was not deleted! Error occured.");
+                    }
+                })
             })
-        });
 
     </script>
 <?php include_once  __DIR__ . '/../footer.php' ?>

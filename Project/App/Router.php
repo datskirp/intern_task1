@@ -44,16 +44,16 @@ class Router
         }
         if (!$routeFound) {
             $this->response->redirect('/404');
-            $this->exitWithError('Url: ' . $this->path . ' you entered is not found!');
+            $this->exitWithError(['Url: ' . $this->path . ' you entered is not found!']);
         }
 
     }
 
-    public function exitWithError(string $msg)
+    public function exitWithError(array $msg = [])
     {
         $this->response->statusCode(404);
         $view = new View(__DIR__ . '/../Views');
-        $view->renderHtml('404.php', ['msg' => $msg]);
+        $view->renderHtml('404.php', ['msg' => $msg[0]]);
     }
 
 }

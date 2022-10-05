@@ -45,12 +45,12 @@ class UserController extends BaseController
         echo $status ?
             json_encode([
                 'status' => 'true',
-                'redirect_url' => '/404',
+                'redirect_url' => '/',
                 'id' => $args['id'],
             ]) :
             json_encode([
                 'status' => 'false',
-                'redirect_url' => '/404',
+                'redirect_url' => 'null',
                 'id' => $args['id'],
             ]);
 
@@ -63,9 +63,19 @@ class UserController extends BaseController
 
     public function update(): void
     {
-        $status= $this->user->edit($_POST);
-        $msg = $status ? 'User ' . $status['id'] . ' was updated' : 'There was an error updating a user';
-        //$this->index(['status' => $msg, 'userData' => $status, 'title' => 'Main']);
+        parse_str(file_get_contents("php://input"),$post_vars);
+        $status = $this->user->edit($post_vars);
+        echo $status ?
+            json_encode([
+                'status' => 'true',
+                'redirect_url' => '/',
+                'id' => $post_vars['id'],
+            ]) :
+            json_encode([
+                'status' => 'false',
+                'redirect_url' => 'null',
+                'id' => $post_vars['id'],
+            ]);
     }
 
     public function getUserInfo(string $id): array
