@@ -9,6 +9,15 @@ class Validator
     public static array $errorMessages = [];
     private static bool $isValid;
 
+    public static function getInstance(): self
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
+
     public static function validate(array $user)
     {
         self::email($user['email'], $user['id']);
