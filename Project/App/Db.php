@@ -39,10 +39,10 @@ class Db
         return $sth->fetch(\PDO::FETCH_ASSOC);
     }
 
-    public function getAll(): ?array
+    public function getAll(): array|false
     {
         $result = $this->pdo->query('SELECT * FROM `users`');
-        return $result->fetchAll() ?? null;
+        return $result->fetchAll();
     }
 
     public function deleteRecord(string $sql, string $id): bool

@@ -21,7 +21,7 @@
                                   py-2 px-3 text-gray-700 leading-tight focus:outline-none
                                   focus:shadow-outline"
                                    id="email" name="email" type="text" placeholder="email" required="required">
-                            <span id="emailError" class="error text-xs text-red-500" aria-live="polite"></span>
+                            <span id="emailError" class="error text-xs text-red-500"></span>
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
@@ -30,7 +30,7 @@
                         <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700
                                   leading-tight focus:outline-none focus:shadow-outline"
                                id="name" name="name" type="text" placeholder="name" required="required">
-                        <span id="nameError" class="text-xs text-red-500" aria-live="polite"></span>
+                        <span id="nameError" class="text-xs text-red-500"></span>
                     </div>
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="gender_id">Select gender</label>
                     <select class="form-select appearance-none block w-full px-3 py-1.5
@@ -62,7 +62,6 @@
         </div>
     </div>
 <script>
-    $(document).ready(function () {
         $("form").submit(function (event) {
             $("#emailError").text("");
             $("#nameError").text("");
@@ -84,8 +83,8 @@
                         window.location.replace(response['redirect_url']);
                     } else
                         $("#message").text("User was not created!");
-                        if (response['errors']['emailExists'])
-                            document.getElementById('emailError').textContent = "Entered e-mail exists in the database!";
+                        if (response['errors']['emailExists'] === true)
+                            $("#emailError").text("Entered e-mail exists in the database!");
                         if (response['errors']['email'])
                             $("#emailError").text(response['errors']['email']);
                         if (response['errors']['name'])
@@ -97,6 +96,5 @@
 
             event.preventDefault();
         });
-    });
 </script>
 <?php include_once  __DIR__ . '/../footer.php' ?>

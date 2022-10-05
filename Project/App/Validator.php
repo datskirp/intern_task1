@@ -1,7 +1,6 @@
 <?php
 namespace App;
 
-use App\Controllers\UserController;
 use App\Models\User;
 
 class Validator
@@ -9,15 +8,6 @@ class Validator
     private static $instance;
     public static array $errorMessages = [];
     private static bool $isValid;
-
-    public static function getInstance(): self
-    {
-        if (self::$instance === null) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
-    }
 
     public static function validate(array $user)
     {
@@ -38,8 +28,12 @@ class Validator
         $getExistingEmail = $db->getEmailById((int)$id);
         if(!filter_var($email, FILTER_VALIDATE_EMAIL))
             self::$errorMessages['email'] = 'E-mail is not valid';
-        if($emailExists && $getExistingEmail != $email)
+        if($getExistingEmail) {
+            if ($emailExists && $getExistingEmail['email'] != $email)
+                self::$errorMessages['emalExists'] = true;
+        } elseif ($emailExists) {
             self::$errorMessages['emalExists'] = true;
+        }
     }
 
     private static function name(string $name): void

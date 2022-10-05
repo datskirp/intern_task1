@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Db;
+
 class User extends Base
 {
     public function add(array $userData): ?array
@@ -19,9 +21,17 @@ class User extends Base
 
     public function edit(array $userData): ?array
     {
-        $sql = 'UPDATE `users` SET `email` = :email, `name` = :name, 
+        $db = Db::getInstance();
+        if($db->getEmailById((int)$userData['id']) == $userData['email']){
+            $sql = 'UPDATE `users` SET `name` = :name, 
                    `gender` = :gender, `status` = :status WHERE id = :id';
-        return $this->db->changeRecord($sql, $userData) ? $userData : null;
+            return $this->db->changeRecord($sql, $userData) ? $userData : null;
+        }
+        else {
+            $sql = 'UPDATE `users` SET `email` = :email, `name` = :name, 
+                   `gender` = :gender, `status` = :status WHERE id = :id';
+            return $this->db->changeRecord($sql, $userData) ? $userData : null;
+        }
     }
 
     public function delete(int $id): bool

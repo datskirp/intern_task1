@@ -83,7 +83,6 @@ class UserController extends BaseController
         $validator::isValid() ?
             $status = $this->user->edit($post_vars) :
             $status = false;
-        //$status = $this->user->edit($post_vars);
         echo $status ?
             json_encode([
                 'status' => 'true',
@@ -99,13 +98,13 @@ class UserController extends BaseController
             ]);
     }
 
-    public function show(string $id)
+    public function show(array $args)
     {
-        $user = $this->user->show($id);
-        if(!is_null($user))
+        $user = $this->user->show($args['id']);
+        if($user)
             return $user;
         $this->response->redirect('/404');
-        $this->router->exitWithError(['User: "' . $id . '" you entered is not found!']);
+        $this->router->exitWithError(['User: "' . $args['id'] . '" you entered is not found!']);
 
     }
 

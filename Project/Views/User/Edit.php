@@ -1,15 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="css/style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <title>App</title>
-</head>
-<body class="bg-gray-300">
-<body class="bg-gray-300">
+<?php include_once  __DIR__ . '/../header.php' ?>
 <div class="flex flex-row justify-center items-center">
     <div class="w-80 px-8 py-4 mt-4 text-left bg-white shadow-lg">
         <div class="flex flex-row justify-center">
@@ -41,6 +30,7 @@
                                   py-2 px-3 text-gray-700 leading-tight focus:outline-none
                                   focus:shadow-outline"
                            id="email" name="email" type="text" value="<?= $args['email'] ?>" required="required">
+                    <span id="emailError" class="error text-xs text-red-500"></span>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
@@ -49,6 +39,7 @@
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700
                                   leading-tight focus:outline-none focus:shadow-outline"
                            id="name" name="name" value="<?= $args['name'] ?>" required="required">
+                    <span id="nameError" class="error text-xs text-red-500"></span>
                 </div>
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="gender">Select gender</label>
                 <select class="form-select appearance-none block w-full px-3 py-1.5
@@ -79,8 +70,9 @@
     </div>
 </div>
 <script>
-    $(document).ready(function () {
         $("form").submit(function (event) {
+            $("#emailError").text("");
+            $("#nameError").text("");
             var formData = {
                 id : $("#id").val(),
                 name: $("#name").val(),
@@ -100,13 +92,17 @@
                         window.location.replace(response['redirect_url']);
                     } else
                         $("#message").text("User with ID: " + response['id'] + " was not updated! Error occured.");
+                        if (response['errors']['emailExists'] === true)
+                            $("#emailError").text("Entered e-mail exists in the database!");
+                        if (response['errors']['email'])
+                            $("#emailError").text(response['errors']['email']);
+                        if (response['errors']['name'])
+                            document.getElementById('nameError').textContent = response['errors']['name'];
                 }
 
             });
 
             event.preventDefault();
         });
-    });
 </script>
-</body>
-</html>
+<?php include_once  __DIR__ . '/../footer.php' ?>

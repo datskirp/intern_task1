@@ -1,7 +1,6 @@
 <?php
 namespace App;
 
-use App\Alert;
 use App\Response;
 use App\View;
 
@@ -49,7 +48,7 @@ class Router
 
     }
 
-    public function exitWithError(array $msg = [])
+    public function exitWithError(array $msg = []): void
     {
         $this->response->statusCode(404);
         $view = new View(__DIR__ . '/../Views');
