@@ -11,7 +11,7 @@
 <body class="bg-gray-300">
 <body class="bg-gray-300">
 <div class="flex flex-row justify-center items-center">
-    <div class="px-8 py-4 mt-4 text-left bg-white shadow-lg">
+    <div class="w-80 px-8 py-4 mt-4 text-left bg-white shadow-lg">
         <div class="flex flex-row justify-center">
             <nav class="bg-gray-200 shadow-lg">
                 <a href="/">
@@ -40,7 +40,7 @@
                     <input class="shadow appearance-none border rounded w-full
                                   py-2 px-3 text-gray-700 leading-tight focus:outline-none
                                   focus:shadow-outline"
-                           id="email" name="email" type="text" value="<?= $args['email'] ?>">
+                           id="email" name="email" type="text" value="<?= $args['email'] ?>" required="required">
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
@@ -48,7 +48,7 @@
                     </label>
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700
                                   leading-tight focus:outline-none focus:shadow-outline"
-                           id="name" name="name" value="<?= $args['name'] ?>">
+                           id="name" name="name" value="<?= $args['name'] ?>" required="required">
                 </div>
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="gender">Select gender</label>
                 <select class="form-select appearance-none block w-full px-3 py-1.5
@@ -74,6 +74,7 @@
                     <input id="change" class="bg-blue-500 hover:border-blue-900 text-white font-bold py-2 w-44 border-2 rounded" type="submit" value="Confirm Changes">
                 </div>
             </form>
+            <p id="message" class='text-center text-red-500'>
         </div>
     </div>
 </div>

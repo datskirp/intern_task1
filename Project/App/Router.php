@@ -44,7 +44,7 @@ class Router
         }
         if (!$routeFound) {
             $this->response->redirect('/404');
-            $this->exitWithError(['Url: ' . $this->path . ' you entered is not found!']);
+            $this->exitWithError(['Url: "' . $this->path . '" you entered is not found!']);
         }
 
     }

@@ -11,7 +11,7 @@ class User extends Base
         return $this->db->changeRecord($sql, $userData) ? $userData : null;
     }
 
-    public function getUserInfo(string $id): array
+    public function show(int $id): array|false
     {
         $sql = 'SELECT * FROM users WHERE id = :id';
         return $this->db->getRecord($sql, ['id' => $id]);
@@ -24,11 +24,10 @@ class User extends Base
         return $this->db->changeRecord($sql, $userData) ? $userData : null;
     }
 
-    public function delete(int $id): ?array
+    public function delete(int $id): bool
     {
-        $userData = $this->getUserInfo($id);
         $sql = 'DELETE FROM `users` WHERE `id` = :id';
-        return $this->db->deleteRecord($sql, $id) ? $userData : null;
+        return $this->db->deleteRecord($sql, $id);
     }
 
     public function getAll(): ?array

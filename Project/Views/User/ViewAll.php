@@ -44,12 +44,19 @@
             </table>
         <?php else: echo '<h2 class="text-red-800">There are no users in the database!</h2>';
             endif; ?>
-            <p id="message" class='text-center text-red-500'>
+            <p id="message" class='text-center'>
     </div>
 </div>
     <script>
-        if (sessionStorage.getItem('msg'))
-            document.getElementById('message').textContent = sessionStorage.getItem('msg');
+        if (sessionStorage.getItem('msg')) {
+            if (sessionStorage.getItem('action') === 'delete') {
+                document.getElementById('message').classList.add('text-red-500');
+                document.getElementById('message').textContent = sessionStorage.getItem('msg');
+            } else {
+                document.getElementById('message').classList.add('text-green-500');
+                document.getElementById('message').textContent = sessionStorage.getItem('msg');
+            }
+        }
         sessionStorage.clear();
         $("button[name='edit']").on("click", function () {
             location.href = "/user/"+this.id+"/edit";

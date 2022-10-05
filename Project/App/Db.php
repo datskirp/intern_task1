@@ -4,6 +4,7 @@ namespace App;
 
 class Db
 {
+    private static $instance;
     private object $pdo;
 
     public function __construct()
@@ -16,6 +17,14 @@ class Db
             $dbInit['password']
         );
     }
+    public static function getInstance(): self
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
 
     public function changeRecord(string $sql, array $values): bool
     {
@@ -23,7 +32,7 @@ class Db
         return $sth->execute($values);
     }
 
-    public function getRecord(string $sql, array $values): array
+    public function getRecord(string $sql, array $values): array|false
     {
         $sth = $this->pdo->prepare($sql);
         $sth->execute($values);
@@ -40,5 +49,13 @@ class Db
     {
         $sth = $this->pdo->prepare($sql);
         return $sth->execute(['id' => $id]);
+    }
+
+    public function checkEmailExistence($email): array|bool
+    {
+        $sql = "SELECT * from `users` where `email` = :email";
+        $sth = $this->pdo->prepare($sql);
+        $sth->execute(['email' => $email]);
+        return ($sth->fetch());
     }
 }

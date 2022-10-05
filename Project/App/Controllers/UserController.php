@@ -4,6 +4,7 @@ namespace App\Controllers;
 use App\Alert;
 use App\Response;
 use App\Router;
+use App\Validator;
 
 class UserController extends BaseController
 {
@@ -24,13 +25,29 @@ class UserController extends BaseController
 
     public function store(): void
     {
-        $_POST['id'] = time();
-        $status = $this->user->add($_POST);
-        $msg = $status ? 'User ' . $status['id'] . ' was added' : 'There was an error adding a user';
-        Alert::setMsg($msg);
-        $this->response->statusCode(200);
-        $this->response->redirect('/');
-        //$this->index(['status' => $msg, 'userData' => $status, 'title' => 'Main']);
+        parse_str(file_get_contents("php://input"),$post_vars);
+        $post_vars['id'] = time();
+        $validator = Validator::getInstance();
+        $validator::deleteErrorMessages();
+        $validator::validate($post_vars);
+        $validator::isValid() ?
+            $status = $this->user->add($post_vars) :
+            $status = false;
+
+        echo $status ?
+            json_encode([
+                'status' => 'true',
+                'redirect_url' => '/',
+                'id' => $post_vars['id'],
+                'action' => 'add',
+            ]) :
+            json_encode([
+                'status' => 'false',
+                'redirect_url' => 'null',
+                'errors' => $validator::$errorMessages,
+            ]);
+
+
     }
 
     public function delete(array $args)
@@ -47,6 +64,7 @@ class UserController extends BaseController
                 'status' => 'true',
                 'redirect_url' => '/',
                 'id' => $args['id'],
+                'action' => 'delete',
             ]) :
             json_encode([
                 'status' => 'false',
@@ -58,7 +76,7 @@ class UserController extends BaseController
 
     public function edit(array $args): void
     {
-        $this->view->renderHtml('User/Edit.php', $this->getUserInfo($args['id']));
+        $this->view->renderHtml('User/Edit.php', $this->user->show($args['id']));
     }
 
     public function update(): void
@@ -70,6 +88,7 @@ class UserController extends BaseController
                 'status' => 'true',
                 'redirect_url' => '/',
                 'id' => $post_vars['id'],
+                'action' => 'update',
             ]) :
             json_encode([
                 'status' => 'false',
@@ -78,9 +97,14 @@ class UserController extends BaseController
             ]);
     }
 
-    public function getUserInfo(string $id): array
+    public function show(string $id)
     {
-        return $this->user->getUserInfo($id);
+        $user = $this->user->show($id);
+        if(!is_null($user))
+            return $user;
+        $this->response->redirect('/404');
+        $this->router->exitWithError(['User: "' . $id . '" you entered is not found!']);
+
     }
 
     public function index(array $args = []): void
