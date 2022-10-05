@@ -21,7 +21,7 @@ class Validator
 
     public static function validate(array $user)
     {
-        self::email($user['email']);
+        self::email($user['email'], $user['id']);
         self::name($user['name']);
         self::$errorMessages ? self::$isValid = false : self::$isValid = true;
     }
@@ -31,13 +31,14 @@ class Validator
         return self::$isValid;
     }
 
-    private static function email(string $email): void
+    private static function email(string $email, string $id): void
     {
         $db = Db::getInstance();
         $emailExists = $db->checkEmailExistence($email);
+        $getExistingEmail = $db->getEmailById((int)$id);
         if(!filter_var($email, FILTER_VALIDATE_EMAIL))
             self::$errorMessages['email'] = 'E-mail is not valid';
-        if($emailExists)
+        if($emailExists && $getExistingEmail != $email)
             self::$errorMessages['emalExists'] = true;
     }
 

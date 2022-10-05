@@ -1,10 +1,10 @@
 <?php
 namespace App\Controllers;
 
-use App\Alert;
 use App\Response;
 use App\Router;
 use App\Validator;
+use App\Db;
 
 class UserController extends BaseController
 {
@@ -20,7 +20,7 @@ class UserController extends BaseController
 
     public function create(): void
     {
-        $this->view->renderHtml('User/Add.php', ['args' => ['title' => 'Add user']]);
+        $this->view->renderHtml('User/Add.php');
     }
 
     public function store(): void
@@ -53,12 +53,7 @@ class UserController extends BaseController
     public function delete(array $args)
     {
         $status =  $this->user->delete((int)$args['id']);
-        //$status ? Alert::setMsg('User ' . $args['id'] . ' was deleted') : $this->router->exitWithError("Can't delete user. There is no user with this id - ");
-        //$this->response->redirect('/');
-        //$this->index(['status' => $msg, 'userData' => $status, 'title' => 'Main']);
-        //$this->router->exitWithError(['User ID: ' . $args['id'] . ' was not deleted!']);
-        //action was called with ajax and echo response is given
-        //echo $status ? "User was deleted! (ID: %s, name: %s" : "No, wasn't deleted";
+
         echo $status ?
             json_encode([
                 'status' => 'true',
@@ -82,7 +77,13 @@ class UserController extends BaseController
     public function update(): void
     {
         parse_str(file_get_contents("php://input"),$post_vars);
-        $status = $this->user->edit($post_vars);
+        $validator = Validator::getInstance();
+        $validator::deleteErrorMessages();
+        $validator::validate($post_vars);
+        $validator::isValid() ?
+            $status = $this->user->edit($post_vars) :
+            $status = false;
+        //$status = $this->user->edit($post_vars);
         echo $status ?
             json_encode([
                 'status' => 'true',
@@ -94,6 +95,7 @@ class UserController extends BaseController
                 'status' => 'false',
                 'redirect_url' => 'null',
                 'id' => $post_vars['id'],
+                'errors' => $validator::$errorMessages,
             ]);
     }
 

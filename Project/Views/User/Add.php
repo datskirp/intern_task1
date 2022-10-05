@@ -12,7 +12,7 @@
             <div class="text-left border-0 px-4 py-4 w-80">
                 <p class="text-center font-bold underline">Use a form below to add a user</p>
                 <br>
-                <form action="/user" method="post" id="addUser" name="addUser" novalidate>
+                <form action="/user" method="post" id="addUser" name="addUser">
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
                             E-mail
@@ -20,7 +20,7 @@
                             <input class="shadow appearance-none border rounded w-full
                                   py-2 px-3 text-gray-700 leading-tight focus:outline-none
                                   focus:shadow-outline"
-                                   id="email" name="email" type="email" placeholder="email" required="required">
+                                   id="email" name="email" type="text" placeholder="email" required="required">
                             <span id="emailError" class="error text-xs text-red-500" aria-live="polite"></span>
                     </div>
                     <div class="mb-4">
@@ -64,6 +64,8 @@
 <script>
     $(document).ready(function () {
         $("form").submit(function (event) {
+            $("#emailError").text("");
+            $("#nameError").text("");
             var formData = {
                 name: $("#name").val(),
                 email: $("#email").val(),
@@ -83,11 +85,11 @@
                     } else
                         $("#message").text("User was not created!");
                         if (response['errors']['emailExists'])
-                            $("#emailError").text("Entered e-mail exists in the database!");
-                        else if (response['errors']['email'])
-                            $("#emailError").text(response['email']);
+                            document.getElementById('emailError').textContent = "Entered e-mail exists in the database!";
+                        if (response['errors']['email'])
+                            $("#emailError").text(response['errors']['email']);
                         if (response['errors']['name'])
-                            $("#nameError").text(response['name']);
+                            document.getElementById('nameError').textContent = response['errors']['name'];
 
                 }
 

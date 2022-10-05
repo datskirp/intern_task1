@@ -51,11 +51,19 @@ class Db
         return $sth->execute(['id' => $id]);
     }
 
-    public function checkEmailExistence($email): array|bool
+    public function checkEmailExistence($email): array|false
     {
         $sql = "SELECT * from `users` where `email` = :email";
         $sth = $this->pdo->prepare($sql);
         $sth->execute(['email' => $email]);
+        return ($sth->fetch());
+    }
+
+    public function getEmailById(int $id): array|false
+    {
+        $sql = "SELECT `email` from `users` where `id` = :id";
+        $sth = $this->pdo->prepare($sql);
+        $sth->execute(['id' => $id]);
         return ($sth->fetch());
     }
 }
