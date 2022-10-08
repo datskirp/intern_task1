@@ -1,23 +1,8 @@
 <?php
 namespace App\Controllers;
 
-use App\Response;
-use App\Router;
-use App\Validator;
-use App\Db;
-
 class UserController extends BaseController
 {
-    private Response $response;
-    private Router $router;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->response = new Response();
-        $this->router = new Router();
-    }
-
     public function create(): void
     {
         $this->view->renderHtml('User/Add.php');
@@ -26,11 +11,15 @@ class UserController extends BaseController
     public function store(): void
     {
         parse_str(file_get_contents("php://input"),$post_vars);
+
+        //var_dump(getallheaders());
+
         $post_vars['id'] = time();
-        $validator = Validator::getInstance();
-        $validator::deleteErrorMessages();
-        $validator::validate($post_vars);
-        $validator::isValid() ?
+        $this->validator->validate($post_vars, $this->validateRules());
+
+        var_dump($this->validator->isValid());
+
+        $this->validator->isValid() ?
             $status = $this->user->add($post_vars) :
             $status = false;
 
@@ -44,7 +33,7 @@ class UserController extends BaseController
             json_encode([
                 'status' => 'false',
                 'redirect_url' => 'null',
-                'errors' => $validator::$errorMessages,
+                'errors' => $this->validator->getAlerts(),
             ]);
 
 
@@ -103,9 +92,6 @@ class UserController extends BaseController
         $user = $this->user->show($args['id']);
         if($user)
             return $user;
-        $this->response->redirect('/404');
-        $this->router->exitWithError(['User: "' . $args['id'] . '" you entered is not found!']);
-
     }
 
     public function index(array $args = []): void
