@@ -22,7 +22,7 @@ abstract class BaseController
         $this->response = new Response();
     }
 
-    public function validateRules()
+    public function validateRules(): array
     {
         return [
             'email' => ['required', 'email', 'unique'],

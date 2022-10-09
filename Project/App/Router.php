@@ -1,14 +1,12 @@
 <?php
 namespace App;
 
-use App\Response;
-use App\View;
-
 class Router
 {
     private array $routes;
-    private array $routeArgs;
+    private array $requestArgs;
     private Request $request;
+    private string $path;
 
     public function __construct()
     {
@@ -31,7 +29,7 @@ class Router
                 for ($i = 1; $i < count($valueMatches); $i++) {
                     $values[] = $valueMatches[$i][0];
                 }
-                $this->routeArgs = array_combine($routeParams, $values);
+                $this->requestArgs = array_combine($routeParams, $values);
                 return $controllerAndAction;
             }
         }
@@ -47,18 +45,18 @@ class Router
             $controllerName = $callback[0];
             $action = $callback[1];
             $controller = new $controllerName();
-            $controller->$action($this->routeArgs);
+            $controller->$action($this->requestArgs);
         } else {
-            $this->exitWithError(['Url: "' . $this->path . '" you entered is not found!']);
+            $this->exitWithError('Url: "' . $this->path . '" you entered is not found!');
         }
     }
 
 
 
-    public function exitWithError(array $msg = []): void
+    public function exitWithError(string $msg = ""): void
     {
         $view = new View(__DIR__ . '/../Views');
-        $view->renderHtml('404.php', ['msg' => $msg[0]]);
+        $view->renderHtml('404.php', ['msg' => $msg]);
     }
 
 }
