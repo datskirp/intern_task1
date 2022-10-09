@@ -16,6 +16,7 @@ class Response
 
     public function send(bool $status, array $alerts, string $id, string $redirectUri)
     {
+        header('Content-Type: application/json; charset=utf-8');
         echo $status ?
             json_encode([
                 'status' => 'true',

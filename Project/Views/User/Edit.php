@@ -106,14 +106,12 @@
         });
     }
     async function postData(url = '', data) {
-        // Default options are marked with *
         const response = await fetch(url, {
-            method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+            method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
-                // 'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'application/json; charset=utf-8'
             },
-            body: data // body data type must match "Content-Type" header
+            body: data
         });
         return response.json();
     }

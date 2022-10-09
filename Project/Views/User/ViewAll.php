@@ -74,35 +74,10 @@
             }
         }
         async function userDelete(url = '') {
-            // Default options are marked with *
             const response = await fetch(url, {
-                method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
-                headers: {
-                    //'Content-Type': 'application/json'
-                    // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                //body: data // body data type must match "Content-Type" header
+                method: 'DELETE',
             });
             return response.json();
         }
-/*
-        $("button[name='delete']").on("click", function () {
-        if (confirm("Delete user?"))
-            $.ajax(
-                {
-                    url: "user/"+this.id,
-                    type: "DELETE",
-                    dataType: "json",
-                    success: function (response){
-                        if (response['status'] === 'true') {
-                            sessionStorage.setItem('msg', "User with ID: " + response['id'] + " was deleted!");
-                            window.location.replace(response['redirect_url']);
-                        }
-                        else
-                            $("#message").text("User with ID: "+response['id']+" was not deleted! Error occured.");
-                    }
-                })
-            })
-*/
     </script>
 <?php include_once  __DIR__ . '/../footer.php' ?>
