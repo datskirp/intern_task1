@@ -6,17 +6,7 @@ use App\Db;
 
 class Validator extends Base
 {
-    private static $instance;
     private bool $isValid;
-
-    public static function getInstance(): self
-    {
-        if (self::$instance === null) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
-    }
 
     public function validate(array $inputFields, array $rules): void
     {
@@ -37,7 +27,7 @@ class Validator extends Base
                             $db = Db::getInstance();
                             if ($db->checkEmailExistence($value) &&
                                     ($db->getEmailById($inputFields['id'])[$field] ?? '') !== $value) {
-                                $this->alert->setAlerts([$field => 'Entered e-mail already exists!']);
+                                $this->alert->setAlerts([$field => 'Entered email already exists!']);
                             }
                         }
                         if ($constraint === 'name' &&
@@ -58,7 +48,7 @@ class Validator extends Base
         return $this->isValid;
     }
 
-    public function getAlerts()
+    public function getAlerts(): array
     {
         return $this->alert->getAlerts();
     }

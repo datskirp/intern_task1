@@ -13,7 +13,7 @@
         <?php if (!empty($users)): ?>
             <table class="border-collapse border-t-2 table-auto shadow-lg">
                 <tr class="bg-gray-200">
-                    <th class=" px-2 py-2 text-center">id</th>
+                    <th class=" px-2 py-2 text-center">ID</th>
                     <th class=" px-2 py-2 text-center">Email</th>
                     <th class=" px-2 py-2 text-center">Name</th>
                     <th class=" px-2 py-2 text-center">Gender</th>
@@ -31,8 +31,19 @@
                         <td class="border-2 px-2 py-2 text-center"><?= $user['gender'] ?></td>
                         <td class="border-2 px-2 py-2 text-center"><?= $user['status'] ?></td>
                         <td class="border-2 px-2 py-2 text-center">
-                            <button name="edit" id ="<?= $user['id'] ?>"  class="bg-green-400 border-2 hover:border-green-800 text-white w-14 rounded" onclick="editUser(this)">Edit</button>
-                            <button name="delete" class="bg-red-400 border-2 hover:border-red-800 text-white w-14 rounded" id="<?= $user['id'] ?>" onclick="deleteUser(this)">Delete</button>
+                            <button name="edit" id ="<?= $user['id'] ?>"
+                                    class="bg-green-400 border-2 hover:border-green-800 text-white w-14 rounded"
+                                    onclick="editUser(this)">
+                                    Edit
+                            </button>
+                            <button name="delete" class="bg-red-400 border-2 hover:border-red-800 text-white w-14 rounded"
+                                    id="<?= $user['id'] ?>" onclick="deleteUser(this)">
+                                    Delete
+                            </button>
+                            <button name="show" class="bg-blue-400 border-2 hover:border-blue-800 text-white w-14 rounded"
+                                    id="<?= $user['id'] ?>" onclick="showUser(this)">
+                                    Show
+                            </button>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -58,6 +69,10 @@
 
         function editUser(elem) {
             location.href = "/user/"+elem.id+"/edit";
+        }
+
+        function showUser(elem) {
+            location.href = "/user/"+elem.id;
         }
 
         function deleteUser(elem) {

@@ -45,9 +45,7 @@ class UserController extends BaseController
     public function show(array $args)
     {
         $user = $this->user->getUserById($args['id']);
-        var_dump($user);
-        if($user)
-            return $user;
+        $this->view->renderHtml('User/Show.php', $user);
     }
 
     public function index(array $args = []): void
