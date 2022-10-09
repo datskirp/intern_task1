@@ -8,7 +8,7 @@ class Alert
 
     public function setAlerts(array $alert): void
     {
-        $this->alerts[] = $alert;
+        $this->alerts += $alert;
     }
 
     public function getAlerts():array

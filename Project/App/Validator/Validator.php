@@ -30,12 +30,13 @@ class Validator extends Base
                         }
 
                         if ($constraint === 'email' && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
-                            $this->alert->setAlerts([$field => 'This field must be valid email address']);
+                            $this->alert->setAlerts([$field => 'This field must be a valid email address']);
                             break;
                         }
                         if ($constraint === 'unique') {
                             $db = Db::getInstance();
-                            if ($db->checkEmailExistence($value)) {
+                            if ($db->checkEmailExistence($value) &&
+                                    ($db->getEmailById($inputFields['id'])[$field] ?? '') !== $value) {
                                 $this->alert->setAlerts([$field => 'Entered e-mail already exists!']);
                             }
                         }

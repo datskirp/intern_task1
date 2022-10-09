@@ -21,7 +21,7 @@
                                   py-2 px-3 text-gray-700 leading-tight focus:outline-none
                                   focus:shadow-outline"
                                    id="email" name="email" type="text" placeholder="email" required="required">
-                            <span id="emailError" class="error text-xs text-red-500"></span>
+                            <span id="emailError" class="text-xs text-red-500"></span>
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
@@ -57,44 +57,58 @@
                                type="submit" value="Add user" >
                     </div>
                 </form>
+                <br>
                 <p id="message" class='text-center text-red-500'>
             </div>
         </div>
     </div>
 <script>
-        $("form").submit(function (event) {
-            $("#emailError").text("");
-            $("#nameError").text("");
-            var formData = {
-                name: $("#name").val(),
-                email: $("#email").val(),
-                gender: $("#gender").val(),
-                status : $("#status").val()
-            };
-            $.ajax({
-                type: "POST",
-                url: "/user",
-                data: formData,
-                dataType: "json",
-                encode: true,
-                success: function (response) {
-                    if (response['status'] === 'true') {
-                        sessionStorage.setItem('msg', "User with ID: " + response['id'] + " was created!");
-                        window.location.replace(response['redirect_url']);
-                    } else
-                        $("#message").text("User was not created!");
-                        if (response['errors']['emailExists'] === true)
-                            $("#emailError").text("Entered e-mail exists in the database!");
-                        if (response['errors']['email'])
-                            $("#emailError").text(response['errors']['email']);
-                        if (response['errors']['name'])
-                            document.getElementById('nameError').textContent = response['errors']['name'];
 
+    const form = document.getElementById('addUser');
+    form.addEventListener('submit', handleFormSubmit);
+    function handleFormSubmit(event) {
+        event.preventDefault();
+
+        let emailError = document.getElementById('emailError');
+        emailError.innerHTML = "";
+        let nameError = document.getElementById('nameError');
+        nameError.innerHTML = "";
+        let message = document.getElementById('message');
+        message.innerHTML = "";
+
+        const data = new FormData(event.target);
+
+        const value = Object.fromEntries(data.entries());
+
+        const response = postData('/user', JSON.stringify(value));
+
+        response.then((result) => {
+            if (result.status === 'true') {
+                sessionStorage.setItem('msg', "User with ID: " + result.id + " was created!");
+                window.location.replace(result.redirect_url);
+            } else {
+                message.innerHTML = "User was not created! Error occurred.";
+                if (result.email) {
+                    emailError.innerHTML = result.email;
                 }
 
-            });
-
-            event.preventDefault();
+                if (result.name)
+                    nameError.innerHTML = result.name;
+            }
         });
+    }
+    async function postData(url = '', data) {
+        // Default options are marked with *
+        const response = await fetch(url, {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: data // body data type must match "Content-Type" header
+        });
+        return response.json();
+    }
+
 </script>
 <?php include_once  __DIR__ . '/../footer.php' ?>

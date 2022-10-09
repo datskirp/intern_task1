@@ -13,7 +13,7 @@ class User extends Base
         return $this->db->changeRecord($sql, $userData) ? $userData : null;
     }
 
-    public function show(int $id): array|false
+    public function getUserById(int $id): array|false
     {
         $sql = 'SELECT * FROM users WHERE id = :id';
         return $this->db->getRecord($sql, ['id' => $id]);
@@ -22,7 +22,7 @@ class User extends Base
     public function edit(array $userData): ?array
     {
         $db = Db::getInstance();
-        if($db->getEmailById((int)$userData['id']) == $userData['email']){
+        if($db->getEmailById((int)$userData['id']) === $userData['email']){
             $sql = 'UPDATE `users` SET `name` = :name, 
                    `gender` = :gender, `status` = :status WHERE id = :id';
             return $this->db->changeRecord($sql, $userData) ? $userData : null;

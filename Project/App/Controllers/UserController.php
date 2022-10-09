@@ -10,86 +10,46 @@ class UserController extends BaseController
 
     public function store(): void
     {
-        parse_str(file_get_contents("php://input"),$post_vars);
-
-        //var_dump(getallheaders());
-
+        $post_vars = json_decode(file_get_contents("php://input"), true);
         $post_vars['id'] = time();
+
         $this->validator->validate($post_vars, $this->validateRules());
-
-        var_dump($this->validator->isValid());
-
         $this->validator->isValid() ?
             $status = $this->user->add($post_vars) :
             $status = false;
 
-        echo $status ?
-            json_encode([
-                'status' => 'true',
-                'redirect_url' => '/',
-                'id' => $post_vars['id'],
-                'action' => 'add',
-            ]) :
-            json_encode([
-                'status' => 'false',
-                'redirect_url' => 'null',
-                'errors' => $this->validator->getAlerts(),
-            ]);
-
-
+        $this->response->send((bool)$status, $this->validator->getAlerts(), $post_vars['id'], '/');
     }
 
     public function delete(array $args)
     {
         $status =  $this->user->delete((int)$args['id']);
 
-        echo $status ?
-            json_encode([
-                'status' => 'true',
-                'redirect_url' => '/',
-                'id' => $args['id'],
-                'action' => 'delete',
-            ]) :
-            json_encode([
-                'status' => 'false',
-                'redirect_url' => 'null',
-                'id' => $args['id'],
-            ]);
+        $this->response->send($status, $this->validator->getAlerts(), $args['id'], '/');
 
     }
 
     public function edit(array $args): void
     {
-        $this->view->renderHtml('User/Edit.php', $this->user->show($args['id']));
+        $this->view->renderHtml('User/Edit.php', $this->user->getUserById($args['id']));
     }
 
     public function update(): void
     {
-        parse_str(file_get_contents("php://input"),$post_vars);
-        $validator = Validator::getInstance();
-        $validator::deleteErrorMessages();
-        $validator::validate($post_vars);
-        $validator::isValid() ?
-            $status = $this->user->edit($post_vars) :
+        $put_vars = json_decode(file_get_contents("php://input"), true);
+
+        $this->validator->validate($put_vars, $this->validateRules());
+        $this->validator->isValid() ?
+            $status = $this->user->edit($put_vars) :
             $status = false;
-        echo $status ?
-            json_encode([
-                'status' => 'true',
-                'redirect_url' => '/',
-                'id' => $post_vars['id'],
-                'action' => 'update',
-            ]) :
-            json_encode([
-                'status' => 'false',
-                'redirect_url' => 'null',
-                'id' => $post_vars['id'],
-                'errors' => $validator::$errorMessages,
-            ]);
+
+        $this->response->send((bool)$status, $this->validator->getAlerts(), $put_vars['id'], '/');
     }
 
     public function show(array $args)
     {
-        $user = $this->user->show($args['id']);
+        $user = $this->user->getUserById($args['id']);
+        var_dump($user);
         if($user)
             return $user;
     }

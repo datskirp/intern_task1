@@ -31,8 +31,8 @@
                         <td class="border-2 px-2 py-2 text-center"><?= $user['gender'] ?></td>
                         <td class="border-2 px-2 py-2 text-center"><?= $user['status'] ?></td>
                         <td class="border-2 px-2 py-2 text-center">
-                            <button name="edit" id ="<?= $user['id'] ?>"  class="bg-green-400 border-2 hover:border-green-800 text-white w-14 rounded">Edit</button>
-                            <button name="delete" class="bg-red-400 border-2 hover:border-red-800 text-white w-14 rounded" id="<?= $user['id'] ?>">Delete</button>
+                            <button name="edit" id ="<?= $user['id'] ?>"  class="bg-green-400 border-2 hover:border-green-800 text-white w-14 rounded" onclick="editUser(this)">Edit</button>
+                            <button name="delete" class="bg-red-400 border-2 hover:border-red-800 text-white w-14 rounded" id="<?= $user['id'] ?>" onclick="deleteUser(this)">Delete</button>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -44,6 +44,7 @@
     </div>
 </div>
     <script>
+        let message = document.getElementById('message');
         if (sessionStorage.getItem('msg')) {
             if (sessionStorage.getItem('action') === 'delete') {
                 document.getElementById('message').classList.add('text-red-500');
@@ -54,9 +55,37 @@
             }
         }
         sessionStorage.clear();
-        $("button[name='edit']").on("click", function () {
-            location.href = "/user/"+this.id+"/edit";
-        });
+
+        function editUser(elem) {
+            location.href = "/user/"+elem.id+"/edit";
+        }
+
+        function deleteUser(elem) {
+            if(confirm("Delete user "+elem.id+"?")) {
+                const response = userDelete("user/" + elem.id);
+
+                response.then((result) => {
+                    if (result.status === 'true') {
+                        sessionStorage.setItem('msg', "User with ID: " + result.id + " was deleted!");
+                        window.location.replace(result.redirect_url);
+                    } else
+                        message.innerHTML = "User was not deleted! Error occurred.";
+                });
+            }
+        }
+        async function userDelete(url = '') {
+            // Default options are marked with *
+            const response = await fetch(url, {
+                method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+                headers: {
+                    //'Content-Type': 'application/json'
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                //body: data // body data type must match "Content-Type" header
+            });
+            return response.json();
+        }
+/*
         $("button[name='delete']").on("click", function () {
         if (confirm("Delete user?"))
             $.ajax(
@@ -74,6 +103,6 @@
                     }
                 })
             })
-
+*/
     </script>
 <?php include_once  __DIR__ . '/../footer.php' ?>
