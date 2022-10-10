@@ -1,5 +1,5 @@
 <?php
     return [
-        'email' => ['required', 'email', 'unique'],
-        'name' => ['required', 'name'],
+        'email' => ['required' => 'yes', 'maxsize' => 255, 'valid' => 'email', 'unique' => 'yes'],
+        'name' => ['required' => 'yes', 'maxsize' => 255, 'valid' => 'name'],
     ];

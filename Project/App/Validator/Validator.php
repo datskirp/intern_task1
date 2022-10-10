@@ -15,8 +15,8 @@ class Validator extends Base
         $this->id = $inputFields['id'];
         foreach ($inputFields as $field => $value) {
             if (array_key_exists($field, $rules)) {
-                foreach ($rules[$field] as $constraint) {
-                    if ($this->$constraint($field, $value)) {
+                foreach ($rules[$field] as $constraint => $rule) {
+                    if ($this->$constraint($field, $value, $rule)) {
                         break;
                     }
                 }
@@ -26,13 +26,19 @@ class Validator extends Base
 
     }
 
-    private function required(string $field, string $value): bool
+    private function required(string $field, string $value, string $rule): bool
     {
-        if(empty($value)) {
+        if(empty($value) && $rule === 'yes') {
             $this->alert->setAlerts($field, 'This field is required');
             return true;
         }
         return false;
+    }
+
+
+    private function valid(string $field, string $value, string $rule): bool
+    {
+            return $this->$rule($field, $value);
     }
 
     private function email(string $field, string $value): bool
@@ -44,10 +50,10 @@ class Validator extends Base
         return false;
     }
 
-    private function unique(string $field, string $value): bool
+    private function unique(string $field, string $value, string $rule): bool
     {
         $db = Db::getInstance();
-        if ($db->checkEmailExistence($value) &&
+        if ($rule === 'yes' && $db->checkEmailExistence($value) &&
             ($db->getEmailById($this->id)[$field] ?? '') !== $value) {
             $this->alert->setAlerts($field, 'Entered email already exists!');
             return true;
@@ -59,6 +65,15 @@ class Validator extends Base
     {
         if (!preg_match("/^\p{L}+(['-]\p{L}+)*\.?(\s\p{L}+(['-]\p{L}+)*\.?)+$/", $value)) {
             $this->alert->setAlerts($field, 'Enter a valid name');
+            return true;
+        }
+        return false;
+    }
+
+    private function maxsize(string $field, string $value, int $rule): bool
+    {
+        if (strlen($value) > $rule) {
+            $this->alert->setAlerts($field, 'The value you entered is too long');
             return true;
         }
         return false;

@@ -16,14 +16,14 @@ class UserController extends BaseController
         $this->validator->isValid() ?
             $status = $this->user->add($post_vars) :
             $status = false;
-        $this->response->setSessionMsg('added', $post_vars['id']);
+        if($status) $this->response->setSessionMsg('added', $post_vars['id']);
         $this->response->send((bool)$status, $this->validator->getAlerts(), $post_vars['id'], '/');
     }
 
     public function delete(array $args): void
     {
         $status =  $this->user->delete((int)$args['id']);
-        $this->response->setSessionMsg('deleted', (int)$args['id']);
+        if($status) $this->response->setSessionMsg('deleted', (int)$args['id']);
         $this->response->send($status, $this->validator->getAlerts(), (int)$args['id'], '/');
     }
 
@@ -39,7 +39,7 @@ class UserController extends BaseController
         $this->validator->isValid() ?
             $status = $this->user->edit($put_vars) :
             $status = false;
-        $this->response->setSessionMsg('updated', $put_vars['id']);
+        if($status) $this->response->setSessionMsg('updated', $put_vars['id']);
         $this->response->send((bool)$status, $this->validator->getAlerts(), $put_vars['id'], '/');
     }
 
