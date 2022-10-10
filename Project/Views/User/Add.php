@@ -85,15 +85,14 @@
         response.then((result) => {
             if (result.status === 'true') {
                 sessionStorage.setItem('msg', "User with ID: " + result.id + " was created!");
-                window.location.replace(result.redirect_url);
+                window.location.replace(result.redirect_uri);
             } else {
                 message.innerHTML = "User was not created! Error occurred.";
-                if (result.email) {
-                    emailError.innerHTML = result.email;
+                if (result.alerts.email) {
+                    emailError.innerHTML = result.alerts.email;
                 }
-
-                if (result.name)
-                    nameError.innerHTML = result.name;
+                if (result.alerts.name)
+                    nameError.innerHTML = result.alerts.name;
             }
         });
     }

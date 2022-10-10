@@ -22,9 +22,7 @@
                 </tr>
                 <?php
                 foreach ($users as $user): ?>
-                    <tr
-                        <?php if (isset($args['userData']['id']) && $args['userData']['id'] == $user['id']) echo ' class="bg-green-100"'; ?>
-                    >
+                    <tr>
                         <td class="border-2 px-2 py-2 text-center"><?= $user['id'] ?></td>
                         <td class="border-2 px-2 py-2 text-center"><?= $user['email'] ?></td>
                         <td class="border-2 px-2 py-2 text-center"><?= $user['name'] ?></td>
@@ -51,21 +49,18 @@
             </table>
         <?php else: echo '<h2 class="text-red-800">There are no users in the database!</h2>';
             endif; ?>
-            <p id="message" class='text-center'>
+        <p id="message" class='text-center'>
+            <?php if(isset($args['args']['action'])) echo "User ID: " . $args['args']['msgID'] . " has been " . $args['args']['action'] . "!"; ?>
+        </p>
     </div>
 </div>
     <script>
         let message = document.getElementById('message');
-        if (sessionStorage.getItem('msg')) {
-            if (sessionStorage.getItem('action') === 'delete') {
-                document.getElementById('message').classList.add('text-red-500');
-                document.getElementById('message').textContent = sessionStorage.getItem('msg');
-            } else {
-                document.getElementById('message').classList.add('text-green-500');
-                document.getElementById('message').textContent = sessionStorage.getItem('msg');
-            }
+        if (message.innerHTML.includes("deleted")) {
+            message.classList.add('text-red-500');
+        } else {
+            message.classList.add('text-green-500');
         }
-        sessionStorage.clear();
 
         function editUser(elem) {
             location.href = "/user/"+elem.id+"/edit";
@@ -81,8 +76,7 @@
 
                 response.then((result) => {
                     if (result.status === 'true') {
-                        sessionStorage.setItem('msg', "User with ID: " + result.id + " was deleted!");
-                        window.location.replace(result.redirect_url);
+                        window.location.replace(result.redirect_uri);
                     } else
                         message.innerHTML = "User was not deleted! Error occurred.";
                 });

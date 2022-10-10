@@ -21,12 +21,4 @@ abstract class BaseController
         $this->validator = new Validator();
         $this->response = new Response();
     }
-
-    public function validateRules(): array
-    {
-        return [
-            'email' => ['required', 'email', 'unique'],
-            'name' => ['required', 'name'],
-        ];
-    }
 }

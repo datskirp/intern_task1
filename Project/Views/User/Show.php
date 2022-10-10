@@ -80,7 +80,7 @@
             response.then((result) => {
                 if (result.status === 'true') {
                     sessionStorage.setItem('msg', "User with ID: " + result.id + " was deleted!");
-                    window.location.replace(result.redirect_url);
+                    window.location.replace(result.redirect_uri);
                 } else
                     message.innerHTML = "User was not deleted! Error occurred.";
             });
@@ -92,7 +92,6 @@
         });
         return response.json();
     }
-
 </script>
 <?php include_once  __DIR__ . '/../footer.php' ?>
 

@@ -71,8 +71,6 @@
     </div>
 </div>
 <script>
-
-
     const form = document.getElementById('editUser');
     form.addEventListener('submit', handleFormSubmit);
     function handleFormSubmit(event) {
@@ -93,15 +91,14 @@
         response.then((result) => {
             if (result.status === 'true') {
                 sessionStorage.setItem('msg', "User with ID: " + result.id + " was updated!");
-                window.location.replace(result.redirect_url);
+                window.location.replace(result.redirect_uri);
             } else {
                 message.innerHTML = "User was not updated! Error occurred.";
-                if (result.email) {
-                    emailError.innerHTML = result.email;
+                if (result.alerts.email) {
+                    emailError.innerHTML = result.alerts.email;
                 }
-
-                if (result.name)
-                    nameError.innerHTML = result.name;
+                if (result.alerts.name)
+                    nameError.innerHTML = result.alerts.name;
             }
         });
     }
@@ -115,6 +112,5 @@
         });
         return response.json();
     }
-
 </script>
 <?php include_once  __DIR__ . '/../footer.php' ?>

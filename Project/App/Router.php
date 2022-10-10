@@ -46,6 +46,7 @@ class Router
             $action = $callback[1];
             $controller = new $controllerName();
             $controller->$action($this->requestArgs);
+            //TODO return view or response object
         } else {
             $this->exitWithError('Url: "' . $this->path . '" you entered is not found!');
         }
