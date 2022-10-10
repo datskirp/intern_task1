@@ -23,30 +23,33 @@ class Validator extends Base
             }
         }
         empty($this->alert->getAlerts()) ? $this->isValid = true : $this->isValid = false;
-
     }
 
     private function required(string $field, string $value, string $rule): bool
     {
-        if(empty($value) && $rule === 'yes') {
+        if (empty($value) && $rule === 'yes') {
             $this->alert->setAlerts($field, 'This field is required');
+
             return true;
         }
+
         return false;
     }
 
 
     private function valid(string $field, string $value, string $rule): bool
     {
-            return $this->$rule($field, $value);
+        return $this->$rule($field, $value);
     }
 
     private function email(string $field, string $value): bool
     {
         if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
             $this->alert->setAlerts($field, 'This field must be a valid email address');
+
             return true;
         }
+
         return false;
     }
 
@@ -56,8 +59,10 @@ class Validator extends Base
         if ($rule === 'yes' && $db->checkEmailExistence($value) &&
             ($db->getEmailById($this->id)[$field] ?? '') !== $value) {
             $this->alert->setAlerts($field, 'Entered email already exists!');
+
             return true;
         }
+
         return false;
     }
 
@@ -65,8 +70,10 @@ class Validator extends Base
     {
         if (!preg_match("/^\p{L}+(['-]\p{L}+)*\.?(\s\p{L}+(['-]\p{L}+)*\.?)+$/", $value)) {
             $this->alert->setAlerts($field, 'Enter a valid name');
+
             return true;
         }
+
         return false;
     }
 
@@ -74,14 +81,16 @@ class Validator extends Base
     {
         if (strlen($value) > $rule) {
             $this->alert->setAlerts($field, 'The value you entered is too long');
+
             return true;
         }
+
         return false;
     }
 
     public function userValidatorRules()
     {
-        return include ROOT . "/Config/userValidatorRules.php";
+        return include __DIR__ . '/../../' . '/Config/userValidatorRules.php';
     }
 
     public function isValid(): bool

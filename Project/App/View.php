@@ -20,5 +20,4 @@ class View
         ob_end_clean();
         echo $buffer;
     }
-
 }

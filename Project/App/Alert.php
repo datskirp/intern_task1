@@ -11,7 +11,7 @@ class Alert
         $this->alerts[$field] = $value;
     }
 
-    public function getAlerts():array
+    public function getAlerts(): array
     {
         return $this->alerts;
     }

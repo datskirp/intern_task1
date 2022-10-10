@@ -24,11 +24,11 @@ class Response
                 'id' => $id,
             ]) :
             json_encode([
-                    'status' => 'false',
-                    'redirect_uri' => 'null',
-                    'id' => $id,
-                    'alerts' => $alerts,
-                ]);
+                'status' => 'false',
+                'redirect_uri' => 'null',
+                'id' => $id,
+                'alerts' => $alerts,
+            ]);
     }
 
     public function startSession(): void
@@ -44,8 +44,9 @@ class Response
 
     public function setSessionMsg(string $action, int $id): void
     {
-        if(!isset($_SESSION))
+        if (!isset($_SESSION)) {
             $this->startSession();
+        }
         $_SESSION['action'] = $action;
         $_SESSION['id'] = $id;
     }
