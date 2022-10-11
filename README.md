@@ -38,5 +38,5 @@ To stop and remove the containers:
 ```#docker compose down```
 
 
- ### Open in browser http://127.0.0.1:8080
- ### PhpMyAdmin http://127.0.0.1:8081  user: db_user, password: 321
+ #### Open in browser http://127.0.0.1:8080
+ ###### PhpMyAdmin http://127.0.0.1:8081  user: db_user, password: 321
