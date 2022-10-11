@@ -34,7 +34,13 @@ class UserController extends BaseController
 
     public function edit(array $args): void
     {
-        $this->view->renderHtml('User/Edit.php', $this->user->getUserById($args['id']));
+        $user = $this->user->getUserById($args['id']);
+        if ($user !== false) {
+            $this->view->renderHtml('User/Edit.php', $user);
+        } else {
+            $this->view->renderHtml('404.php', ['msg' => 'This url is not found!']);
+        }
+        //$this->view->renderHtml('User/Edit.php', $this->user->getUserById($args['id']));
     }
 
     public function update(): void
@@ -53,7 +59,12 @@ class UserController extends BaseController
     public function show(array $args)
     {
         $user = $this->user->getUserById($args['id']);
-        $this->view->renderHtml('User/Show.php', $user);
+        if ($user !== false) {
+            $this->view->renderHtml('User/Show.php', $user);
+        } else {
+            $this->view->renderHtml('404.php', ['msg' => 'This url is not found!']);
+        }
+
     }
 
     public function index(array $args = []): void

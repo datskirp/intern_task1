@@ -49,7 +49,7 @@ class Router
             $controller->$action($this->requestArgs);
         //TODO return view or response object
         } else {
-            $this->exitWithError('Url: "' . $this->path . '" you entered is not found!');
+            $this->exitWithError('This url is not found!');
         }
     }
 
