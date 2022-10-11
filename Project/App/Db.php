@@ -11,8 +11,10 @@ class Db
     {
         $dbInit = (require __DIR__ . '/../Config/db.php')['db'];
 
+        $dsn = 'mysql:host=' . $dbInit['host'] . '; dbname=' . $dbInit['dbname'] .
+            '; port=' . $dbInit['port'];
         $this->pdo = new \PDO(
-            'mysql:host=' . $dbInit['host'] . '; dbname=' . $dbInit['dbname'],
+            $dsn,
             $dbInit['user'],
             $dbInit['password']
         );

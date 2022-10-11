@@ -2,9 +2,10 @@
 
 return [
     'db' => [
-        'host' => 'task1-db-1',
+        'host' => 'db',
         'dbname' => 'app_db',
         'user' => 'db_user',
         'password' => '321',
+        'port' => '3306',
     ],
 ];
