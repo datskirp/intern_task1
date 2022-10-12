@@ -9,7 +9,7 @@ return [
         '/user/edit' => [\App\Controllers\UserController::class, 'edit'],
     ],
     'post' => [
-        '/api/v1/user' => [\App\Controllers\UserController::class, 'store'],
+        '/api/v1/users' => [\App\Controllers\UserController::class, 'store'],
     ],
     'put' => [
         '/api/v1/user/{id:\d+}' => [\App\Controllers\UserController::class, 'update'],

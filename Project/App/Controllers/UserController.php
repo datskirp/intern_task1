@@ -29,7 +29,7 @@ class UserController extends BaseController
         if ($status) {
             $this->response->setSessionMsg('deleted', (int)$args['id']);
         }
-        $this->response->send($status, $this->validator->getAlerts(), (int)$args['id'], '/');
+        $this->response->send($status, (int)$args['id'], '/');
     }
 
     public function edit(array $args): void
