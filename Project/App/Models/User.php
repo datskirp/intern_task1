@@ -44,7 +44,7 @@ class User extends Base
         return $this->db->deleteRecord($sql, $id);
     }
 
-    public function getAll(): ?array
+    public function getAll(): array
     {
         return $this->db->getAll();
     }

@@ -67,6 +67,16 @@ class UserController extends BaseController
 
     }
 
+    public function showAll()
+    {
+        $users = $this->user->getAll();
+        if (empty($users)) {
+            $this->response->dbIdEmpty();
+        } else {
+            $this->response->sendOk($users);
+        }
+    }
+
     public function index(array $args = []): void
     {
         if (!isset($_SESSION)) {
@@ -77,7 +87,7 @@ class UserController extends BaseController
             $args['msgID'] = $_SESSION['id'];
             $this->response->stopSession();
         }
-        $users = $this->user->getAll();
-        $this->view->renderHtml('User/ViewAll.php', ['users' => $users, 'args' => $args]);
+        //$users = $this->user->getAll();
+        $this->view->renderHtml('User/Start.php', ['args' => $args]);
     }
 }

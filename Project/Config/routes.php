@@ -1,18 +1,20 @@
 <?php
 
-return ['get' => [
-    '/' => [\App\Controllers\UserController::class, 'index'],
-    '/user/{id:\d+}' => [\App\Controllers\UserController::class, 'show'],
-    '/user/create' => [\App\Controllers\UserController::class, 'create'],
-    '/user/{id:\d+}/edit' => [\App\Controllers\UserController::class, 'edit'],
-],
+return [
+    'get' => [
+        '/' => [\App\Controllers\UserController::class, 'index'],
+        '/api/v1/user/{id:\d+}' => [\App\Controllers\UserController::class, 'show'],
+        '/api/v1/users' => [\App\Controllers\UserController::class, 'showAll'],
+        '/user/create' => [\App\Controllers\UserController::class, 'create'],
+        '/user/edit' => [\App\Controllers\UserController::class, 'edit'],
+    ],
     'post' => [
-        '/user' => [\App\Controllers\UserController::class, 'store'],
+        '/api/v1/user' => [\App\Controllers\UserController::class, 'store'],
     ],
     'put' => [
-        '/user/{id:\d+}' => [\App\Controllers\UserController::class, 'update'],
+        '/api/v1/user/{id:\d+}' => [\App\Controllers\UserController::class, 'update'],
     ],
     'delete' => [
-        '/user/{id:\d+}' => [\App\Controllers\UserController::class, 'delete'],
+        '/api/v1/user/{id:\d+}' => [\App\Controllers\UserController::class, 'delete'],
     ],
 ];
