@@ -7,6 +7,7 @@ use App\Alert;
 class Response
 {
     private const HEADER_CONTENT = 'Content-Type: application/json; charset=utf-8';
+    private array $responseBody;
 
     private function setDefaultHeader(): void
     {
@@ -25,19 +26,40 @@ class Response
 
     public function dbIdEmpty(): void
     {
-        echo json_encode([
-            'status' => 'false',
-            'msg' => 'There are no users in the database!'
-        ]);
+        $this->responseBody['status'] = false;
+        $this->responseBody['msg'] = 'There are no users in the database!';
+        echo json_encode($this->responseBody);
     }
 
-    public function sendOk(array $users)
+    public function send404()
     {
+        $this->statusCode(404);
         $this->setDefaultHeader();
-        echo json_encode([
-            'status' => 'true',
-            'data' => $users,
-        ]);
+        //echo json_encode(['msg' => 'There is no such user!']);
+    }
+
+    public function sendOk($id = null, array $data = [])
+    {
+        $this->responseBody['status'] = true;
+        $this->setDefaultHeader();
+        if (!is_null($id))
+            $this->responseBody['id'] = $id;
+        if (!empty($data))
+            $this->responseBody['data'] = $data;
+
+        echo json_encode($this->responseBody);
+    }
+
+    public function sendNotValid(int $id, array $alerts)
+    {
+        $this->responseBody['status'] = false;
+        $this->responseBody['id'] = $id;
+        $this->responseBody['alerts'] = $alerts;
+        $this->setDefaultHeader();
+
+        echo json_encode($this->responseBody);
+
+
     }
 
     public function send(bool $status, array $alerts, int $id, string $redirectUri): void

@@ -8,7 +8,9 @@
              onclick="showUsers()">View all users</button>
         </div>
         <br>
-        <p id="message" class='text-center'></p>
+        <p id="message" class='text-center'>
+            <?php if(isset($args['args']['action'])) echo "User ID: " . $args['args']['msgID'] . " has been " . $args['args']['action'] . "!"; ?>
+        </p>
     </div>
 </div>
 <script>
@@ -16,7 +18,7 @@
     function showUsers() {
         const response = getUsers("/api/v1/users");
         response.then((result) => {
-            if (result.status === 'true') {
+            if (result.status === true) {
                 generateTable(result.data);
             } else
                 message.innerHTML = result.msg;
@@ -124,8 +126,8 @@
             const response = userDelete("api/v1/user/" + elem.id);
 
             response.then((result) => {
-                if (result.status === 'true') {
-                    window.location.replace(result.redirect_uri);
+                if (result.status === true) {
+                    window.location.replace('/');
                 } else
                     message.innerHTML = "User was not deleted! Error occurred.";
             });

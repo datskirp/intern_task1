@@ -17,10 +17,15 @@ class UserController extends BaseController
         $this->validator->isValid() ?
             $status = $this->user->add($post_vars) :
             $status = false;
+
         if ($status) {
+            $this->response->startSession();
             $this->response->setSessionMsg('added', $post_vars['id']);
+            $this->response->sendOk($post_vars['id']);
+        } else {
+            $this->response->sendNotValid($post_vars['id'], $this->validator->getAlerts());
         }
-        $this->response->send((bool)$status, $this->validator->getAlerts(), $post_vars['id'], '/');
+
     }
 
     public function delete(array $args): void
@@ -28,8 +33,11 @@ class UserController extends BaseController
         $status = $this->user->delete((int)$args['id']);
         if ($status) {
             $this->response->setSessionMsg('deleted', (int)$args['id']);
+            $this->response->sendOk((int)$args['id']);
         }
-        $this->response->send($status, (int)$args['id'], '/');
+        else {
+            $this->response->send404();
+        }
     }
 
     public function edit(array $args): void
@@ -73,19 +81,22 @@ class UserController extends BaseController
         if (empty($users)) {
             $this->response->dbIdEmpty();
         } else {
-            $this->response->sendOk($users);
+            $this->response->sendOk(null, $users);
         }
     }
 
     public function index(array $args = []): void
     {
+        session_start();
+        /*
         if (!isset($_SESSION)) {
             $this->response->startSession();
         }
+        */
         if (isset($_SESSION['action'])) {
             $args['action'] = $_SESSION['action'];
             $args['msgID'] = $_SESSION['id'];
-            $this->response->stopSession();
+            //$this->response->stopSession();
         }
         //$users = $this->user->getAll();
         $this->view->renderHtml('User/Start.php', ['args' => $args]);

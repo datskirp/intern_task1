@@ -31,6 +31,7 @@ class View
     public function renderHtml(string $template, array $args = []): void
     {
         extract($args, EXTR_SKIP);
+        //var_dump($args);
         ob_start();
         $this->insertHeader();
         $this->insertContent($template);

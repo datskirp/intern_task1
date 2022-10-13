@@ -88,6 +88,17 @@ class Validator extends Base
         return false;
     }
 
+    private function enum(string $field, string $value, array $rule): bool
+    {
+        if (!in_array($value, $rule)) {
+            $this->alert->setAlerts($field, 'Only '. implode(', ', $rule) . ' values are allowed');
+
+            return true;
+        }
+
+        return false;
+    }
+
     public function userValidatorRules()
     {
         return include __DIR__ . '/../../' . '/Config/userValidatorRules.php';

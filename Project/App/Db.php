@@ -52,7 +52,7 @@ class Db
     {
         $sth = $this->pdo->prepare($sql);
 
-        return $sth->execute(['id' => $id]);
+        return ($sth->execute(['id' => $id]) && $sth->rowCount() == 1);
     }
 
     public function checkEmailExistence($email): array|false
