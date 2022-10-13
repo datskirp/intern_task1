@@ -21,23 +21,16 @@ class View
         return include_once $this->dir . '/footer.php';
     }
 
-    private function insertContent(string $template): string
-    {
-        return include_once $this->dir . '/' . $template;
-    }
-
-
-
     public function renderHtml(string $template, array $args = []): void
     {
-        extract($args, EXTR_SKIP);
-        //var_dump($args);
+        extract($args);
         ob_start();
         $this->insertHeader();
-        $this->insertContent($template);
+        include_once $this->dir . '/' . $template;
         $this->insertFooter();
         $buffer = ob_get_contents();
         ob_end_clean();
+
         echo $buffer;
     }
 }

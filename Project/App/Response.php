@@ -2,8 +2,6 @@
 
 namespace App;
 
-use App\Alert;
-
 class Response
 {
     private const HEADER_CONTENT = 'Content-Type: application/json; charset=utf-8';
@@ -38,14 +36,22 @@ class Response
         //echo json_encode(['msg' => 'There is no such user!']);
     }
 
-    public function sendOk($id = null, array $data = [])
+    public function sendOk($id = null, array $data = [], string $html = '')
     {
         $this->responseBody['status'] = true;
         $this->setDefaultHeader();
-        if (!is_null($id))
+        if (!is_null($id)) {
             $this->responseBody['id'] = $id;
-        if (!empty($data))
+        }
+        if (!empty($data)) {
             $this->responseBody['data'] = $data;
+        }
+        if (!empty($html)) {
+            $this->responseBody['html'] = $html;
+        }
+        if (isset($_SESSION['action']) && $_SESSION['action'] === 'added') {
+            $this->statusCode(201);
+        }
 
         echo json_encode($this->responseBody);
     }
@@ -55,11 +61,10 @@ class Response
         $this->responseBody['status'] = false;
         $this->responseBody['id'] = $id;
         $this->responseBody['alerts'] = $alerts;
+        $this->statusCode(400);
         $this->setDefaultHeader();
 
         echo json_encode($this->responseBody);
-
-
     }
 
     public function send(bool $status, array $alerts, int $id, string $redirectUri): void

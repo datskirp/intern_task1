@@ -1,6 +1,9 @@
 <div class="flex flex-row justify-center items-center">
     <div id = "content-box" class="w-auto px-8 py-4 mt-4 text-left bg-white shadow-lg">
         <div id ="content-buttons" class="flex flex-row justify-center">
+            <a href="/">
+                <button id = "main" hidden class="bg-blue-500 hover:border-blue-900 text-white font-bold py-2 w-44 border-2 rounded">Main</button>
+            </a>
             <a href="/user/create">
                 <button class="bg-blue-500 hover:border-blue-900 text-white font-bold py-2 w-44 border-2 rounded">Add user</button>
             </a>
@@ -9,13 +12,14 @@
         </div>
         <br>
         <p id="message" class='text-center'>
-            <?php if(isset($args['args']['action'])) echo "User ID: " . $args['args']['msgID'] . " has been " . $args['args']['action'] . "!"; ?>
+            <?php if(isset($args['action'])) echo "User ID: " . $args['msgID'] . " has been " . $args['action'] . "!"; ?>
         </p>
     </div>
 </div>
 <script>
     let message = document.getElementById('message');
     function showUsers() {
+        message.innerHTML = "";
         const response = getUsers("/api/v1/users");
         response.then((result) => {
             if (result.status === true) {
@@ -32,12 +36,15 @@
     }
 
     function generateTable(users) {
+        document.getElementById("main").hidden = false;
         const divTable = document.createElement("div");
+        divTable.id = 'showAllDiv';
         divTable.classList.add("flex", "flex-row", "justify-center");
 
         // creates a <table> element and a <tbody> element
         const tbl = document.createElement("table");
         tbl.classList.add("border-collapse", "border-t-2", "table-auto", "shadow-lg");
+        tbl.id = "showAllTable";
 
         const tblBody = document.createElement("tbody");
         var count = Object.keys(users).length;
@@ -75,7 +82,7 @@
             editButton.classList.add("bg-green-400", "border-2", "hover:border-green-800", "text-white", "w-14", "rounded");
             editButton.name = "edit";
             editButton.id = users[i]['id'];
-            editButton.onclick = function(){editUser(this)};
+            editButton.onclick = function(){editUserShow(this)};
             const editButtonText = document.createTextNode('Edit');
             editButton.appendChild(editButtonText);
             cellButtons.appendChild(editButton);
@@ -109,17 +116,83 @@
         divTable.appendChild(tbl);
         document.getElementById('content-box').appendChild(divTable);
 
-        document.getElementById("showAll").disabled = true;
+        document.getElementById("showAll").hidden = true;
 
     }
 
-    function editUser(elem) {
+    function editUserShow(elem) {
         location.href = "/user/"+elem.id+"/edit";
     }
 
-    function showUser(elem) {
-        location.href = "/user/"+elem.id;
+    function generateUserEdit(user) {
+
     }
+
+
+    function editUser() {
+        message.innerHTML = "";
+        const response = userEdit("/api/v1/users");
+        response.then((result) => {
+            if (result.status === true) {
+                generateTable(result.data);
+            } else
+                message.innerHTML = result.msg;
+        });
+    }
+    async function userEdit(url = '') {
+        const response = await fetch(url, {
+            method: 'GET',
+        });
+        return response.json();
+    }
+
+    function showUser(elem) {
+        document.getElementById('showAllTable').hidden = true;
+        message.innerHTML = "";
+        const response = userShow("/api/v1/user/"+elem.id);
+        response.then((result) => {
+            if (result.status === true) {
+                generateUserShow(result.data, result.html);
+            } else
+                message.innerHTML = "User was not found! Error occurred.";
+        });
+    }
+    async function userShow(url = '') {
+        const response = await fetch(url, {
+            method: 'GET',
+        });
+        return response.json();
+    }
+
+    function generateUserShow(user, content) {
+        const divShow = document.createElement("div");
+        divShow.id = 'showDiv';
+
+        //document.getElementById('text').textContent = 'Hello!';
+
+        document.getElementById('content-box').appendChild(divShow);
+        divShow.insertAdjacentHTML('afterend', content);
+        document.getElementById('id').value = user['id'];
+        document.getElementById('email').value = user['email'];
+        document.getElementById('name').value = user['name'];
+        if (user['gender'] === 'mail') {
+            document.getElementById('male').selected = true;
+        } else {
+            document.getElementById('female').selected = true;
+        }
+        if (user['status'] === 'active') {
+            document.getElementById('active').selected = true;
+        } else {
+            document.getElementById('inactive').selected = true;
+        }
+        document.getElementById('nameEdit').id = user['id'];
+        document.getElementById('nameDelete').id = user['id'];
+
+
+
+    }
+
+
 
     function deleteUser(elem) {
         if(confirm("Delete user "+elem.id+"?")) {

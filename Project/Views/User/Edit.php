@@ -86,12 +86,11 @@
         const data = new FormData(event.target);
 
         const value = Object.fromEntries(data.entries());
-        const response = postData('/user/'+value.id, JSON.stringify(value));
+        const response = putData('/api/v1/user/'+value.id, JSON.stringify(value));
 
         response.then((result) => {
-            if (result.status === 'true') {
-                sessionStorage.setItem('msg', "User with ID: " + result.id + " was updated!");
-                window.location.replace(result.redirect_uri);
+            if (result.status === true) {
+                window.location.replace('/');
             } else {
                 message.innerHTML = "User was not updated! Error occurred.";
                 if (result.alerts.email) {
@@ -102,7 +101,7 @@
             }
         });
     }
-    async function postData(url = '', data) {
+    async function putData(url = '', data) {
         const response = await fetch(url, {
             method: 'PUT',
             headers: {

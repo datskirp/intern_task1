@@ -60,17 +60,20 @@ class UserController extends BaseController
             $status = false;
         if ($status) {
             $this->response->setSessionMsg('updated', $put_vars['id']);
+            $this->response->sendOk($put_vars['id']);
+        } else {
+            $this->response->sendNotValid($put_vars['id'], $this->validator->getAlerts());
         }
-        $this->response->send((bool)$status, $this->validator->getAlerts(), $put_vars['id'], '/');
     }
 
     public function show(array $args)
     {
         $user = $this->user->getUserById($args['id']);
         if ($user !== false) {
-            $this->view->renderHtml('User/Show.php', $user);
+            $html = file_get_contents(__DIR__ . '/../../Views/User/Show.php');
+            $this->response->sendOk(null, $user, $html);
         } else {
-            $this->view->renderHtml('404.php', ['msg' => 'This url is not found!']);
+            $this->response->send404();
         }
 
     }
@@ -96,7 +99,7 @@ class UserController extends BaseController
         if (isset($_SESSION['action'])) {
             $args['action'] = $_SESSION['action'];
             $args['msgID'] = $_SESSION['id'];
-            //$this->response->stopSession();
+            $this->response->stopSession();
         }
         //$users = $this->user->getAll();
         $this->view->renderHtml('User/Start.php', ['args' => $args]);
