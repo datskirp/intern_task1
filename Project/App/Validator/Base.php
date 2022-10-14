@@ -6,7 +6,7 @@ use App\Alert;
 
 abstract class Base
 {
-    protected Alert $alert;
+    public Alert $alert;
 
     public function __construct()
     {

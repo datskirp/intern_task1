@@ -14,16 +14,20 @@ class UserController extends BaseController
         $post_vars = json_decode(file_get_contents('php://input'), true);
         $post_vars['id'] = time();
         $this->validator->validate($post_vars, $this->validator->userValidatorRules());
-        $this->validator->isValid() ?
-            $status = $this->user->add($post_vars) :
-            $status = false;
-
-        if ($status) {
-            $this->response->startSession();
-            $this->response->setSessionMsg('added', $post_vars['id']);
-            $this->response->sendOk($post_vars['id']);
-        } else {
-            $this->response->sendNotValid($post_vars['id'], $this->validator->getAlerts());
+        try {
+            $this->validator->isValid() ?
+                $status = $this->user->add($post_vars) :
+                $status = false;
+        } catch (\PDOException){
+            $this->validator->alert->setAlerts("error", "Can't write to database, wrong input data");
+        } finally {
+            if (isset($status) && $status) {
+                $this->response->startSession();
+                $this->response->setSessionMsg('added', $post_vars['id']);
+                $this->response->sendOk($post_vars['id']);
+            } else {
+                $this->response->sendNotValid($post_vars['id'], $this->validator->getAlerts());
+            }
         }
 
     }

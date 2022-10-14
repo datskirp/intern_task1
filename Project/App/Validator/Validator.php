@@ -20,6 +20,8 @@ class Validator extends Base
                         break;
                     }
                 }
+            } else {
+                $this->alert->setAlerts($field, "This field is not allowed!");
             }
         }
         empty($this->alert->getAlerts()) ? $this->isValid = true : $this->isValid = false;

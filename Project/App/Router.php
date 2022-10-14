@@ -57,7 +57,7 @@ class Router
 
     public function exitWithError(string $path): void
     {
-        if (preg_match("~^api/v1/.*$~", $path)) {
+        if (preg_match("~^api/v1.*$~", $path)) {
             $response = new Response();
             $response->send404();
         } else {

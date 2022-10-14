@@ -18,6 +18,7 @@ class Db
             $dbInit['user'],
             $dbInit['password']
         );
+        $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
     public static function getInstance(): self
     {
