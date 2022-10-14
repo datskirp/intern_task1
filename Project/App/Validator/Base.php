@@ -15,5 +15,6 @@ abstract class Base
     //$inputField = ['email' => $value] or ['name' => $value]
     public function validate(array $inputFields, array $rules): bool
     {
+        return true|false;
     }
 }

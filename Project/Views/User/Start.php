@@ -178,8 +178,6 @@
 
     }
 
-
-
     function deleteUser(elem) {
         if(confirm("Delete user "+elem.id+"?")) {
             const response = userDelete("api/v1/user/" + elem.id);

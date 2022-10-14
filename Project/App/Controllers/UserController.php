@@ -79,7 +79,7 @@ class UserController extends BaseController
         }
     }
 
-    public function show(array $args)
+    public function show(array $args): void
     {
         $user = $this->user->getUserById($args['id']);
         if ($user !== false) {
@@ -89,7 +89,7 @@ class UserController extends BaseController
         }
     }
 
-    public function showAll()
+    public function showAll(): void
     {
         $users = $this->user->getAll();
         if (empty($users)) {
@@ -102,17 +102,11 @@ class UserController extends BaseController
     public function index(array $args = []): void
     {
         session_start();
-        /*
-        if (!isset($_SESSION)) {
-            $this->response->startSession();
-        }
-        */
         if (isset($_SESSION['action'])) {
             $args['action'] = $_SESSION['action'];
             $args['msgID'] = $_SESSION['id'];
             $this->response->stopSession();
         }
-        //$users = $this->user->getAll();
         $this->view->renderHtml('User/Start.php', ['args' => $args]);
     }
 }

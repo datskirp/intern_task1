@@ -12,8 +12,8 @@ class Validator extends Base
     {
         $this->alert->resetAlerts();
         if (!empty(array_diff_key($rules, $inputFields))) {
+            $this->alert->setAlerts('error', "Wrong input field names in a request body. Input fields must be: 'id' (optional: will get overwritten), 'email', 'name', 'gender', 'status'.");
 
-            $this->alert->setAlerts("error", "Wrong input field names in a request body. Input fields must be: 'id' (optional: will get overwritten), 'email', 'name', 'gender', 'status'.");
             return false;
         }
         $this->id = $inputFields['id'];
@@ -26,6 +26,7 @@ class Validator extends Base
                 }
             }
         }
+
         return empty($this->alert->getAlerts());
     }
 

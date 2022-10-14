@@ -29,21 +29,21 @@ class Response
         echo json_encode($this->responseBody);
     }
 
-    public function send404()
+    public function send404(): void
     {
         $this->statusCode(404);
         $this->setDefaultHeader();
         //echo json_encode(['msg' => 'There is no such user!']);
     }
 
-    public function send400(string $id)
+    public function send400(string $id): void
     {
         $this->statusCode(400);
         $this->setDefaultHeader();
         echo json_encode(['status' => 'There is no such user with id: ' . $id . '!']);
     }
 
-    public function sendOk($id = null, array $data = [], string $html = '')
+    public function sendOk($id = null, array $data = [], string $html = ''): void
     {
         $this->responseBody['status'] = true;
         $this->setDefaultHeader();
@@ -63,7 +63,7 @@ class Response
         echo json_encode($this->responseBody);
     }
 
-    public function sendNotValid(int $id, array $alerts)
+    public function sendNotValid(int $id, array $alerts): void
     {
         $this->responseBody['status'] = false;
         $this->responseBody['id'] = $id;
