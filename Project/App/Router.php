@@ -49,15 +49,20 @@ class Router
             $controller->$action($this->requestArgs);
         //TODO return view or response object
         } else {
-            $this->exitWithError('This url is not found! - ' . $this->path);
+            $this->exitWithError($this->path);
         }
     }
 
 
 
-    public function exitWithError(string $msg = ''): void
+    public function exitWithError(string $path): void
     {
-        $view = new View(__DIR__ . '/../Views');
-        $view->renderHtml('404.php', ['msg' => $msg]);
+        if (preg_match("~^api/v1/.*$~", $path)) {
+            $response = new Response();
+            $response->send404();
+        } else {
+            $view = new View(__DIR__ . '/../Views');
+            $view->renderHtml('404.php', ['msg' => 'Page is not found']);
+        }
     }
 }

@@ -42,18 +42,17 @@ class UserController extends BaseController
 
     public function edit(array $args): void
     {
-        $user = $this->user->getUserById($args['id']);
-        if ($user !== false) {
-            $this->view->renderHtml('User/Edit.php', $user);
+        if($this->user->getUserById($args['id'])) {
+            $this->view->renderHtml('User/Edit.php', $args);
         } else {
-            $this->view->renderHtml('404.php', ['msg' => 'This url is not found!']);
+            $this->view->renderHtml('404.php', ['msg' => 'User is not found']);
         }
-        //$this->view->renderHtml('User/Edit.php', $this->user->getUserById($args['id']));
     }
 
-    public function update(): void
+    public function update(array $args): void
     {
         $put_vars = json_decode(file_get_contents('php://input'), true);
+        $put_vars['id'] = $args['id'];
         $this->validator->validate($put_vars, $this->validator->userValidatorRules());
         $this->validator->isValid() ?
             $status = $this->user->edit($put_vars) :
@@ -70,10 +69,9 @@ class UserController extends BaseController
     {
         $user = $this->user->getUserById($args['id']);
         if ($user !== false) {
-            $html = file_get_contents(__DIR__ . '/../../Views/User/Show.php');
-            $this->response->sendOk(null, $user, $html);
+            $this->response->sendOk(null, $user);
         } else {
-            $this->response->send404();
+            $this->response->send400($args['id']);
         }
 
     }

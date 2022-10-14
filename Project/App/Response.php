@@ -36,6 +36,13 @@ class Response
         //echo json_encode(['msg' => 'There is no such user!']);
     }
 
+    public function send400(string $id)
+    {
+        $this->statusCode(400);
+        $this->setDefaultHeader();
+        echo json_encode(['status' => 'There is no such user with id: ' . $id . '!']);
+    }
+
     public function sendOk($id = null, array $data = [], string $html = '')
     {
         $this->responseBody['status'] = true;
@@ -65,23 +72,6 @@ class Response
         $this->setDefaultHeader();
 
         echo json_encode($this->responseBody);
-    }
-
-    public function send(bool $status, array $alerts, int $id, string $redirectUri): void
-    {
-        header('Content-Type: application/json; charset=utf-8');
-        echo $status ?
-            json_encode([
-                'status' => 'true',
-                'redirect_uri' => $redirectUri,
-                'id' => $id,
-            ]) :
-            json_encode([
-                'status' => 'false',
-                'redirect_uri' => 'null',
-                'id' => $id,
-                'alerts' => $alerts,
-            ]);
     }
 
     public function startSession(): void

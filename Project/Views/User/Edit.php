@@ -1,4 +1,4 @@
-<?php include_once  __DIR__ . '/../header.php' ?>
+
 <div class="flex flex-row justify-center items-center">
     <div class="w-80 px-8 py-4 mt-4 text-left bg-white shadow-lg">
         <div class="flex flex-row justify-center">
@@ -20,7 +20,7 @@
                     <input class="shadow appearance-none border rounded w-full
                                   py-2 px-3 text-gray-700 leading-tight focus:outline-none
                                   focus:shadow-outline"
-                           id="id" name="id" type="text" value="<?= $args['id'] ?>" readonly="readonly">
+                           id="id" name="id" type="text" value = "<?= $args['id'] ?>" readonly="readonly">
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
@@ -29,7 +29,7 @@
                     <input class="shadow appearance-none border rounded w-full
                                   py-2 px-3 text-gray-700 leading-tight focus:outline-none
                                   focus:shadow-outline"
-                           id="email" name="email" type="text" value="<?= $args['email'] ?>" required="required">
+                           id="email" name="email" type="text" required="required">
                     <span id="emailError" class="text-xs text-red-500"></span>
                 </div>
                 <div class="mb-4">
@@ -38,7 +38,7 @@
                     </label>
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700
                                   leading-tight focus:outline-none focus:shadow-outline"
-                           id="name" name="name" value="<?= $args['name'] ?>" required="required">
+                           id="name" name="name" required="required">
                     <span id="nameError" class="text-xs text-red-500"></span>
                 </div>
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="gender">Select gender</label>
@@ -47,8 +47,8 @@
                                border border-solid border-gray-300 rounded transition ease-in-out
                                m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                         name="gender" id="gender">
-                    <option value="male" <?php if ($args['gender'] == 'male') echo 'selected="selected"' ?>>Male</option>
-                    <option value="female" <?php if ($args['gender'] == 'female') echo 'selected="selected"' ?>>Female</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
                 </select>
                 <br>
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="status">Select status</label>
@@ -57,8 +57,8 @@
                                border border-solid border-gray-300 rounded transition ease-in-out
                                m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                         name="status" id="status">
-                    <option value="active" <?php if ($args['status'] == 'active') echo 'selected="selected"' ?>>Active</option>
-                    <option value="inactive" <?php if ($args['status'] == 'inactive') echo 'selected="selected"' ?>>Inactive</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
                 </select>
                 <br>
                 <div class="flex flex-row justify-center">
@@ -71,6 +71,39 @@
     </div>
 </div>
 <script>
+    let message = document.getElementById('message');
+    const id = document.getElementById('id').value;
+    const response = userShow("/api/v1/user/"+id);
+    response.then((result) => {
+        if (result.status === true) {
+            generateUserShow(result.data);
+        } else
+            message.innerHTML = "User was not found! Error occurred.";
+    });
+
+    async function userShow(url = '') {
+        const response = await fetch(url, {
+            method: 'GET',
+        });
+        return response.json();
+    }
+
+    function generateUserShow(user) {
+        document.getElementById('id').value = user['id'];
+        document.getElementById('email').value = user['email'];
+        document.getElementById('name').value = user['name'];
+        if (user['gender'] === 'mail') {
+            document.getElementById('male').selected = true;
+        } else {
+            document.getElementById('female').selected = true;
+        }
+        if (user['status'] === 'active') {
+            document.getElementById('active').selected = true;
+        } else {
+            document.getElementById('inactive').selected = true;
+        }
+    }
+
     const form = document.getElementById('editUser');
     form.addEventListener('submit', handleFormSubmit);
     function handleFormSubmit(event) {
@@ -112,4 +145,3 @@
         return response.json();
     }
 </script>
-<?php include_once  __DIR__ . '/../footer.php' ?>

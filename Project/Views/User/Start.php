@@ -96,15 +96,6 @@
             deleteButton.appendChild(deleteButtonText);
             cellButtons.appendChild(deleteButton);
 
-            const showButton = document.createElement('button');
-            showButton.classList.add("bg-blue-400", "border-2", "hover:border-blue-800", "text-white", "w-14", "rounded");
-            showButton.name = "show";
-            showButton.id = users[i]['id'];
-            showButton.onclick = function(){showUser(this)};
-            const showButtonText = document.createTextNode('Show');
-            showButton.appendChild(showButtonText);
-            cellButtons.appendChild(showButton);
-
             row.appendChild(cellButtons);
             // add the row to the end of the table body
             tblBody.appendChild(row);
@@ -123,11 +114,6 @@
     function editUserShow(elem) {
         location.href = "/user/"+elem.id+"/edit";
     }
-
-    function generateUserEdit(user) {
-
-    }
-
 
     function editUser() {
         message.innerHTML = "";
