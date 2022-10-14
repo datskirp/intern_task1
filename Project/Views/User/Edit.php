@@ -47,8 +47,8 @@
                                border border-solid border-gray-300 rounded transition ease-in-out
                                m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                         name="gender" id="gender">
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
+                    <option id = "male" value="male">Male</option>
+                    <option id = "female" value="female">Female</option>
                 </select>
                 <br>
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="status">Select status</label>
@@ -57,8 +57,8 @@
                                border border-solid border-gray-300 rounded transition ease-in-out
                                m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                         name="status" id="status">
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+                    <option id = "active" value="active">Active</option>
+                    <option id = "inactive" value="inactive">Inactive</option>
                 </select>
                 <br>
                 <div class="flex flex-row justify-center">
@@ -92,7 +92,7 @@
         document.getElementById('id').value = user['id'];
         document.getElementById('email').value = user['email'];
         document.getElementById('name').value = user['name'];
-        if (user['gender'] === 'mail') {
+        if (user['gender'] === 'male') {
             document.getElementById('male').selected = true;
         } else {
             document.getElementById('female').selected = true;

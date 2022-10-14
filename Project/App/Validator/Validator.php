@@ -6,12 +6,16 @@ use App\Db;
 
 class Validator extends Base
 {
-    private bool $isValid;
     private int $id;
 
-    public function validate(array $inputFields, array $rules): void
+    public function validate(array $inputFields, array $rules): bool
     {
         $this->alert->resetAlerts();
+        if (!empty(array_diff_key($rules, $inputFields))) {
+
+            $this->alert->setAlerts("error", "Wrong input field names in a request body. Input fields must be: 'id' (optional: will get overwritten), 'email', 'name', 'gender', 'status'.");
+            return false;
+        }
         $this->id = $inputFields['id'];
         foreach ($inputFields as $field => $value) {
             if (array_key_exists($field, $rules)) {
@@ -20,11 +24,9 @@ class Validator extends Base
                         break;
                     }
                 }
-            } else {
-                $this->alert->setAlerts($field, "This field is not allowed!");
             }
         }
-        empty($this->alert->getAlerts()) ? $this->isValid = true : $this->isValid = false;
+        return empty($this->alert->getAlerts());
     }
 
     private function required(string $field, string $value, string $rule): bool

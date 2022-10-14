@@ -13,7 +13,7 @@ abstract class Base
         $this->alert = new Alert();
     }
     //$inputField = ['email' => $value] or ['name' => $value]
-    public function validate(array $inputFields, array $rules): void
+    public function validate(array $inputFields, array $rules): bool
     {
     }
 }

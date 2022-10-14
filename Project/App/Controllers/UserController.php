@@ -13,13 +13,14 @@ class UserController extends BaseController
     {
         $post_vars = json_decode(file_get_contents('php://input'), true);
         $post_vars['id'] = time();
-        $this->validator->validate($post_vars, $this->validator->userValidatorRules());
+        $isValid = $this->validator->validate($post_vars, $this->validator->userValidatorRules());
+
         try {
-            $this->validator->isValid() ?
+            $isValid ?
                 $status = $this->user->add($post_vars) :
                 $status = false;
-        } catch (\PDOException){
-            $this->validator->alert->setAlerts("error", "Can't write to database, wrong input data");
+        } catch (\PDOException) {
+            $this->validator->alert->setAlerts('error', "Can't write to database, wrong input data");
         } finally {
             if (isset($status) && $status) {
                 $this->response->startSession();
@@ -29,7 +30,6 @@ class UserController extends BaseController
                 $this->response->sendNotValid($post_vars['id'], $this->validator->getAlerts());
             }
         }
-
     }
 
     public function delete(array $args): void
@@ -38,15 +38,14 @@ class UserController extends BaseController
         if ($status) {
             $this->response->setSessionMsg('deleted', (int)$args['id']);
             $this->response->sendOk((int)$args['id']);
-        }
-        else {
+        } else {
             $this->response->send404();
         }
     }
 
     public function edit(array $args): void
     {
-        if($this->user->getUserById($args['id'])) {
+        if ($this->user->getUserById($args['id'])) {
             $this->view->renderHtml('User/Edit.php', $args);
         } else {
             $this->view->renderHtml('404.php', ['msg' => 'User is not found']);
@@ -55,17 +54,28 @@ class UserController extends BaseController
 
     public function update(array $args): void
     {
+        $isValid = false;
         $put_vars = json_decode(file_get_contents('php://input'), true);
         $put_vars['id'] = $args['id'];
-        $this->validator->validate($put_vars, $this->validator->userValidatorRules());
-        $this->validator->isValid() ?
-            $status = $this->user->edit($put_vars) :
-            $status = false;
-        if ($status) {
-            $this->response->setSessionMsg('updated', $put_vars['id']);
-            $this->response->sendOk($put_vars['id']);
+        if ($this->user->getUserById($args['id'])) {
+            $isValid = $this->validator->validate($put_vars, $this->validator->userValidatorRules());
         } else {
-            $this->response->sendNotValid($put_vars['id'], $this->validator->getAlerts());
+            $this->validator->alert->setAlerts('error', 'Wrong user ID!');
+        }
+
+        try {
+            $isValid ?
+                $status = $this->user->edit($put_vars) :
+                $status = false;
+        } catch (\PDOException) {
+            $this->validator->alert->setAlerts('error', "Can't write to database, wrong input data");
+        } finally {
+            if (isset($status) && $status) {
+                $this->response->setSessionMsg('updated', $put_vars['id']);
+                $this->response->sendOk($put_vars['id']);
+            } else {
+                $this->response->sendNotValid($args['id'], $this->validator->getAlerts());
+            }
         }
     }
 
@@ -77,7 +87,6 @@ class UserController extends BaseController
         } else {
             $this->response->send400($args['id']);
         }
-
     }
 
     public function showAll()
