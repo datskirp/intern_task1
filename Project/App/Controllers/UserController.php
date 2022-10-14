@@ -39,7 +39,7 @@ class UserController extends BaseController
             $this->response->setSessionMsg('deleted', (int)$args['id']);
             $this->response->sendOk((int)$args['id']);
         } else {
-            $this->response->send404();
+            $this->response->send400($args['id']);
         }
     }
 
