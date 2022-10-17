@@ -7,8 +7,6 @@ services:
     user: '1000:1000'
     volumes:
       - './Project/:/app'
-      - './docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini'
-      - './docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini'
 
   nginx:
     image: nginx:latest
@@ -17,32 +15,3 @@ services:
     volumes:
       - './Project/:/app'
       - './docker/nginx:/etc/nginx/conf.d'
-
-
-  db:
-    image: mysql
-    user: '1000:1000'
-    environment:
-      MYSQL_ROOT_PASSWORD: 123
-      MYSQL_DATABASE: app_db
-      MYSQL_USER: db_user
-      MYSQL_PASSWORD: 321
-    volumes:
-      - ./docker/mysql/:/docker-entrypoint-initdb.d
-      - ./dbdata:/var/lib/mysql
-
-    ports:
-      - '6033:3306'
-
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    links:
-      - db
-    environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
-      PMA_ARBITRARY: 1
-    restart: always
-    ports:
-      - 8081:80

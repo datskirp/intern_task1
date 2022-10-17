@@ -4,40 +4,26 @@ namespace App;
 
 class Request
 {
-    public function getMethod()
+    private array $routes;
+
+    public function __construct(array $routes)
+    {
+        $this->routes = $routes[self::getMethod()];
+    }
+
+
+    public static function getMethod(): string
     {
         return strtolower($_SERVER['REQUEST_METHOD']);
     }
 
-    public function getUri()
+    public function getUri(): string
     {
-        return $_SERVER['REQUEST_URI'];
+        return trim($this->getUri(), '/');
     }
 
-    public function boolGet()
+    public function getRoutes(): array
     {
-        return $this->getMethod() === 'get';
-    }
-
-    public function boolPost()
-    {
-        return $this->getMethod() === 'post';
-    }
-
-    public function getData(): array
-    {
-        $data = [];
-        if ($this->boolGet()) {
-            foreach ($_GET as $key => $value) {
-                $data[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
-            }
-        }
-        if ($this->boolPost()) {
-            foreach ($_POST as $key => $value) {
-                $data[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
-            }
-        }
-
-        return $data;
+        return $this->routes;
     }
 }

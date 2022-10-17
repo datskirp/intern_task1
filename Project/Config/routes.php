@@ -7,7 +7,7 @@ return ['get' => [
     '/user/{id:\d+}/edit' => [\App\Controllers\UserController::class, 'edit'],
 ],
     'post' => [
-        '/user' => [\App\Controllers\UserController::class, 'store'],
+        '/' => [\App\Controllers\UserController::class, 'upload'],
     ],
     'put' => [
         '/user/{id:\d+}' => [\App\Controllers\UserController::class, 'update'],

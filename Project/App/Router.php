@@ -4,28 +4,23 @@ namespace App;
 
 class Router
 {
-    private array $routes;
     private array $requestArgs;
-    private Request $request;
-    private string $path;
 
-    public function __construct()
+    public function __construct(Request $request)
     {
-        $this->request = new Request();
-        $this->routes = (require __DIR__ . '/../Config/routes.php')[$this->request->getMethod()];
-        $this->path = trim($this->request->getUri(), '/');
+        $this->request = $request;
     }
 
     public function getCallback(): array|false
     {
-        foreach ($this->routes as $route => $controllerAndAction) {
+        foreach ($this->request->getRoutes() as $route => $controllerAndAction) {
             $route = trim($route, '/');
             $routeParams = [];
             if (preg_match_all('/\{(\w+)(:[^}]+)?}/', $route, $matches)) {
                 $routeParams = $matches[1];
             }
             $routeRegex = '~^' . preg_replace_callback('/\{\w+(:([^}]+))?}/', fn ($m) => isset($m[2]) ? "({$m[2]})" : '(\w+)', $route) . '$~';
-            if (preg_match_all($routeRegex, $this->path, $valueMatches)) {
+            if (preg_match_all($routeRegex, $this->request->getUri(), $valueMatches)) {
                 $values = [];
                 for ($i = 1; $i < count($valueMatches); $i++) {
                     $values[] = $valueMatches[$i][0];

@@ -78,6 +78,11 @@ class UserController extends BaseController
             $this->response->stopSession();
         }
         $users = $this->user->getAll();
-        $this->view->renderHtml('User/ViewAll.php', ['users' => $users, 'args' => $args]);
+        $this->view->renderHtml('User/Upload.html', ['users' => $users, 'args' => $args]);
+    }
+
+    public function upload()
+    {
+        var_dump($_FILES);
     }
 }
