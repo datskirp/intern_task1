@@ -2,8 +2,21 @@
 
 namespace App\Controllers;
 
-class UserController extends BaseController
+use App\View;
+
+class UserController
 {
+    private $view;
+
+    /**
+     * @param $view
+     */
+    public function __construct()
+    {
+        $this->view = new View(__DIR__ . "/../../Views");
+    }
+
+
     public function create(): void
     {
         $this->view->renderHtml('User/Add.php');
@@ -69,20 +82,13 @@ class UserController extends BaseController
 
     public function index(array $args = []): void
     {
-        if (!isset($_SESSION)) {
-            $this->response->startSession();
-        }
-        if (isset($_SESSION['action'])) {
-            $args['action'] = $_SESSION['action'];
-            $args['msgID'] = $_SESSION['id'];
-            $this->response->stopSession();
-        }
-        $users = $this->user->getAll();
-        $this->view->renderHtml('User/Upload.html', ['users' => $users, 'args' => $args]);
+        $this->view->renderHtml('Upload.html.twig', ['args' => $args]);
     }
 
     public function upload()
     {
         var_dump($_FILES);
+        var_dump($_POST);
+        var_dump(diskfreespace(__DIR__ . '/../../www'));
     }
 }

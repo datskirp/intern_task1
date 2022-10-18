@@ -2,22 +2,30 @@
 
 namespace App;
 
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
+
 class View
 {
-    private string $dir;
+    private $twig;
 
-    public function __construct(string $dir)
+    public function __construct(Environment $twig)
     {
-        $this->dir = $dir;
+        $this->twig = $twig;
     }
 
     public function renderHtml(string $template, array $args = []): void
     {
-        extract($args, EXTR_SKIP);
-        ob_start();
-        include_once $this->dir . '/' . $template;
-        $buffer = ob_get_contents();
-        ob_end_clean();
-        echo $buffer;
+        echo $this->twig->render($template, ['maxSize' => 10000000]);
+    }
+
+    public function render404(): void
+    {
+
+    }
+
+    public function render400(): void
+    {
+
     }
 }

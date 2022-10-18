@@ -19,11 +19,16 @@ class Request
 
     public function getUri(): string
     {
-        return trim($this->getUri(), '/');
+        return trim($_SERVER['REQUEST_URI'], '/');
     }
 
-    public function getRoutes(): array
+    public function getRoute(): array
     {
         return $this->routes;
+    }
+
+    public function getFile(): ?array
+    {
+        return $_FILES;
     }
 }

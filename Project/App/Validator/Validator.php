@@ -2,27 +2,26 @@
 
 namespace App\Validator;
 
+use App\Validator\ValidatorInterface;
+
 use App\Db;
 
-class Validator extends Base
+class Validator implements ValidatorInterface
 {
     private bool $isValid;
-    private int $id;
+    private array $errorMsg = [];
 
-    public function validate(array $inputFields, array $rules): void
+    public function validate(array $file, array $rules): void
     {
-        $this->alert->resetAlerts();
-        $this->id = $inputFields['id'];
-        foreach ($inputFields as $field => $value) {
-            if (array_key_exists($field, $rules)) {
-                foreach ($rules[$field] as $constraint => $rule) {
-                    if ($this->$constraint($field, $value, $rule)) {
-                        break;
-                    }
+        var_dump($file);
+        foreach ($rules as $fileField => $constraintList) {
+            foreach ($constraintList as $constraint) {
+                if ($this->$constraint($file[$fileField])) {
+                    break;
                 }
             }
         }
-        empty($this->alert->getAlerts()) ? $this->isValid = true : $this->isValid = false;
+        empty($this->errorMsg) ? $this->isValid = true : $this->isValid = false;
     }
 
     private function required(string $field, string $value, string $rule): bool
@@ -90,7 +89,7 @@ class Validator extends Base
 
     public function userValidatorRules()
     {
-        return include __DIR__ . '/../../' . '/Config/userValidatorRules.php';
+        return include __DIR__ . '/../task1/' . '/Config/validatorRules.php';
     }
 
     public function isValid(): bool
@@ -98,8 +97,8 @@ class Validator extends Base
         return $this->isValid;
     }
 
-    public function getAlerts(): array
+    public function getErrors(): array
     {
-        return $this->alert->getAlerts();
+        return $this->errorMsg;
     }
 }
