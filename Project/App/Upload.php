@@ -15,7 +15,7 @@ class Upload
         $this->validatorRules = $validatorRules;
     }
 
-    public function index()
+    public function index(): string
     {
         if ($this->validator::uploadDirExists()) {
             return $this->view->renderHtml(
@@ -23,16 +23,19 @@ class Upload
                 [
                     'files' => $this->createUploadsDirInfo(__DIR__ . '/../www/uploads/'),
                     'tableId' => 'files',
-                ]);
+                ]
+            );
         }
+
         return $this->view->renderHtml('Upload.html.twig');
     }
 
-    public function upload(?array $file, string $formName)
+    public function upload(?array $file, string $formName): string
     {
         if (is_null($file) || $file[$formName]['error'] === UPLOAD_ERR_NO_FILE) {
             return $this->view->render400('400.html.twig');
         }
+        var_dump($file);
         $uploadsDir = __DIR__ . '/../www/uploads/';
         $this->validator->validate($file[$formName], $this->validatorRules);
         if ($this->validator->isValid()) {
@@ -64,25 +67,32 @@ class Upload
                 ]
             );
 
-            return $this->view->renderHtml(
-                'Upload.html.twig',
-                [
-                    'errors' => $this->validator->getErrors(),
-                    'files' => $this->createUploadsDirInfo($uploadsDir),
-                    'tableId' => 'files',
-                ]
-            );
+            return $this->validator::uploadDirExists() ?
+                    $this->view->renderHtml(
+                        'Upload.html.twig',
+                        [
+                            'errors' => $this->validator->getErrors(),
+                            'files' => $this->createUploadsDirInfo($uploadsDir),
+                            'tableId' => 'files',
+                        ]
+                    ) :
+                    $this->view->renderHtml(
+                        'Upload.html.twig',
+                        [
+                            'errors' => $this->validator->getErrors(),
+                        ]
+                    );
         }
     }
 
-    public function createUploadsDir($uploadsDir)
+    public function createUploadsDir($uploadsDir): void
     {
         if (!$this->validator::uploadDirExists()) {
             @mkdir($uploadsDir, 0744);
         }
     }
 
-    public function createUploadsDirInfo($uploadsDir)
+    public function createUploadsDirInfo($uploadsDir): array
     {
         if ($dh = opendir($uploadsDir)) {
             $filesInfo = [];
@@ -100,7 +110,7 @@ class Upload
         return $filesInfo;
     }
 
-    private static function writeLog(array $logInfo)
+    private static function writeLog(array $logInfo): void
     {
         $filename = 'upload_' . date('dmY') . '.log';
         $fileToWrite = fopen(__DIR__ . '/../logs/' . $filename, 'a');
@@ -126,6 +136,7 @@ class Upload
         foreach ($errors as $type => $value) {
             $errorMsg .= $type . ': ' . $value . ';';
         }
+
         return $errorMsg;
     }
 }
