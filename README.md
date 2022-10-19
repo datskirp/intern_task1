@@ -1,7 +1,7 @@
 # Task 1.Iteration2: Basic App for uploading image and text files.
 
-The application was created for educational purpose. The app allows to upload image and txt files to a directory. Each 
-upload event is logged a file, which is created daily.
+The application was created for educational purpose. The app allows to upload image and text files to a directory. Each 
+upload event is logged in a file, which is created daily.
 
 ## Installation using Docker
 
@@ -11,15 +11,11 @@ Containers that will be installed: php-fpm, nginx.
 
 Download the repository with git clone:
 
-```#git clone https://github.com/datskirp/intern_task1/```
+```#git clone -b iteration2 https://github.com/datskirp/intern_task1/```
 
 Go to the downloaded repository:
 
 ```#cd intern_task1```
-
-Create 'dbdata' directory which will be used as shared volume with mysql docker container:
-
-```#mkdir dbdata```
 
 Run docker compose to build and start the containers:
 
@@ -31,4 +27,3 @@ To stop and remove the containers:
 
 
  #### Open in browser http://127.0.0.1:8080
- ###### PhpMyAdmin http://127.0.0.1:8081  user: db_user, password: 321
