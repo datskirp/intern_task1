@@ -2,33 +2,64 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <title>File Upload</title>
 </head>
 <body>
-<!-- The data encoding type, enctype, MUST be specified as below -->
-<form enctype="multipart/form-data" action="/" method="POST" id="fileForm">
-    <input type="hidden" value="{{ maxSize }}" id="maxSize">
-    <!-- MAX_FILE_SIZE must precede the file input field -->
-    <!-- Name of input element determines name in $_FILES array -->
-    Send this file: <input name="upload" type="file" id="upload"/>
-    <br>
-    <input type="submit" value="Send File" />
-</form>
-
+<div class="flex flex-row justify-center items-center mx-auto">
+    <div class="px-8 py-4 mt-4 text-center bg-white shadow-lg">
+        <div class="flex flex-row justify-center">
+            <form enctype="multipart/form-data" action="/" method="POST" id="fileForm">
+                <input type="hidden" value="{{ maxSize }}" id="maxSize">
+                <label for="upload" class="font-bold">
+                    <p class="text-left text-gray-700">Choose a file to upload:</p>
+                </label>
+                <input class="border-2 border-gray-300 mt-2 p-1" name="upload" type="file" id="upload"/>
+                <br>
+                <button class="ali bg-gray-200 text-gray-700 border-2 border-gray-600 hover:border-gray-900 mt-2 p-1 px-2 rounded" type="submit">
+                    Send File
+                </button>
+            </form>
+        </div>
+        <br>
+        <div class="flex flex-row justify-center">
+            <table id="{{ tableId }}" class="border-collapse border-t-2 table-auto shadow-lg">
+                <tr class="bg-gray-200">
+                    <th class=" px-1 py-1 text-center">Name</th>
+                    <th class=" px-1 py-1 text-center">Size (KB)</th>
+                    <th class=" px-1 py-1 text-center">Meta info</th>
+                </tr>
+                {% for name, value in files %}
+                <tr>
+                    <td class="border-2 px-2 py-2 text-center">{{ name }}</td>
+                    <td class="border-2 px-2 py-2 text-center">{{ value.size }}</td>
+                    <td class="border-2 px-2 py-2 text-center">{{ value.meta }}</td>
+                </tr>
+                {% endfor %}
+                <br>
+            </table>
+        </div>
+    </div>
+</div>
 
 <script>
-    document.getElementById('fileForm').addEventListener('submit', fileInfo);
+    if (!document.getElementById('files')) {
+        document.querySelector('table').hidden = true;
+    }
+    //document.getElementById('fileForm').addEventListener('submit', fileInfo);
     function fileInfo(event){
         event.preventDefault();
         if (document.getElementById('upload').files[0]) {
-            let spaceLeft = document.getElementById('maxSize').value;
+            let maxSize = document.getElementById('maxSize').value;
             let fileName = document.getElementById('upload').files[0].name;
             let fileSize = document.getElementById('upload').files[0].size;
             let fileType = document.getElementById('upload').files[0].type;
             let nameExt = fileName.split('.').pop();
 
             if (fileType.includes('image') || nameExt === 'txt') {
-                if (fileSize < spaceLeft)
+                if (fileSize < maxSize)
                     document.getElementById('fileForm').submit();
                 else
                     alert("Max file size must be below 10 MB");

@@ -1,6 +1,7 @@
 <?php
 
 return [
-    'tmp_name' => ['image', 'txt'],
+    'tmp_name' => ['image'],
+    'name' => ['txt'],
     'size' => ['localStorage'],
 ];

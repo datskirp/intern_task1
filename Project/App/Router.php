@@ -5,16 +5,19 @@ namespace App;
 class Router
 {
     private $request;
+    private array $routes;
 
-    public function __construct(Request $request)
+    public function __construct(Request $request, array $routes)
     {
         $this->request = $request;
+        $this->routes = $routes[$this->request::getMethod()];
     }
 
     public function getCallback(): array|false
     {
-        foreach ($this->request->getRoute() as $route => $controllerAndAction) {
-            if ($route === '/') {
+        foreach ($this->routes as $route => $controllerAndAction) {
+
+            if ($route === $this->request::getUri()) {
                 return $controllerAndAction;
             }
         }
