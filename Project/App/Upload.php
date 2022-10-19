@@ -35,7 +35,6 @@ class Upload
         if (is_null($file) || $file[$formName]['error'] === UPLOAD_ERR_NO_FILE) {
             return $this->view->render400('400.html.twig');
         }
-        var_dump($file);
         $uploadsDir = __DIR__ . '/../www/uploads/';
         $this->validator->validate($file[$formName], $this->validatorRules);
         if ($this->validator->isValid()) {
