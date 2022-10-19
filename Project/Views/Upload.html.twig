@@ -24,6 +24,17 @@
             </form>
         </div>
         <br>
+        <span id="errorMsg" class="text-red-500">
+            {% if errors is defined %}
+                Error occured!
+                <ul>
+                {% for type, value in errors %}
+                  <li>{{ type }}: {{ value }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </span>
+        <br>
         <div class="flex flex-row justify-center">
             <table id="{{ tableId }}" class="border-collapse border-t-2 table-auto shadow-lg">
                 <tr class="bg-gray-200">

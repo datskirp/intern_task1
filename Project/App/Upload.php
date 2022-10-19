@@ -17,6 +17,14 @@ class Upload
 
     public function index()
     {
+        if ($this->validator::uploadDirExists()) {
+            return $this->view->renderHtml(
+                'Upload.html.twig',
+                [
+                    'files' => $this->createUploadsDirInfo(__DIR__ . '/../www/uploads/'),
+                    'tableId' => 'files',
+                ]);
+        }
         return $this->view->renderHtml('Upload.html.twig');
     }
 
@@ -57,7 +65,7 @@ class Upload
             );
 
             return $this->view->renderHtml(
-                'Uploads.html.twig',
+                'Upload.html.twig',
                 [
                     'errors' => $this->validator->getErrors(),
                     'files' => $this->createUploadsDirInfo($uploadsDir),
@@ -97,16 +105,27 @@ class Upload
         $filename = 'upload_' . date('dmY') . '.log';
         $fileToWrite = fopen(__DIR__ . '/../logs/' . $filename, 'a');
         $now = date('d-m-Y H:i:s');
-
+        if (is_array($logInfo['errors'])) {
+            $logInfo['errors'] = self::expandErrorsForLogging($logInfo['errors']);
+        }
         $message = sprintf(
             "%s => Upload status: %s. \nFile name: %s \nSize: %s \nErrors occured: %s\n\n",
             $now,
             $logInfo['status'],
             $logInfo['name'],
             $logInfo['size'],
-            $logInfo['errors']
+            $logInfo['errors'],
         );
         fwrite($fileToWrite, $message);
         fclose($fileToWrite);
+    }
+
+    private static function expandErrorsForLogging(array $errors): string
+    {
+        $errorMsg = '';
+        foreach ($errors as $type => $value) {
+            $errorMsg .= $type . ': ' . $value . ';';
+        }
+        return $errorMsg;
     }
 }

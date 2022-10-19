@@ -30,7 +30,7 @@ if ($callback) {
     $upload = new $callback[0]($validator, $view, $validatorRules);
     echo (call_user_func([$upload, $callback[1]], $request::getFile(), UPLOAD));
 } else {
-    echo $view->render404('404.twig.html');
+    echo $view->render404('404.html.twig');
 }
 
 
