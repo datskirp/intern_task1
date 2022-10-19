@@ -32,9 +32,11 @@ class Validator implements ValidatorInterface
         $mimetype = finfo_file($finfo, $tmpFileName);
         if (str_contains($mimetype, 'image')) {
             $this->fileTypeChecked = true;
+
             return true;
         }
         $this->errorMsg['type'] = 'File is not an image or a text file';
+
         return false;
     }
 
@@ -42,9 +44,11 @@ class Validator implements ValidatorInterface
     {
         if (pathinfo($fileName, PATHINFO_EXTENSION) === 'txt') {
             $this->fileTypeChecked = true;
+
             return true;
         }
         $this->errorMsg['type'] = 'File is not an image or a text file';
+
         return false;
     }
 
@@ -54,6 +58,7 @@ class Validator implements ValidatorInterface
             return true;
         }
         $this->errorMsg['diskSpace'] = 'Not enough disk space to save a file';
+
         return false;
     }
 

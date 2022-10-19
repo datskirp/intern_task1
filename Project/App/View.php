@@ -3,7 +3,6 @@
 namespace App;
 
 use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
 
 class View
 {
@@ -19,6 +18,7 @@ class View
     public function renderHtml(string $template, array $args = []): string
     {
         $args['maxSize'] = $this->maxFileSize;
+
         return $this->twig->render($template, $args);
     }
 

@@ -28,9 +28,7 @@ $callback = $router->getCallback();
 if ($callback) {
     $validatorRules = require_once __DIR__ . '/../Config/validatorRules.php';
     $upload = new $callback[0]($validator, $view, $validatorRules);
-    echo (call_user_func([$upload, $callback[1]], $request::getFile(), UPLOAD));
+    echo(call_user_func([$upload, $callback[1]], $request::getFile(), UPLOAD));
 } else {
     echo $view->render404('404.html.twig');
 }
-
-
