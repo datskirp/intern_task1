@@ -1,0 +1,10 @@
+{
+    "name": "inno/task1",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Inno\\Task1\\": "src/"
+        }
+    },
+    "require": {}
+}
