@@ -6,13 +6,13 @@ class Router
 {
     private array $routes;
     private array $requestArgs;
-    private Request $request;
+    private $request;
     private string $path;
 
-    public function __construct()
+    public function __construct(Request $request, $routes)
     {
-        $this->request = new Request();
-        $this->routes = (require __DIR__ . '/../Config/routes.php')[$this->request->getMethod()];
+        $this->request = $request;
+        $this->routes = $routes[$this->request->getMethod()];
         $this->path = trim($this->request->getUri(), '/');
     }
 
@@ -24,7 +24,7 @@ class Router
             if (preg_match_all('/\{(\w+)(:[^}]+)?}/', $route, $matches)) {
                 $routeParams = $matches[1];
             }
-            $routeRegex = '~^' . preg_replace_callback('/\{\w+(:([^}]+))?}/', fn ($m) => isset($m[2]) ? "({$m[2]})" : '(\w+)', $route) . '$~';
+            $routeRegex = '~^' . preg_replace_callback('/\{\w+(:([^}]+))?}/', fn($m) => isset($m[2]) ? "({$m[2]})" : '(\w+)', $route) . '$~';
             if (preg_match_all($routeRegex, $this->path, $valueMatches)) {
                 $values = [];
                 for ($i = 1; $i < count($valueMatches); $i++) {
@@ -32,32 +32,10 @@ class Router
                 }
                 $this->requestArgs = array_combine($routeParams, $values);
 
-                return $controllerAndAction;
+                return [$controllerAndAction[0], $controllerAndAction[1], $this->requestArgs];
             }
         }
 
         return false;
-    }
-
-    public function run(): void
-    {
-        $callback = $this->getCallback();
-        if ($callback !== false) {
-            $controllerName = $callback[0];
-            $action = $callback[1];
-            $controller = new $controllerName();
-            $controller->$action($this->requestArgs);
-        //TODO return view or response object
-        } else {
-            $this->exitWithError('This url is not found!');
-        }
-    }
-
-
-
-    public function exitWithError(string $msg = ''): void
-    {
-        $view = new View(__DIR__ . '/../Views');
-        $view->renderHtml('404.php', ['msg' => $msg]);
     }
 }

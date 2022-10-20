@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\User;
 
 use App\View;
-use App\Models\User;
+use App\Models\User\User;
 use App\Validator\Validator;
 use App\Response;
 
@@ -21,4 +21,9 @@ abstract class BaseController
         $this->validator = new Validator();
         $this->response = new Response();
     }
+
+    public function create(): void
+    {
+    }
+
 }

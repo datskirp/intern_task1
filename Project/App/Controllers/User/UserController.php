@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\User;
 
 class UserController extends BaseController
 {
     public function create(): void
     {
-        $this->view->renderHtml('User/Add.php');
+        $this->view->renderHtml(__METHOD__);
     }
 
     public function store(): void
@@ -69,13 +69,10 @@ class UserController extends BaseController
 
     public function index(array $args = []): void
     {
-        if (!isset($_SESSION)) {
-            $this->response->startSession();
-        }
         if (isset($_SESSION['action'])) {
             $args['action'] = $_SESSION['action'];
             $args['msgID'] = $_SESSION['id'];
-            $this->response->stopSession();
+            $this->session->stop();
         }
         $users = $this->user->getAll();
         $this->view->renderHtml('User/ViewAll.php', ['users' => $users, 'args' => $args]);

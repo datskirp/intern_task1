@@ -1,10 +1,8 @@
 <?php
 
-use App\Router;
-
 define("ROOT", dirname(__DIR__));
 
-var_dump(ROOT);
+
 
 /*
 spl_autoload_register(function (string $className) {
@@ -16,5 +14,9 @@ require __DIR__ . '/../vendor/autoload.php';
 
 $container = require ROOT . '/App/Container.php';
 
-$router = new Router();
-$router->run();
+/** @var $router \App\Router*/
+$router = $container->get(\App\Router::class);
+$callback = $router->getCallback();
+var_dump($callback);
+$container->call([$callback[0], $callback[1]], $callback[2]);
+
