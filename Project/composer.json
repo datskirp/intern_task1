@@ -1,9 +1,8 @@
 {
-    "name": "inno/task1",
-    "type": "project",
+    "name": "app/app",
     "autoload": {
         "psr-4": {
-            "Inno\\Task1\\": "src/"
+            "App\\App\\": "App/"
         }
     },
     "require": {}
