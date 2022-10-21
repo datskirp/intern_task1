@@ -2,7 +2,6 @@
 
 namespace App\Controllers\User;
 
-
 class UserController extends BaseController
 {
     public function create(): string
@@ -22,6 +21,7 @@ class UserController extends BaseController
         if ($status) {
             $this->session->setSessionMsg('added', $post_vars['id']);
         }
+
         return $this->response->send((bool)$status, $this->validator->getErrors(), $post_vars['id'], '/');
     }
 
@@ -31,6 +31,7 @@ class UserController extends BaseController
         if ($status) {
             $this->session->setSessionMsg('deleted', (int)$args['id']);
         }
+
         return $this->response->send($status, [], (int)$args['id'], '/');
     }
 
@@ -40,7 +41,8 @@ class UserController extends BaseController
         if ($user) {
             return $this->view->render('User/Edit.php', ['user' => $user]);
         }
-            return $this->view->renderError(404, 'The page you are looking for is not found');
+
+        return $this->view->renderError(404, 'The page you are looking for is not found');
     }
 
     public function update(): string
@@ -53,6 +55,7 @@ class UserController extends BaseController
         if ($status) {
             $this->session->setSessionMsg('updated', $put_vars['id']);
         }
+
         return $this->response->send((bool)$status, $this->validator->getErrors(), $put_vars['id'], '/');
     }
 
@@ -62,9 +65,8 @@ class UserController extends BaseController
         if ($user) {
             return $this->view->render('User/Show.php', ['user' => $user]);
         }
-            return $this->view->renderError(404, 'The page you are looking for is not found');
 
-
+        return $this->view->renderError(404, 'The page you are looking for is not found');
     }
 
     public function index(array $args = []): string
@@ -75,6 +77,7 @@ class UserController extends BaseController
             $this->session->stop();
         }
         $users = $this->user->getAll();
+
         return $this->view->render('User/ViewAll.php', ['users' => $users, 'args' => $args]);
     }
 }

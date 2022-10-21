@@ -3,28 +3,14 @@
 namespace App\Models\User;
 
 use App\Db;
-use App\Validator\UserValidator;
 
 abstract class Base
 {
     protected static $db;
-    protected $validator;
 
     public function __construct()
     {
         self::$db = Db::getInstance();
-    }
-
-
-    public function __set(string $name, $value)
-    {
-        $camelCaseName = $this->underscoreToCamelCase($name);
-        $this->$camelCaseName = $value;
-    }
-
-    private function underscoreToCamelCase(string $source): string
-    {
-        return lcfirst(str_replace('_', '', ucwords($source, '_')));
     }
 
     public function getAll(): ?array
@@ -39,6 +25,7 @@ abstract class Base
             [':id' => $id],
             static::class
         );
+
         return $entities ? $entities[0] : null;
     }
 
@@ -64,7 +51,8 @@ abstract class Base
             'SELECT `email` FROM `' . static::getTableName() . '` WHERE `id` = :id',
             [':id' => $id]
         );
-        return $result ? : false;
+
+        return $result ?: false;
     }
 
 
@@ -82,6 +70,7 @@ abstract class Base
             $index++;
         }
         $sql = 'UPDATE ' . static::getTableName() . ' SET ' . implode(', ', $columnParams) . ' WHERE id = ' . $data['id'];
+
         return self::$db->changeRecord($sql, $paramsValues);
     }
 
@@ -102,58 +91,4 @@ abstract class Base
 
         return self::$db->changeRecord($sql, $data);
     }
-
-
-    private function mapPropertiesToDbFormat(): array
-    {
-        $reflector = new \ReflectionObject($this);
-        $properties = $reflector->getProperties();
-
-        $mappedProperties = [];
-        foreach ($properties as $property) {
-            $propertyName = $property->getName();
-            $propertyNameAsUnderscore = $this->camelCaseToUnderscore($propertyName);
-            $mappedProperties[$propertyNameAsUnderscore] = $this->$propertyName;
-        }
-
-        return $mappedProperties;
-    }
-
-    private function camelCaseToUnderscore(string $source): string
-    {
-        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $source));
-    }
-
-
-
-    public function add(array $userData): ?array
-    {
-        $sql = 'INSERT INTO ' . static::getTableName() . ' (`id`, `email`, `name`, `gender`, `status`) 
-                     VALUES (:id, :email, :name, :gender, :status)';
-
-        return $this->db->changeRecord($sql, $userData) ? $userData : null;
-    }
-
-
-
-    public function edit(array $userData): ?array
-    {
-        $db = Db::getInstance();
-        if ($db->getEmailById((int)$userData['id']) === $userData['email']) {
-            $sql = 'UPDATE `users` SET `name` = :name, 
-                   `gender` = :gender, `status` = :status WHERE id = :id';
-
-            return $this->db->changeRecord($sql, $userData) ? $userData : null;
-        } else {
-            $sql = 'UPDATE `users` SET `email` = :email, `name` = :name, 
-                   `gender` = :gender, `status` = :status WHERE id = :id';
-
-            return $this->db->changeRecord($sql, $userData) ? $userData : null;
-        }
-    }
-
-
-
-
-
 }

@@ -52,13 +52,4 @@ class Db
 
         return $sth->fetch(\PDO::FETCH_ASSOC);
     }
-
-    public function deleteRecord(string $sql, string $id): bool
-    {
-        $sth = $this->pdo->prepare($sql);
-
-        return $sth->execute(['id' => $id]);
-    }
-
-
 }

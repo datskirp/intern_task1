@@ -11,6 +11,7 @@ class View
         include_once ROOT . '/Views/' . $template;
         $buffer = ob_get_contents();
         ob_end_clean();
+
         return $buffer;
     }
 
@@ -20,7 +21,7 @@ class View
         include_once ROOT . '/Views/Error.php';
         $buffer = ob_get_contents();
         ob_end_clean();
+
         return $buffer;
     }
 }
-

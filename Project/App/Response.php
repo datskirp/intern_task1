@@ -17,6 +17,7 @@ class Response
     public function send(bool $status, array $alerts, int $id, string $redirectUri): string
     {
         header('Content-Type: application/json; charset=utf-8');
+
         return $status ?
             json_encode([
                 'status' => 'true',
@@ -30,5 +31,4 @@ class Response
                 'alerts' => $alerts,
             ]);
     }
-
 }

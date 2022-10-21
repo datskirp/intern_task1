@@ -24,7 +24,7 @@ abstract class Base
     {
         if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
             $this->errors[$field] = 'This field must be a valid email address';
-            if($rule) {
+            if ($rule) {
                 return true;
             }
         }
@@ -34,11 +34,6 @@ abstract class Base
 
     protected function unique(string $field, string $value, bool $rule): bool
     {
-        //var_dump($field);
-        //var_dump($value);
-        //var_dump($rule);
-        //var_dump(User::checkEmailExistence($value));
-        //var_dump(User::getEmailById($this->id)[$field]);
         if ($rule && User::checkEmailExistence($value) &&
             (User::getEmailById($this->id)[$field] ?? '') !== $value) {
             $this->errors[$field] = 'Entered email already exists!';
