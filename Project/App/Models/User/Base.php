@@ -15,15 +15,14 @@ abstract class Base
 
     public function getAll(): ?array
     {
-        return self::$db->query('SELECT * FROM `' . static::getTableName() . '`;', [], static::class);
+        return self::$db->query('SELECT * FROM `' . static::getTableName() . '`;');
     }
 
-    public static function getById(int $id): ?self
+    public static function getById(int $id): ?array
     {
         $entities = self::$db->query(
             'SELECT * FROM `' . static::getTableName() . '` WHERE id=:id;',
             [':id' => $id],
-            static::class
         );
 
         return $entities ? $entities[0] : null;

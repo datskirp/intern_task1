@@ -5,14 +5,19 @@ return ['get' => [
     '/user/{id:\d+}' => [\App\Controllers\User\UserController::class, 'show'],
     '/user/create' => [\App\Controllers\User\UserController::class, 'create'],
     '/user/{id:\d+}/edit' => [\App\Controllers\User\UserController::class, 'edit'],
+    '/api/v1/user/{id:\d+}' => [\App\Controllers\Api\v1\ApiController::class, 'show'],
+    '/api/v1/users' => [\App\Controllers\Api\v1\ApiController::class, 'showAll'],
 ],
     'post' => [
         '/user' => [\App\Controllers\User\UserController::class, 'store'],
+        '/api/v1/users' => [\App\Controllers\Api\v1\ApiController::class, 'store'],
     ],
     'put' => [
         '/user/{id:\d+}' => [\App\Controllers\User\UserController::class, 'update'],
+        '/api/v1/user/{id:\d+}' => [\App\Controllers\Api\v1\ApiController::class, 'update'],
     ],
     'delete' => [
         '/user/{id:\d+}' => [\App\Controllers\User\UserController::class, 'delete'],
+        '/api/v1/user/{id:\d+}' => [\App\Controllers\Api\v1\ApiController::class, 'delete'],
     ],
 ];

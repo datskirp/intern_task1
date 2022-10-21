@@ -20,7 +20,7 @@
                     <input class="shadow appearance-none border rounded w-full
                                   py-2 px-3 text-gray-700 leading-tight focus:outline-none
                                   focus:shadow-outline"
-                           id="id" name="id" type="text" value="<?= $user->getId() ?>" readonly="readonly">
+                           id="id" name="id" type="text" value="<?= $user['id'] ?>" readonly="readonly">
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
@@ -29,7 +29,7 @@
                     <input class="shadow appearance-none border rounded w-full
                                   py-2 px-3 text-gray-700 leading-tight focus:outline-none
                                   focus:shadow-outline"
-                           id="email" name="email" type="text" value="<?= $user->getEmail() ?>" required="required">
+                           id="email" name="email" type="text" value="<?= $user['email'] ?>" required="required">
                     <span id="emailError" class="text-xs text-red-500"></span>
                 </div>
                 <div class="mb-4">
@@ -38,7 +38,7 @@
                     </label>
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700
                                   leading-tight focus:outline-none focus:shadow-outline"
-                           id="name" name="name" value="<?= $user->getName() ?>" required="required">
+                           id="name" name="name" value="<?= $user['name'] ?>" required="required">
                     <span id="nameError" class="text-xs text-red-500"></span>
                 </div>
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="gender">Select gender</label>
@@ -47,8 +47,8 @@
                                border border-solid border-gray-300 rounded transition ease-in-out
                                m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                         name="gender" id="gender">
-                    <option value="male" <?php if ($user->getGender() == 'male') echo 'selected="selected"' ?>>Male</option>
-                    <option value="female" <?php if ($user->getGender() == 'female') echo 'selected="selected"' ?>>Female</option>
+                    <option value="male" <?php if ($user['gender'] == 'male') echo 'selected="selected"' ?>>Male</option>
+                    <option value="female" <?php if ($user['gender'] == 'female') echo 'selected="selected"' ?>>Female</option>
                 </select>
                 <br>
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="status">Select status</label>
@@ -57,8 +57,8 @@
                                border border-solid border-gray-300 rounded transition ease-in-out
                                m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                         name="status" id="status">
-                    <option value="active" <?php if ($user->getStatus() == 'active') echo 'selected="selected"' ?>>Active</option>
-                    <option value="inactive" <?php if ($user->getStatus() == 'inactive') echo 'selected="selected"' ?>>Inactive</option>
+                    <option value="active" <?php if ($user['status'] == 'active') echo 'selected="selected"' ?>>Active</option>
+                    <option value="inactive" <?php if ($user['status'] == 'inactive') echo 'selected="selected"' ?>>Inactive</option>
                 </select>
                 <br>
                 <div class="flex flex-row justify-center">

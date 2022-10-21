@@ -2,6 +2,8 @@
 
 namespace App\Controllers\User;
 
+use App\Controllers\BaseController;
+
 class UserController extends BaseController
 {
     public function create(): string
@@ -14,7 +16,7 @@ class UserController extends BaseController
         $post_vars = json_decode(file_get_contents('php://input'), true);
         $post_vars['id'] = time();
 
-        $this->validator->validateUser($post_vars) ?
+        $this->validator->validate($post_vars) ?
             $status = $this->user->insert($post_vars) :
             $status = false;
         //var_dump($status);
@@ -22,7 +24,7 @@ class UserController extends BaseController
             $this->session->setSessionMsg('added', $post_vars['id']);
         }
 
-        return $this->response->send((bool)$status, $this->validator->getErrors(), $post_vars['id'], '/');
+        return $this->response->send((bool)$status, $post_vars['id'], '/', $this->validator->getErrors());
     }
 
     public function delete(array $args): string
@@ -32,7 +34,7 @@ class UserController extends BaseController
             $this->session->setSessionMsg('deleted', (int)$args['id']);
         }
 
-        return $this->response->send($status, [], (int)$args['id'], '/');
+        return $this->response->send($status, (int)$args['id'], '/');
     }
 
     public function edit(array $args): string
@@ -45,18 +47,18 @@ class UserController extends BaseController
         return $this->view->renderError(404, 'The page you are looking for is not found');
     }
 
-    public function update(): string
+    public function update(array $arg = []): string
     {
         $put_vars = json_decode(file_get_contents('php://input'), true);
 
-        $this->validator->validateUser($put_vars) ?
+        $this->validator->validate($put_vars) ?
             $status = $this->user->update($put_vars) :
             $status = false;
         if ($status) {
             $this->session->setSessionMsg('updated', $put_vars['id']);
         }
 
-        return $this->response->send((bool)$status, $this->validator->getErrors(), $put_vars['id'], '/');
+        return $this->response->send((bool)$status, $put_vars['id'], '/', $this->validator->getErrors());
     }
 
     public function show(array $args): string

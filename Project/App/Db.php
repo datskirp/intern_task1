@@ -27,7 +27,7 @@ class Db
 
         return self::$instance;
     }
-    public function query(string $sql, array $params = [], string $className = 'stdClass'): ?array
+    public function query(string $sql, array $params = []): ?array
     {
         $sth = $this->pdo->prepare($sql);
         $result = $sth->execute($params);
@@ -35,7 +35,7 @@ class Db
             return null;
         }
 
-        return $sth->fetchAll(\PDO::FETCH_CLASS, $className);
+        return $sth->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public function changeRecord(string $sql, array $values): bool

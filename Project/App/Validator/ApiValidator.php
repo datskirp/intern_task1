@@ -2,10 +2,7 @@
 
 namespace App\Validator;
 
-use App\Db;
-use App\Models\User\User;
-
-class UserValidator extends Base
+class ApiValidator extends Base
 {
     private array $rules;
     protected int $id;
@@ -15,12 +12,18 @@ class UserValidator extends Base
         $this->rules = [
             'email' => ['required' => true, 'max' => 255, 'email' => true, 'unique' => true],
             'name' => ['required' => true, 'max' => 120, 'min' => 2],
+            'gender' => ['required' => true, 'enum' => ['male', 'female']],
+            'status' => ['required' => true, 'enum' => ['active', 'inactive']],
+            'id' => [],
         ];
     }
-
     public function validate(array $inputFields): bool
     {
-        $this->errors = [];
+        if (!empty(array_diff_key($this->rules, $inputFields))) {
+            $this->errors['error'] = "Wrong input field names in a request body. Input fields must be: 'id' (optional: will get overwritten), 'email', 'name', 'gender', 'status'.";
+
+            return false;
+        }
         $this->id = $inputFields['id'];
         foreach ($inputFields as $field => $value) {
             if (array_key_exists($field, $this->rules)) {
@@ -31,7 +34,7 @@ class UserValidator extends Base
                 }
             }
         }
-        return empty($this->errors);
 
+        return empty($this->errors);
     }
 }

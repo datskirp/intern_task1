@@ -38,4 +38,10 @@ class Router
 
         return false;
     }
+
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
 }

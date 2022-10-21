@@ -6,8 +6,9 @@ use App\Models\User\User;
 
 abstract class Base
 {
-    protected array $errors;
-    protected bool $isValid;
+    protected array $errors = [];
+
+    abstract public function validate(array $inputFields):bool;
 
     protected function required(string $field, string $value, bool $rule): bool
     {
@@ -66,9 +67,15 @@ abstract class Base
         return false;
     }
 
-    public function isValid(): bool
+    private function enum(string $field, string $value, array $rule): bool
     {
-        return $this->isValid;
+        if (!in_array($value, $rule)) {
+            $this->errors[$field] = 'Only '. implode(', ', $rule) . ' values are allowed';
+
+            return true;
+        }
+
+        return false;
     }
 
     public function getErrors(): array

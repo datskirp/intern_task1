@@ -1,5 +1,5 @@
 <?php
-namespace App\Controllers\User;
+namespace App\Controllers;
 
 use App\View;
 use App\Session;
