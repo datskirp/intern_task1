@@ -70,20 +70,19 @@ abstract class Base
 
     abstract protected static function getTableName(): string;
 
-    private function update(array $data): void
+    public function update(array $data): bool
     {
-        $columns2params = [];
-        $params2values = [];
+        $columnParams = [];
+        $paramsValues = [];
         $index = 1;
         foreach ($data as $column => $value) {
             $param = ':param' . $index; // :param1
-            $columns2params[] = $column . ' = ' . $param; // column1 = :param1
-            $params2values[$param] = $value; // [:param1 => value1]
+            $columnParams[] = $column . ' = ' . $param; // column1 = :param1
+            $paramsValues[$param] = $value; // [:param1 => value1]
             $index++;
         }
-        $sql = 'UPDATE ' . static::getTableName() . ' SET ' . implode(', ', $columns2params) . ' WHERE id = ' . $data['id'];
-        $db = Db::getInstance();
-        $db->query($sql, $params2values, static::class);
+        $sql = 'UPDATE ' . static::getTableName() . ' SET ' . implode(', ', $columnParams) . ' WHERE id = ' . $data['id'];
+        return self::$db->changeRecord($sql, $paramsValues);
     }
 
     public function insert(array $data): bool

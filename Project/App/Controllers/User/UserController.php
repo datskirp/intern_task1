@@ -25,47 +25,45 @@ class UserController extends BaseController
         return $this->response->send((bool)$status, $this->validator->getErrors(), $post_vars['id'], '/');
     }
 
-    public function delete(array $args): void
+    public function delete(array $args): string
     {
         $status = $this->user->delete((int)$args['id']);
         if ($status) {
-            $this->response->setSessionMsg('deleted', (int)$args['id']);
+            $this->session->setSessionMsg('deleted', (int)$args['id']);
         }
-        $this->response->send($status, $this->validator->getAlerts(), (int)$args['id'], '/');
+        return $this->response->send($status, [], (int)$args['id'], '/');
     }
 
-    public function edit(array $args): void
+    public function edit(array $args): string
     {
-        $user = $this->user->getUserById($args['id']);
-        if ($user !== false) {
-            $this->view->render('User/Edit.php', $user);
-        } else {
-            $this->view->render('Error.php', ['msg' => 'This url is not found!']);
+        $user = $this->user::getById($args['id']);
+        if ($user) {
+            return $this->view->render('User/Edit.php', ['user' => $user]);
         }
-        //$this->view->renderHtml('User/Edit.php', $this->user->getUserById($args['id']));
+            return $this->view->renderError(404, 'The page you are looking for is not found');
     }
 
-    public function update(): void
+    public function update(): string
     {
         $put_vars = json_decode(file_get_contents('php://input'), true);
-        $this->validator->validate($put_vars, $this->validator->userValidatorRules());
-        $this->validator->isValid() ?
-            $status = $this->user->edit($put_vars) :
+
+        $this->validator->validateUser($put_vars) ?
+            $status = $this->user->update($put_vars) :
             $status = false;
         if ($status) {
-            $this->response->setSessionMsg('updated', $put_vars['id']);
+            $this->session->setSessionMsg('updated', $put_vars['id']);
         }
-        $this->response->send((bool)$status, $this->validator->getAlerts(), $put_vars['id'], '/');
+        return $this->response->send((bool)$status, $this->validator->getErrors(), $put_vars['id'], '/');
     }
 
-    public function show(array $args)
+    public function show(array $args): string
     {
-        $user = $this->user->getUserById($args['id']);
-        if ($user !== false) {
-            $this->view->render('User/Show.php', $user);
-        } else {
-            $this->view->render('Error.php', ['msg' => 'This url is not found!']);
+        $user = $this->user::getById($args['id']);
+        if ($user) {
+            return $this->view->render('User/Show.php', ['user' => $user]);
         }
+            return $this->view->renderError(404, 'The page you are looking for is not found');
+
 
     }
 
