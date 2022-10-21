@@ -7,6 +7,7 @@ use App\Validator\UserValidator;
 
 class User extends Base
 {
+    private int $id;
     private string $email;
     private string $name;
     private string $gender;
@@ -15,6 +16,11 @@ class User extends Base
     protected static function getTableName(): string
     {
         return 'users';
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     public function getEmail(): string
@@ -34,11 +40,4 @@ class User extends Base
         return $this->status;
     }
 
-    public function store(array $input): bool
-    {
-        if ($this->validator->validateUser($input)) {
-            var_dump($this->insert($input));
-
-        }
-    }
 }

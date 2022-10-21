@@ -31,7 +31,6 @@ class Db
     {
         $sth = $this->pdo->prepare($sql);
         $result = $sth->execute($params);
-
         if (false === $result) {
             return null;
         }

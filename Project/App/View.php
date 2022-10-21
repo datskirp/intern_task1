@@ -4,23 +4,23 @@ namespace App;
 
 class View
 {
-    public function render($template, array $args = []): void
+    public function render($template, array $args = []): string
     {
         extract($args, EXTR_SKIP);
         ob_start();
         include_once ROOT . '/Views/' . $template;
         $buffer = ob_get_contents();
         ob_end_clean();
-        echo $buffer;
+        return $buffer;
     }
 
-    public function renderError(int $statusCode, $msg)
+    public function renderError(int $statusCode, $msg): string
     {
         ob_start();
         include_once ROOT . '/Views/Error.php';
         $buffer = ob_get_contents();
         ob_end_clean();
-        echo $buffer;
+        return $buffer;
     }
 }
 

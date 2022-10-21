@@ -2,44 +2,27 @@
 
 namespace App\Controllers\User;
 
-use App\View;
-use App\Session;
-use App\Models\User\User;
-use App\Response;
 
-class UserController
+class UserController extends BaseController
 {
-    private $view;
-    private $session;
-    private $user;
-    private $response;
-
-    public function __construct(View $view, Session $session, User $user, Response $response)
+    public function create(): string
     {
-        $this->view = $view;
-        $this->session = $session;
-        $this->user = $user;
-        $this->response = $response;
-        var_dump($user);
+        return $this->view->render('User/Add.php');
     }
 
-
-    public function create(): void
-    {
-        $this->view->render('User/Add.php');
-    }
-
-    public function store(): void
+    public function store(): string
     {
         $post_vars = json_decode(file_get_contents('php://input'), true);
         $post_vars['id'] = time();
-        $this->user->store($post_vars) ?
-            $status = $this->user->add($post_vars) :
+
+        $this->validator->validateUser($post_vars) ?
+            $status = $this->user->insert($post_vars) :
             $status = false;
+        //var_dump($status);
         if ($status) {
-            $this->response->setSessionMsg('added', $post_vars['id']);
+            $this->session->setSessionMsg('added', $post_vars['id']);
         }
-        $this->response->send((bool)$status, $this->validator->getAlerts(), $post_vars['id'], '/');
+        return $this->response->send((bool)$status, $this->validator->getErrors(), $post_vars['id'], '/');
     }
 
     public function delete(array $args): void
@@ -86,7 +69,7 @@ class UserController
 
     }
 
-    public function index(array $args = []): void
+    public function index(array $args = []): string
     {
         if (isset($_SESSION['action'])) {
             $args['action'] = $_SESSION['action'];
@@ -94,7 +77,6 @@ class UserController
             $this->session->stop();
         }
         $users = $this->user->getAll();
-        var_dump($users);
-        $this->view->render('User/ViewAll.php', ['users' => $users, 'args' => $args]);
+        return $this->view->render('User/ViewAll.php', ['users' => $users, 'args' => $args]);
     }
 }

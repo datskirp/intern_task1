@@ -7,21 +7,14 @@ use App\Validator\UserValidator;
 
 abstract class Base
 {
-    protected int $id;
-    protected $db;
+    protected static $db;
     protected $validator;
 
-    public function __construct(Db $db, UserValidator $validator)
+    public function __construct()
     {
-        $this->db = $db;
-        $this->validator = $validator;
+        self::$db = Db::getInstance();
     }
 
-
-    public function getId(): int
-    {
-        return $this->id;
-    }
 
     public function __set(string $name, $value)
     {
@@ -36,9 +29,7 @@ abstract class Base
 
     public function getAll(): ?array
     {
-        var_dump(static::getTableName());
-        var_dump($this->db);
-        return $this->db->query('SELECT * FROM `' . static::getTableName() . '`;', [], static::class);
+        return self::$db->query('SELECT * FROM `' . static::getTableName() . '`;', [], static::class);
     }
 
     public static function getById(int $id): ?self
@@ -51,38 +42,20 @@ abstract class Base
         return $entities ? $entities[0] : null;
     }
 
-    public function delete(int $id = null): void
+    public function delete(int $id): bool
     {
-        if (is_null($id)) {
-            $id = $this->id;
-        }
-        self::$db->query(
+        return self::$db->changeRecord(
             'DELETE FROM `' . static::getTableName() . '` WHERE id = :id',
             [':id' => $id]
         );
-        $this->id = null;
     }
 
-    public function save(): void
+    public static function checkEmailExistence($email): array|false
     {
-        $mappedProperties = $this->mapPropertiesToDbFormat();
-        if ($this->id !== null) {
-            $this->update($mappedProperties);
-        } else {
-            $this->insert($mappedProperties);
-        }
-    }
-
-    public static function checkEmailExistence($email): bool
-    {
-        $result = self::$db->query(
+        return self::$db->getRecord(
             'SELECT * FROM `' . static::getTableName() . '` WHERE `email` = :email',
             ['email' => $email]
         );
-        if (!is_null($result)) {
-            return true;
-        }
-        return false;
     }
 
     public static function getEmailById(int $id): array|false
@@ -97,23 +70,23 @@ abstract class Base
 
     abstract protected static function getTableName(): string;
 
-    private function update(array $mappedProperties): void
+    private function update(array $data): void
     {
         $columns2params = [];
         $params2values = [];
         $index = 1;
-        foreach ($mappedProperties as $column => $value) {
+        foreach ($data as $column => $value) {
             $param = ':param' . $index; // :param1
             $columns2params[] = $column . ' = ' . $param; // column1 = :param1
             $params2values[$param] = $value; // [:param1 => value1]
             $index++;
         }
-        $sql = 'UPDATE ' . static::getTableName() . ' SET ' . implode(', ', $columns2params) . ' WHERE id = ' . $this->id;
+        $sql = 'UPDATE ' . static::getTableName() . ' SET ' . implode(', ', $columns2params) . ' WHERE id = ' . $data['id'];
         $db = Db::getInstance();
         $db->query($sql, $params2values, static::class);
     }
 
-    protected function insert(array $data): ?array
+    public function insert(array $data): bool
     {
         $columns = [];
         $paramsNames = [];
@@ -128,21 +101,9 @@ abstract class Base
 
         $sql = 'INSERT INTO ' . static::getTableName() . ' (' . $columnsViaSemicolon . ') VALUES (' . $paramsNamesViaSemicolon . ');';
 
-        return self::$db->query($sql, $data, static::class);
+        return self::$db->changeRecord($sql, $data);
     }
 
-    private function refresh(): void
-    {
-        $objectFromDb = static::getById($this->id);
-        $reflector = new \ReflectionObject($objectFromDb);
-        $properties = $reflector->getProperties();
-
-        foreach ($properties as $property) {
-            $property->setAccessible(true);
-            $propertyName = $property->getName();
-            $this->$propertyName = $property->getValue($objectFromDb);
-        }
-    }
 
     private function mapPropertiesToDbFormat(): array
     {
