@@ -1,9 +1,8 @@
 <?php
 use function DI\create;
-use App\Controllers\BaseController;
-use App\Controllers\UserController;
+use function DI\get;
 
 return [
     \App\Router::class => DI\autowire()->constructorParameter('routes', require ROOT . '/Config/routes.php'),
-    BaseController::class => create(UserController::class),
+    \App\Models\User\Base::class => DI\autowire()->constructor(\App\Db::class, \App\Validator\UserValidator::class),
 ];

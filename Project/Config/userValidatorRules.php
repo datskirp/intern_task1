@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'email' => ['required' => 'yes', 'maxsize' => 255, 'valid' => 'email', 'unique' => 'yes'],
-    'name' => ['required' => 'yes', 'maxsize' => 255, 'valid' => 'name'],
+    'email' => ['required' => true, 'maxsize' => 255, 'valid' => 'email', 'unique' => 'yes'],
+    'name' => ['required' => true, 'maxsize' => 255, 'valid' => 'name'],
 ];

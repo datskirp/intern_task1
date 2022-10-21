@@ -27,6 +27,17 @@ class Db
 
         return self::$instance;
     }
+    public function query(string $sql, array $params = [], string $className = 'stdClass'): ?array
+    {
+        $sth = $this->pdo->prepare($sql);
+        $result = $sth->execute($params);
+
+        if (false === $result) {
+            return null;
+        }
+
+        return $sth->fetchAll(\PDO::FETCH_CLASS, $className);
+    }
 
     public function changeRecord(string $sql, array $values): bool
     {
@@ -43,7 +54,7 @@ class Db
         return $sth->fetch(\PDO::FETCH_ASSOC);
     }
 
-    public function getAll(): array|false
+    public function getAll(): array
     {
         $result = $this->pdo->query('SELECT * FROM `users`');
 
@@ -57,21 +68,5 @@ class Db
         return $sth->execute(['id' => $id]);
     }
 
-    public function checkEmailExistence($email): array|false
-    {
-        $sql = 'SELECT * from `users` where `email` = :email';
-        $sth = $this->pdo->prepare($sql);
-        $sth->execute(['email' => $email]);
 
-        return ($sth->fetch());
-    }
-
-    public function getEmailById(int $id): array|false
-    {
-        $sql = 'SELECT `email` from `users` where `id` = :id';
-        $sth = $this->pdo->prepare($sql);
-        $sth->execute(['id' => $id]);
-
-        return ($sth->fetch());
-    }
 }

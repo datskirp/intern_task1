@@ -3,49 +3,42 @@
 namespace App\Models\User;
 
 use App\Db;
+use App\Validator\UserValidator;
 
 class User extends Base
 {
-    public function add(array $userData): ?array
-    {
-        $sql = 'INSERT INTO `users` (`id`, `email`, `name`, `gender`, `status`) 
-                     VALUES (:id, :email, :name, :gender, :status)';
+    private string $email;
+    private string $name;
+    private string $gender;
+    private string $status;
 
-        return $this->db->changeRecord($sql, $userData) ? $userData : null;
+    protected static function getTableName(): string
+    {
+        return 'users';
     }
 
-    public function getUserById(int $id): array|false
+    public function getEmail(): string
     {
-        $sql = 'SELECT * FROM users WHERE id = :id';
-
-        return $this->db->getRecord($sql, ['id' => $id]);
+        return $this->email;
+    }
+    public function getName(): string
+    {
+        return $this->name;
+    }
+    public function getGender(): string
+    {
+        return $this->gender;
+    }
+    public function getStatus(): string
+    {
+        return $this->status;
     }
 
-    public function edit(array $userData): ?array
+    public function store(array $input): bool
     {
-        $db = Db::getInstance();
-        if ($db->getEmailById((int)$userData['id']) === $userData['email']) {
-            $sql = 'UPDATE `users` SET `name` = :name, 
-                   `gender` = :gender, `status` = :status WHERE id = :id';
+        if ($this->validator->validateUser($input)) {
+            var_dump($this->insert($input));
 
-            return $this->db->changeRecord($sql, $userData) ? $userData : null;
-        } else {
-            $sql = 'UPDATE `users` SET `email` = :email, `name` = :name, 
-                   `gender` = :gender, `status` = :status WHERE id = :id';
-
-            return $this->db->changeRecord($sql, $userData) ? $userData : null;
         }
-    }
-
-    public function delete(int $id): bool
-    {
-        $sql = 'DELETE FROM `users` WHERE `id` = :id';
-
-        return $this->db->deleteRecord($sql, $id);
-    }
-
-    public function getAll(): ?array
-    {
-        return $this->db->getAll();
     }
 }

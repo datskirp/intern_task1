@@ -23,23 +23,23 @@
                 <?php
                 foreach ($users as $user): ?>
                     <tr>
-                        <td class="border-2 px-2 py-2 text-center"><?= $user['id'] ?></td>
-                        <td class="border-2 px-2 py-2 text-center"><?= $user['email'] ?></td>
-                        <td class="border-2 px-2 py-2 text-center"><?= $user['name'] ?></td>
-                        <td class="border-2 px-2 py-2 text-center"><?= $user['gender'] ?></td>
-                        <td class="border-2 px-2 py-2 text-center"><?= $user['status'] ?></td>
+                        <td class="border-2 px-2 py-2 text-center"><?= $user->getId() ?></td>
+                        <td class="border-2 px-2 py-2 text-center"><?= $user->getEmail() ?></td>
+                        <td class="border-2 px-2 py-2 text-center"><?= $user->getName() ?></td>
+                        <td class="border-2 px-2 py-2 text-center"><?= $user->getGender() ?></td>
+                        <td class="border-2 px-2 py-2 text-center"><?= $user->getStatus() ?></td>
                         <td class="border-2 px-2 py-2 text-center">
-                            <button name="edit" id ="<?= $user['id'] ?>"
+                            <button name="edit" id ="<?= $user->getId() ?>"
                                     class="bg-green-400 border-2 hover:border-green-800 text-white w-14 rounded"
                                     onclick="editUser(this)">
                                     Edit
                             </button>
                             <button name="delete" class="bg-red-400 border-2 hover:border-red-800 text-white w-14 rounded"
-                                    id="<?= $user['id'] ?>" onclick="deleteUser(this)">
+                                    id="<?= $user->getId() ?>" onclick="deleteUser(this)">
                                     Delete
                             </button>
                             <button name="show" class="bg-blue-400 border-2 hover:border-blue-800 text-white w-14 rounded"
-                                    id="<?= $user['id'] ?>" onclick="showUser(this)">
+                                    id="<?= $user->getId() ?>" onclick="showUser(this)">
                                     Show
                             </button>
                         </td>

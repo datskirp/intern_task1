@@ -2,19 +2,38 @@
 
 namespace App\Controllers\User;
 
-class UserController extends BaseController
+use App\View;
+use App\Session;
+use App\Models\User\User;
+use App\Response;
+
+class UserController
 {
+    private $view;
+    private $session;
+    private $user;
+    private $response;
+
+    public function __construct(View $view, Session $session, User $user, Response $response)
+    {
+        $this->view = $view;
+        $this->session = $session;
+        $this->user = $user;
+        $this->response = $response;
+        var_dump($user);
+    }
+
+
     public function create(): void
     {
-        $this->view->renderHtml(__METHOD__);
+        $this->view->render('User/Add.php');
     }
 
     public function store(): void
     {
         $post_vars = json_decode(file_get_contents('php://input'), true);
         $post_vars['id'] = time();
-        $this->validator->validate($post_vars, $this->validator->userValidatorRules());
-        $this->validator->isValid() ?
+        $this->user->store($post_vars) ?
             $status = $this->user->add($post_vars) :
             $status = false;
         if ($status) {
@@ -36,9 +55,9 @@ class UserController extends BaseController
     {
         $user = $this->user->getUserById($args['id']);
         if ($user !== false) {
-            $this->view->renderHtml('User/Edit.php', $user);
+            $this->view->render('User/Edit.php', $user);
         } else {
-            $this->view->renderHtml('404.php', ['msg' => 'This url is not found!']);
+            $this->view->render('Error.php', ['msg' => 'This url is not found!']);
         }
         //$this->view->renderHtml('User/Edit.php', $this->user->getUserById($args['id']));
     }
@@ -60,9 +79,9 @@ class UserController extends BaseController
     {
         $user = $this->user->getUserById($args['id']);
         if ($user !== false) {
-            $this->view->renderHtml('User/Show.php', $user);
+            $this->view->render('User/Show.php', $user);
         } else {
-            $this->view->renderHtml('404.php', ['msg' => 'This url is not found!']);
+            $this->view->render('Error.php', ['msg' => 'This url is not found!']);
         }
 
     }
@@ -75,6 +94,7 @@ class UserController extends BaseController
             $this->session->stop();
         }
         $users = $this->user->getAll();
-        $this->view->renderHtml('User/ViewAll.php', ['users' => $users, 'args' => $args]);
+        var_dump($users);
+        $this->view->render('User/ViewAll.php', ['users' => $users, 'args' => $args]);
     }
 }
