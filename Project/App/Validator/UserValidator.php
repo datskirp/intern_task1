@@ -2,9 +2,6 @@
 
 namespace App\Validator;
 
-use App\Db;
-use App\Models\User\User;
-
 class UserValidator extends Base
 {
     private array $rules;
@@ -31,7 +28,7 @@ class UserValidator extends Base
                 }
             }
         }
-        return empty($this->errors);
 
+        return empty($this->errors);
     }
 }

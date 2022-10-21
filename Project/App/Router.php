@@ -43,5 +43,4 @@ class Router
     {
         return $this->path;
     }
-
 }

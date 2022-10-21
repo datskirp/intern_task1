@@ -44,6 +44,7 @@ class Response
     {
         $this->responseBody['status'] = false;
         $this->responseBody['msg'] = 'There are no users in the database!';
+
         return json_encode($this->responseBody);
     }
 
@@ -57,7 +58,6 @@ class Response
             case 404:
                 return json_encode(['status' => 'The endpoint is not found']);
         }
-
     }
 
     public function sendApi($data, $id = null, string $html = ''): string
@@ -72,9 +72,6 @@ class Response
         }
         if (!empty($html)) {
             $this->responseBody['html'] = $html;
-        }
-        if (isset($_SESSION['action']) && $_SESSION['action'] === 'added') {
-            $this->statusCode(201);
         }
 
         return json_encode($this->responseBody);

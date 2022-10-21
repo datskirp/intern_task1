@@ -8,7 +8,7 @@ abstract class Base
 {
     protected array $errors = [];
 
-    abstract public function validate(array $inputFields):bool;
+    abstract public function validate(array $inputFields): bool;
 
     protected function required(string $field, string $value, bool $rule): bool
     {
@@ -67,7 +67,7 @@ abstract class Base
         return false;
     }
 
-    private function enum(string $field, string $value, array $rule): bool
+    protected function enum(string $field, string $value, array $rule): bool
     {
         if (!in_array($value, $rule)) {
             $this->errors[$field] = 'Only '. implode(', ', $rule) . ' values are allowed';

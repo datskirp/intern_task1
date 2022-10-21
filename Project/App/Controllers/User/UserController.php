@@ -15,7 +15,6 @@ class UserController extends BaseController
     {
         $post_vars = json_decode(file_get_contents('php://input'), true);
         $post_vars['id'] = time();
-
         $this->validator->validate($post_vars) ?
             $status = $this->user->insert($post_vars) :
             $status = false;
