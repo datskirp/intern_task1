@@ -15,11 +15,12 @@ class UserController extends BaseController
     {
         $post_vars = json_decode(file_get_contents('php://input'), true);
         $post_vars['id'] = time();
-        $this->user->validate($post_vars) ?
-            $status = $this->user->insert($post_vars) :
+        $validData = $this->user->validate($post_vars);
+        $validData ?
+            $status = $this->user->insert($validData) :
             $status = false;
         if ($status) {
-            $this->session->setSessionMsg('added', $post_vars['id']);
+            $this->session->setSessionMsg('added', $validData['id']);
         }
 
         return $this->response->send($status, $post_vars['id'], '/', $this->user->validator->getErrors());

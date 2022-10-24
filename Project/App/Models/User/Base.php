@@ -31,6 +31,9 @@ abstract class Base
 
     public function delete(int $id): bool
     {
+        if (is_null(self::getById($id))) {
+            return false;
+        }
         return self::$db->changeRecord(
             'DELETE FROM `' . static::getTableName() . '` WHERE id = :id',
             [':id' => $id]
@@ -45,11 +48,11 @@ abstract class Base
         );
     }
 
-    public static function getEmailById(int $id): array|false
+    public static function getColumnById(int $id, $column): array|false
     {
         $result = self::$db->getRecord(
-            'SELECT `email` FROM `' . static::getTableName() . '` WHERE `id` = :id',
-            [':id' => $id]
+            'SELECT :column FROM `' . static::getTableName() . '` WHERE `id` = :id',
+            [':id' => $id, ':column' => $column]
         );
 
         return $result ?: false;

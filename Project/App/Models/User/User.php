@@ -2,7 +2,6 @@
 
 namespace App\Models\User;
 
-use App\Db;
 use App\Validator\UserValidator;
 
 class User extends Base
@@ -24,7 +23,7 @@ class User extends Base
         $this->validator = $validator;
     }
 
-    public function validate($data): bool
+    public function validate($data): array|false
     {
         return $this->validator->validate($data);
     }

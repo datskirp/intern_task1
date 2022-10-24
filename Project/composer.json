@@ -6,6 +6,8 @@
         }
     },
     "require": {
-        "php-di/php-di": "^6.4"
+        "php-di/php-di": "^6.4",
+        "twig/twig": "^3.4",
+        "ext-fileinfo": "*"
     }
 }
