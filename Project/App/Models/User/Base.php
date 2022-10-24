@@ -3,6 +3,7 @@
 namespace App\Models\User;
 
 use App\Db;
+use App\Validator\ApiValidator;
 
 abstract class Base
 {

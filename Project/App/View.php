@@ -8,7 +8,9 @@ class View
     {
         extract($args, EXTR_SKIP);
         ob_start();
+        include_once ROOT . '/Views/header.php';
         include_once ROOT . '/Views/' . $template;
+        include_once ROOT . '/Views/footer.php';
         $buffer = ob_get_contents();
         ob_end_clean();
 

@@ -15,15 +15,14 @@ class UserController extends BaseController
     {
         $post_vars = json_decode(file_get_contents('php://input'), true);
         $post_vars['id'] = time();
-        $this->validator->validate($post_vars) ?
+        $this->user->validate($post_vars) ?
             $status = $this->user->insert($post_vars) :
             $status = false;
-        //var_dump($status);
         if ($status) {
             $this->session->setSessionMsg('added', $post_vars['id']);
         }
 
-        return $this->response->send((bool)$status, $post_vars['id'], '/', $this->validator->getErrors());
+        return $this->response->send($status, $post_vars['id'], '/', $this->user->validator->getErrors());
     }
 
     public function delete(array $args): string
@@ -50,14 +49,14 @@ class UserController extends BaseController
     {
         $put_vars = json_decode(file_get_contents('php://input'), true);
 
-        $this->validator->validate($put_vars) ?
+        $this->user->validate($put_vars) ?
             $status = $this->user->update($put_vars) :
             $status = false;
         if ($status) {
             $this->session->setSessionMsg('updated', $put_vars['id']);
         }
 
-        return $this->response->send((bool)$status, $put_vars['id'], '/', $this->validator->getErrors());
+        return $this->response->send((bool)$status, $put_vars['id'], '/', $this->user->validator->getErrors());
     }
 
     public function show(array $args): string

@@ -2,10 +2,13 @@
 
 namespace App\Controllers\Api\v1;
 
-use App\Controllers\User\UserController;
+use App\Controllers\BaseController;
+use App\Validator\ApiValidator;
 
-class ApiController extends UserController
+class ApiController extends BaseController
 {
+    public $apiValidator;
+
     public function show(array $args): string
     {
         $user = $this->user::getById($args['id']);
@@ -70,5 +73,10 @@ class ApiController extends UserController
         } else {
             return $this->response->sendError(400, $args['id']);
         }
+    }
+
+    public function setApiValidator(ApiValidator $apiValidator)
+    {
+        $this->apiValidator = $apiValidator;
     }
 }

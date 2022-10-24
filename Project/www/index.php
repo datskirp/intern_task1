@@ -1,11 +1,7 @@
 <?php
-
-use App\Response;
+use App\App;
 
 define('ROOT', dirname(__DIR__));
-
-
-
 /*
 spl_autoload_register(function (string $className) {
     require_once __DIR__ . '/../' . str_replace('\\', '/', $className) . '.php';
@@ -14,17 +10,5 @@ spl_autoload_register(function (string $className) {
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$container = require ROOT . '/App/Container.php';
-
-$router = $container->get(\App\Router::class);
-$callback = $router->getCallback();
-if ($callback) {
-    echo $container->call([$callback[0], $callback[1]], [$callback[2]]);
-} else {
-    if (preg_match('~^api/v1.*$~', $router->getPath())) {
-        $response = new Response();
-        echo $response->sendError(404);
-    } else {
-        echo $container->call([\App\View::class, 'renderError'], [404, 'The page you are looking for is not found']);
-    }
-}
+$app = new App();
+$app->run();

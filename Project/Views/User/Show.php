@@ -1,4 +1,4 @@
-<?php include_once  __DIR__ . '/../header.php' ?>
+
 <div class="flex flex-row justify-center items-center">
     <div class="w-80 px-8 py-4 mt-4 text-left bg-white shadow-lg">
         <div class="flex flex-row justify-center">
@@ -93,5 +93,5 @@
         return response.json();
     }
 </script>
-<?php include_once  __DIR__ . '/../footer.php' ?>
+
 
