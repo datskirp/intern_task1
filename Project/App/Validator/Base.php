@@ -3,6 +3,7 @@
 namespace App\Validator;
 
 use App\Models\User\User;
+use App\Controllers\Upload\UploadController;
 
 abstract class Base
 {
@@ -29,17 +30,21 @@ abstract class Base
         'secure' => 'The %s must have between 8 and 64 characters and contain at least one number, one upper case letter, one lower case letter and one special character',
         'unique' => 'The %s already exists',
         'enum' => 'The values of %s field should be %s or %s',
+        'image' => 'The file must be image or text',
+        'txt' => 'The file must be image or text',
+        'enoughLocalStorage' => "There's not enough free space on the disk!",
+        'maxSize' => 'The file %s must not exceed %s bytes',
     ];
     protected array $errors = [];
+    protected bool $fileTypeChecked = false;
 
-    abstract public function validate(array $data): array|false;
+    abstract public function validate(array $data): mixed;
 
-    protected function validateData(array $data, array $fields, array $messages = []): array
+    protected function validateData(array $data, array $fields, array $messages = []): void
     {
         $split = fn($str, $separator) => array_map('trim', explode($separator, $str));
         $rule_messages = array_filter($messages, fn($message) => is_string($message));
         $validation_errors = array_merge(self::DEFAULT_VALIDATION_ERRORS, $rule_messages);
-        $errors = [];
         foreach ($fields as $field => $option) {
 
             $rules = $split($option, '|');
@@ -55,7 +60,7 @@ abstract class Base
                 if (is_callable([$this, $fn])) {
                     $pass = $this->$fn($data, $field, ...$params);
                     if (!$pass) {
-                        $errors[$field] = sprintf(
+                        $this->errors[$field] = sprintf(
                             $messages[$field][$rule_name] ?? $validation_errors[$rule_name],
                             $field,
                             ...$params
@@ -64,8 +69,6 @@ abstract class Base
                 }
             }
         }
-
-        return $errors;
     }
 
     private function array_trim(array $items): array
@@ -86,6 +89,51 @@ abstract class Base
         $data = filter_var_array($inputs, $options);
 
         return $trim ? $this->array_trim($data) : $data;
+    }
+
+    private function is_image(array $data, string $field): bool
+    {
+        if ($this->fileTypeChecked) {
+            return true;
+        }
+        $finfo = finfo_open(FILEINFO_MIME);
+        $mimetype = finfo_file($finfo, $data['tmp_name']);
+        if (str_contains($mimetype, 'image')) {
+            unset($this->errors[$field]);
+            $this->fileTypeChecked = true;
+            return true;
+        }
+
+        return false;
+    }
+
+    private function is_txt(array $data, string $field): bool
+    {
+        if ($this->fileTypeChecked) {
+            return true;
+        }
+        if (pathinfo($data['name'], PATHINFO_EXTENSION) === 'txt') {
+            unset($this->errors[$field]);
+            $this->fileTypeChecked = true;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private function is_enoughLocalStorage(array $data, string $field): bool
+    {
+        if (diskfreespace(ROOT . '/www') - $data['size'] > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function is_maxSize(array $data, string $field): bool
+    {
+        return $data['size'] < UploadController::MAX_FILE_SIZE;
     }
 
     private function is_required(array $data, string $field): bool

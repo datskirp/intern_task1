@@ -1,0 +1,75 @@
+{% include 'header.twig' %}
+<div class="flex flex-row justify-center items-center mx-auto">
+    <div class="px-8 py-4 mt-4 text-center bg-white shadow-lg">
+        <div class="flex flex-row justify-center">
+            <form enctype="multipart/form-data" action="/upload" method="POST" id="fileForm">
+                <input type="hidden" value="{{ maxSize }}" id="maxSize">
+                <label for="upload" class="font-bold">
+                    <p class="text-left text-gray-700">Choose a file to upload:</p>
+                </label>
+                <input class="border-2 border-gray-300 mt-2 p-1" name="upload" type="file" id="upload"/>
+                <br>
+                <button class="ali bg-gray-200 text-gray-700 border-2 border-gray-600 hover:border-gray-900 mt-2 p-1 px-2 rounded" type="submit">
+                    Send File
+                </button>
+            </form>
+        </div>
+        <br>
+        <span id="errorMsg" class="text-red-500">
+            {% if errors is defined %}
+                Error occured!
+                <ul>
+                {% for type, value in errors %}
+                    <li>{{ type }}: {{ value }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </span>
+        <br>
+        <div class="flex flex-row justify-center">
+            <table id="{{ tableId }}" class="border-collapse border-t-2 table-auto shadow-lg">
+                <tr class="bg-gray-200">
+                    <th class=" px-1 py-1 text-center">Name</th>
+                    <th class=" px-1 py-1 text-center">Size (KB)</th>
+                    <th class=" px-1 py-1 text-center">Meta info</th>
+                </tr>
+                {% for name, value in files %}
+                    <tr>
+                        <td class="border-2 px-2 py-2 text-center">{{ name }}</td>
+                        <td class="border-2 px-2 py-2 text-center">{{ value.size }}</td>
+                        <td class="border-2 px-2 py-2 text-center">{{ value.meta }}</td>
+                    </tr>
+                {% endfor %}
+                <br>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    if (!document.getElementById('files')) {
+        document.querySelector('table').hidden = true;
+    }
+    //document.getElementById('fileForm').addEventListener('submit', fileInfo);
+    function fileInfo(event){
+        event.preventDefault();
+        if (document.getElementById('upload').files[0]) {
+            let maxSize = document.getElementById('maxSize').value;
+            let fileName = document.getElementById('upload').files[0].name;
+            let fileSize = document.getElementById('upload').files[0].size;
+            let fileType = document.getElementById('upload').files[0].type;
+            let nameExt = fileName.split('.').pop();
+            if (fileType.includes('image') || nameExt === 'txt') {
+                if (fileSize < maxSize)
+                    document.getElementById('fileForm').submit();
+                else
+                    alert("Max file size must be below 5 MB");
+            } else {
+                alert("File must be an image or text");
+            }
+        } else {
+            alert("Please, choose a file to upload");
+        }
+    }
+</script>
+{% include 'footer.twig' %}

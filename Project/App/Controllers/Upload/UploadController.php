@@ -3,37 +3,42 @@ namespace App\Controllers\Upload;
 
 use App\Controllers\BaseController;
 use App\Validator\UploadValidator;
+use App\Logger;
 
 class UploadController extends BaseController
 {
+    const MAX_FILE_SIZE = 1 * 1024 * 1024;
+    const FORM_NAME = 'upload';
+    const UPLOAD_DIR = ROOT . '/www/uploads/';
     private $validator;
 
     public function index(): string
     {
         if ($this->validator::uploadDirExists()) {
-            return $this->view->renderHtml(
-                'Upload.html.twig',
+            return $this->view->render(
+                'Upload.twig',
                 [
-                    'files' => $this->createUploadsDirInfo(__DIR__ . '/../www/uploads/'),
+                    'files' => $this->createUploadsDirInfo(ROOT . '/www/uploads/'),
                     'tableId' => 'files',
+                    'maxSize' => self::MAX_FILE_SIZE,
                 ]
             );
         }
 
-        return $this->view->renderHtml('Upload.html.twig');
+        return $this->view->render('Upload.twig', ['maxSize' => self::MAX_FILE_SIZE]);
     }
 
-    public function upload(?array $file, string $formName): string
+    public function upload(array $args = []): string
     {
+        $file = $_FILES;
+        $formName = self::FORM_NAME;
         if (is_null($file) || $file[$formName]['error'] === UPLOAD_ERR_NO_FILE) {
-            return $this->view->render400('400.html.twig');
+            return $this->view->renderError(400, 'No file was uploaded');
         }
-        $uploadsDir = __DIR__ . '/../www/uploads/';
-        $this->validator->validate($file[$formName], $this->validatorRules);
-        if ($this->validator->isValid()) {
-            $this->createUploadsDir($uploadsDir);
-            move_uploaded_file($file[$formName]['tmp_name'], $uploadsDir . $file[$formName]['name']);
-            self::writeLog(
+        if ($this->validator->validate($file[$formName])) {
+            $this->createUploadsDir(self::UPLOAD_DIR);
+            move_uploaded_file($file[$formName]['tmp_name'], self::UPLOAD_DIR . $file[$formName]['name']);
+            Logger::writeLog(
                 [
                     'status' => 'success',
                     'name' => $file[$formName]['name'],
@@ -42,15 +47,15 @@ class UploadController extends BaseController
                 ]
             );
 
-            return $this->view->renderHtml(
-                'Upload.html.twig',
+            return $this->view->render(
+                'Upload.twig',
                 [
-                    'files' => $this->createUploadsDirInfo($uploadsDir),
+                    'files' => $this->createUploadsDirInfo(self::UPLOAD_DIR),
                     'tableId' => 'files',
                 ]
             );
         } else {
-            self::writeLog(
+            Logger::writeLog(
                 [
                     'status' => 'failure',
                     'name' => $file[$formName]['name'],
@@ -60,16 +65,16 @@ class UploadController extends BaseController
             );
 
             return $this->validator::uploadDirExists() ?
-                $this->view->renderHtml(
-                    'Upload.html.twig',
+                $this->view->render(
+                    'Upload.twig',
                     [
                         'errors' => $this->validator->getErrors(),
-                        'files' => $this->createUploadsDirInfo($uploadsDir),
+                        'files' => $this->createUploadsDirInfo(self::UPLOAD_DIR),
                         'tableId' => 'files',
                     ]
                 ) :
-                $this->view->renderHtml(
-                    'Upload.html.twig',
+                $this->view->render(
+                    'Upload.twig',
                     [
                         'errors' => $this->validator->getErrors(),
                     ]
@@ -92,7 +97,7 @@ class UploadController extends BaseController
                 if (is_dir($file)) {
                     continue;
                 }
-                $filesInfo[$file]['size'] = ceil(filesize($uploadsDir . $file) / 1000);
+                $filesInfo[$file]['size'] = ceil(filesize($uploadsDir . $file) / 1024);
                 $mimetype = mime_content_type($uploadsDir . $file);
                 $filesInfo[$file]['meta'] = str_contains($mimetype, 'image') ? $mimetype : '';
             }
@@ -100,36 +105,6 @@ class UploadController extends BaseController
         }
 
         return $filesInfo;
-    }
-
-    private static function writeLog(array $logInfo): void
-    {
-        $filename = 'upload_' . date('dmY') . '.log';
-        $fileToWrite = fopen(__DIR__ . '/../logs/' . $filename, 'a');
-        $now = date('d-m-Y H:i:s');
-        if (is_array($logInfo['errors'])) {
-            $logInfo['errors'] = self::expandErrorsForLogging($logInfo['errors']);
-        }
-        $message = sprintf(
-            "%s => Upload status: %s. \nFile name: %s \nSize: %s \nErrors occured: %s\n\n",
-            $now,
-            $logInfo['status'],
-            $logInfo['name'],
-            $logInfo['size'],
-            $logInfo['errors'],
-        );
-        fwrite($fileToWrite, $message);
-        fclose($fileToWrite);
-    }
-
-    private static function expandErrorsForLogging(array $errors): string
-    {
-        $errorMsg = '';
-        foreach ($errors as $type => $value) {
-            $errorMsg .= $type . ': ' . $value . ';';
-        }
-
-        return $errorMsg;
     }
 
 

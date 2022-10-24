@@ -36,7 +36,7 @@ class ApiValidator extends Base
         }
 
         $inputs = $this->sanitize($data, $sanitization_rules, self::FILTERS);
-        $this->errors = $this->validateData($inputs, $validation_rules, $messages);
+        $this->validateData($inputs, $validation_rules, $messages);
         return $this->errors ? false : $inputs;
     }
 }
