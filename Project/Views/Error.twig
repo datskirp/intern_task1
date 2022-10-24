@@ -1,5 +1,3 @@
-<?php /* @var string $msg
- */ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-<p style="text-align: center; font-size: xxx-large"><?= $statusCode ?>
+<p style="text-align: center; font-size: xxx-large">{{ statusCode }}</p>
     <br>
-    <h4 style="text-align: center;"><?= $msg ?></h4>
-</p>
-<p> </p>
+<h4 style="text-align: center;">{{ msg }}</h4>
+
 </body>
 </html>

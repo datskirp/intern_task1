@@ -33,9 +33,9 @@ class ApiController extends BaseController
     {
         $post_vars = json_decode(file_get_contents('php://input'), true);
         $post_vars['id'] = time();
-
-        $this->apiValidator->validate($post_vars) ?
-            $status = $this->user->insert($post_vars) :
+        $validData = $this->apiValidator->validate($post_vars);
+        $validData ?
+            $status = $this->user->insert($validData) :
 
             $status = false;
         if ($status) {

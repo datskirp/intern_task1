@@ -13,7 +13,7 @@ class UserValidator extends Base
         $this->fields = [
             'id' => 'int | required',
             'name' => 'string | required | between: 2, 120',
-            'email' => 'email | required | email | unique: email | max: 320',
+            'email' => 'email | required | email | unique | max: 320',
             'gender' => 'string | enum: male, female',
             'status' => 'string | enum: active, inactive',
         ];

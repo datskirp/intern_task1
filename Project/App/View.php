@@ -2,28 +2,24 @@
 
 namespace App;
 
+use Twig\Environment;
+
 class View
 {
+    private $twig;
+
+    public function __construct(Environment $twig)
+    {
+        $this->twig = $twig;
+    }
     public function render($template, array $args = []): string
     {
-        extract($args, EXTR_SKIP);
-        ob_start();
-        include_once ROOT . '/Views/header.php';
-        include_once ROOT . '/Views/' . $template;
-        include_once ROOT . '/Views/footer.php';
-        $buffer = ob_get_contents();
-        ob_end_clean();
-
-        return $buffer;
+        return $this->twig->render($template, $args);
     }
 
     public function renderError(int $statusCode, $msg): string
     {
-        ob_start();
-        include_once ROOT . '/Views/Error.php';
-        $buffer = ob_get_contents();
-        ob_end_clean();
-
-        return $buffer;
+        $view = 'Error.twig';
+        return $this->twig->render($view, ['statusCode' => $statusCode, 'msg' => $msg]);
     }
 }

@@ -8,7 +8,7 @@ class UserController extends BaseController
 {
     public function create(): string
     {
-        return $this->view->render('User/Add.php');
+        return $this->view->render('User/Add.twig');
     }
 
     public function store(): string
@@ -40,7 +40,7 @@ class UserController extends BaseController
     {
         $user = $this->user::getById($args['id']);
         if ($user) {
-            return $this->view->render('User/Edit.php', ['user' => $user]);
+            return $this->view->render('User/Edit.twig', ['user' => $user]);
         }
 
         return $this->view->renderError(404, 'The page you are looking for is not found');
@@ -64,7 +64,7 @@ class UserController extends BaseController
     {
         $user = $this->user::getById($args['id']);
         if ($user) {
-            return $this->view->render('User/Show.php', ['user' => $user]);
+            return $this->view->render('User/Show.twig', ['user' => $user]);
         }
 
         return $this->view->renderError(404, 'The page you are looking for is not found');
@@ -74,11 +74,11 @@ class UserController extends BaseController
     {
         if (isset($_SESSION['action'])) {
             $args['action'] = $_SESSION['action'];
-            $args['msgID'] = $_SESSION['id'];
+            $args['msg'] = $_SESSION['id'];
             $this->session->stop();
         }
         $users = $this->user->getAll();
 
-        return $this->view->render('User/ViewAll.php', ['users' => $users, 'args' => $args]);
+        return $this->view->render('User/ViewAll.twig', ['users' => $users, 'args' => $args]);
     }
 }

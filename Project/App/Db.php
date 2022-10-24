@@ -49,7 +49,6 @@ class Db
     {
         $sth = $this->pdo->prepare($sql);
         $sth->execute($values);
-
         return $sth->fetch(\PDO::FETCH_ASSOC);
     }
 }

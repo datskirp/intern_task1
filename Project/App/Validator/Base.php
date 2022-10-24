@@ -28,7 +28,7 @@ abstract class Base
         'alphanumeric' => 'The %s should have only letters and numbers',
         'secure' => 'The %s must have between 8 and 64 characters and contain at least one number, one upper case letter, one lower case letter and one special character',
         'unique' => 'The %s already exists',
-        'enum' => 'The values should be %s or %s',
+        'enum' => 'The values of %s field should be %s or %s',
     ];
     protected array $errors = [];
 
@@ -153,13 +153,13 @@ abstract class Base
         return preg_match($pattern, $data[$field]);
     }
 
-    private function is_unique(array $data, string $field, string $column): bool
+    private function is_unique(array $data, string $field): bool
     {
         if (!isset($data[$field])) {
             return true;
         }
         if (User::checkEmailExistence($data[$field]) &&
-            (User::getColumnById($this->id, $column)[$field] ?? '') !== $data[$field]) {
+            (User::getColumnById($this->id, $field)[$field] ?? '') !== $data[$field]) {
 
             return false;
         }

@@ -1,4 +1,4 @@
-
+{% include 'header.twig' %}
 <body class="bg-gray-300">
 <div class="flex flex-row justify-center items-center">
     <div class="w-auto px-8 py-4 mt-4 text-left bg-white shadow-lg">
@@ -10,7 +10,7 @@
             </nav>
         </div>
         <br>
-        <?php if (!empty($users)): ?>
+        {% if users %}
             <table class="border-collapse border-t-2 table-auto shadow-lg">
                 <tr class="bg-gray-200">
                     <th class=" px-2 py-2 text-center">ID</th>
@@ -20,37 +20,37 @@
                     <th class=" px-2 py-2 text-center">Status</th>
                     <th class=" px-2 py-2 text-center"></th>
                 </tr>
-                <?php
-                foreach ($users as $user): ?>
+                {% for user in users %}
                     <tr>
-                        <td class="border-2 px-2 py-2 text-center"><?= $user['id'] ?></td>
-                        <td class="border-2 px-2 py-2 text-center"><?= $user['email'] ?></td>
-                        <td class="border-2 px-2 py-2 text-center"><?= $user['name'] ?></td>
-                        <td class="border-2 px-2 py-2 text-center"><?= $user['gender'] ?></td>
-                        <td class="border-2 px-2 py-2 text-center"><?= $user['status'] ?></td>
+                        <td class="border-2 px-2 py-2 text-center">{{ user.id }}</td>
+                        <td class="border-2 px-2 py-2 text-center">{{ user.email }}</td>
+                        <td class="border-2 px-2 py-2 text-center">{{ user.name }}</td>
+                        <td class="border-2 px-2 py-2 text-center">{{ user.gender }}</td>
+                        <td class="border-2 px-2 py-2 text-center">{{ user.status }}</td>
                         <td class="border-2 px-2 py-2 text-center">
-                            <button name="edit" id ="<?= $user['id'] ?>"
+                            <button name="edit" id ="{{ user.id }}"
                                     class="bg-green-400 border-2 hover:border-green-800 text-white w-14 rounded"
                                     onclick="editUser(this)">
                                 Edit
                             </button>
                             <button name="delete" class="bg-red-400 border-2 hover:border-red-800 text-white w-14 rounded"
-                                    id="<?= $user['id'] ?>" onclick="deleteUser(this)">
+                                    id="{{ user.id }}" onclick="deleteUser(this)">
                                 Delete
                             </button>
                             <button name="show" class="bg-blue-400 border-2 hover:border-blue-800 text-white w-14 rounded"
-                                    id="<?= $user['id'] ?>" onclick="showUser(this)">
+                                    id="{{ user.id }}" onclick="showUser(this)">
                                 Show
                             </button>
                         </td>
                     </tr>
-                <?php endforeach; ?>
+                {% endfor %}
                 <br>
             </table>
-        <?php else: echo '<h2 class="text-red-800">There are no users in the database!</h2>';
-            endif; ?>
+        {% else %} <h2 class="text-red-800">There are no users in the database!</h2>
+        {% endif %}
         <p id="message" class='text-center'>
-            <?php if(isset($args['args']['action'])) echo "User ID: " . $args['args']['msgID'] . " has been " . $args['args']['action'] . "!"; ?>
+            {% if args.action is defined %} User ID: {{ args.msg }} has been {{ args.action }}!
+            {% endif %}
         </p>
     </div>
 </div>
@@ -89,3 +89,4 @@
             return response.json();
         }
     </script>
+{% include 'footer.twig' %}
