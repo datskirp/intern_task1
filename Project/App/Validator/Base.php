@@ -41,6 +41,25 @@ abstract class Base
 
     abstract public function validate(array $data): mixed;
 
+    protected function filter(array $data, array $fields, array $messages): array|false
+    {
+        $sanitization_rules = [];
+        $validation_rules = [];
+
+        foreach ($fields as $field => $rules) {
+            if (strpos($rules, '|')) {
+                [$sanitization_rules[$field], $validation_rules[$field] ] = explode('|', $rules, 2);
+            } else {
+                $sanitization_rules[$field] = $rules;
+            }
+        }
+
+        $inputs = $this->sanitize($data, $sanitization_rules, self::FILTERS);
+        $this->validateData($inputs, $validation_rules, $messages);
+
+        return $this->errors ? false : $inputs;
+    }
+
     protected function validateData(array $data, array $fields, array $messages = []): void
     {
         $split = fn ($str, $separator) => array_map('trim', explode($separator, $str));
