@@ -16,7 +16,7 @@ class ApiController extends BaseController
             return $this->response->sendApi(null, $user);
         }
 
-        return $this->response->sendError(400, $args['id']);
+        return $this->response->sendError(404);
     }
 
     public function showAll(): string
@@ -54,7 +54,7 @@ class ApiController extends BaseController
             return $this->response->sendApi((int)$args['id']);
         }
 
-        return $this->response->sendError(400, $args['id']);
+        return $this->response->sendError(404);
     }
 
     public function update(array $args = []): string
@@ -71,7 +71,7 @@ class ApiController extends BaseController
 
             return $this->response->sendNotValid($put_vars['id'], $this->apiValidator->getErrors());
         } else {
-            return $this->response->sendError(400, $args['id']);
+            return $this->response->sendError(404);
         }
     }
 

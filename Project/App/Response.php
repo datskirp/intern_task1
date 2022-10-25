@@ -22,22 +22,15 @@ class Response
         header("Location: $url");
     }
 
-    public function send(bool $status, string $redirectUri, array $alerts = [], int $id = null): string
+    public function send(bool $status, string $redirectUri = null, array $alerts = [], int $id = null): string
     {
         header('Content-Type: application/json; charset=utf-8');
-
-        return $status ?
-            json_encode([
-                'status' => 'true',
-                'redirect_uri' => $redirectUri,
-                'id' => $id,
-            ]) :
-            json_encode([
-                'status' => 'false',
-                'redirect_uri' => 'null',
-                'id' => $id,
-                'alerts' => $alerts,
-            ]);
+        return json_encode([
+            'status' => $status,
+            'redirect_uri' => $redirectUri,
+            'id' => $id,
+            'alerts' => $alerts
+        ]);
     }
 
     public function dbIsEmpty(): string
@@ -48,13 +41,13 @@ class Response
         return json_encode($this->responseBody);
     }
 
-    public function sendError(int $statusCode, int $id = null): string
+    public function sendError(int $statusCode, mixed $value = null): string
     {
         $this->statusCode($statusCode);
         $this->setDefaultHeader();
         switch ($statusCode) {
             case 400:
-                return json_encode(['status' => 'There is no such user with id: ' . $id . '!']);
+                return json_encode(['status' => 'There is a problem with value' . $value. '!']);
             case 404:
                 return json_encode(['status' => 'The endpoint is not found']);
         }
