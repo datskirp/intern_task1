@@ -17,4 +17,18 @@ class AuthController extends BaseController
 
         return $this->view->render('User/Register.twig', ['title' => 'User authentication', 'args' => $args]);
     }
+
+    public function signUp(): string
+    {
+        $post_vars = json_decode(file_get_contents('php://input'), true);
+        $validData = $this->user->validate($post_vars);
+        $validData ?
+            $status = $this->user->insert($validData) :
+            $status = false;
+        if ($status) {
+            Session::createFlash('action', 'added' . $validData['first_name'] . ' ' . $validData['last_name'], Session::FLASH_SUCCESS);
+        }
+
+        return $this->response->send($status, '/register', $this->user->validator->getErrors());
+    }
 }

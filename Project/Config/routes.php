@@ -14,6 +14,7 @@ return ['get' => [
         '/user' => [App\Controllers\User\UserController::class, 'store'],
         '/api/v1/users' => [App\Controllers\Api\v1\ApiController::class, 'store'],
         '/upload' => [App\Controllers\Upload\UploadController::class, 'upload'],
+        '/register' => [App\Controllers\Auth\AuthController::class, 'signUp'],
     ],
     'put' => [
         '/user/{id:\d+}' => [App\Controllers\User\UserController::class, 'update'],

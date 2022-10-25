@@ -34,7 +34,7 @@ abstract class Base
         'txt' => 'The file must be image or text',
         'enoughLocalStorage' => "There's not enough free space on the disk!",
         'maxSize' => 'The file %s must not exceed %s bytes',
-        'alpha' => 'The %s should contain only letters',
+        'alpha' => 'This field must contain letters only',
     ];
     protected array $errors = [];
     protected bool $fileTypeChecked = false;

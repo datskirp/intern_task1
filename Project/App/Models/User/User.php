@@ -26,7 +26,19 @@ class User extends Base
 
     public function validate($data): array|false
     {
-        return $this->validator->validate($data);
+        $result =  $this->validator->validate($data);
+        if($result) {
+            foreach ($result as $key => $value) {
+                if (str_contains($key, 'confirm')) {
+                    unset($result[$key]);
+                }
+                if ($key === 'password') {
+                    $result[$key] = password_hash($value, PASSWORD_DEFAULT);
+                }
+            }
+            return $result;
+        }
+        return false;
     }
 
     public function getId(): int

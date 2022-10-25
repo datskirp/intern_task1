@@ -345,6 +345,8 @@
 
         let emailError = document.getElementById('emailError');
         emailError.innerHTML = "";
+        let confirmEmailError = document.getElementById('confirmEmailError');
+        confirmEmailError.innerHTML = "";
         let firstNameError = document.getElementById('firstNameError');
         firstNameError.innerHTML = "";
         let lastNameError = document.getElementById('lastNameError');
@@ -360,7 +362,7 @@
 
         const value = Object.fromEntries(data.entries());
 
-        const response = postData('/user', JSON.stringify(value));
+        const response = postData('/register', JSON.stringify(value));
 
         response.then((result) => {
             if (result.status === 'true') {
@@ -370,8 +372,21 @@
                 if (result.alerts.email) {
                     emailError.innerHTML = result.alerts.email;
                 }
-                if (result.alerts.first_name)
+                if (result.alerts.first_name) {
                     firstNameError.innerHTML = result.alerts.first_name;
+                }
+                if (result.alerts.last_name) {
+                    lastNameError.innerHTML = result.alerts.last_name;
+                }
+                if (result.alerts.confirm_email) {
+                    confirmEmailError.innerHTML = result.alerts.confirm_email;
+                }
+                if (result.alerts.password) {
+                    passwordError.innerHTML = result.alerts.password;
+                }
+                if (result.alerts.confirm_password) {
+                    confirmPasswordError.innerHTML = result.alerts.confirm_password;
+                }
             }
         });
     }
