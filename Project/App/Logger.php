@@ -4,7 +4,7 @@ namespace App;
 
 class Logger
 {
-    const LOG_DIR = ROOT . '/logs';
+    const LOG_DIR = ROOT . '/logs/';
 
     public static function writeLog(array $logInfo): void
     {
@@ -18,10 +18,7 @@ class Logger
             $logInfo['errors'] = self::expandErrorsForLogging($logInfo['errors']);
         }
         $message = sprintf(
-            "%s => Upload status: %s. \n
-                File name: %s \n
-                Size: %s \n
-                Errors occured: %s\n\n",
+            "%s => Upload status: %s. \nFile name: %s \nSize: %s \nErrors occured: %s\n\n",
                 $now,
                 $logInfo['status'],
                 $logInfo['name'],

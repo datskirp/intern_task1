@@ -33,6 +33,13 @@ class UploadController extends BaseController
         $file = $_FILES;
         $formName = self::FORM_NAME;
         if (is_null($file) || $file[$formName]['error'] === UPLOAD_ERR_NO_FILE) {
+            Logger::writeLog(
+                [
+                    'status' => 'failure',
+                    'name' => $file[$formName]['name'],
+                    'size' => $file[$formName]['size'],
+                    'errors' => 'No file was uploaded',
+                ]);
             return $this->view->renderError(400, 'No file was uploaded');
         }
         if ($this->validator->validate($file[$formName])) {
