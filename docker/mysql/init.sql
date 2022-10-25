@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS `users` (
                          `first_name` VARCHAR(120) NOT NULL ,
                          `last_name` VARCHAR(120) NOT NULL ,
                          `password` CHAR(255) NOT NULL,
-                        `created_date` TIMESTAMP NOT NULL,
+                        `created_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                          PRIMARY KEY (`id`),
                          UNIQUE (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

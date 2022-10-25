@@ -90,13 +90,13 @@ abstract class Base
         }
     }
 
-    private function array_trim(array $items): array
+    private function arrayTrim(array $items): array
     {
         return array_map(function ($item) {
             if (is_string($item)) {
                 return trim($item);
             } elseif (is_array($item)) {
-                return $this->array_trim($item);
+                return $this->arrayTrim($item);
             } else {
                 return $item;
             }
@@ -108,7 +108,7 @@ abstract class Base
         $options = array_map(fn ($field) => $filters[trim($field)], $fields);
         $data = filter_var_array($inputs, $options);
 
-        return $trim ? $this->array_trim($data) : $data;
+        return $trim ? $this->arrayTrim($data) : $data;
     }
 
     private function is_image(array $data, string $field): bool

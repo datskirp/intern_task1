@@ -3,6 +3,7 @@
 namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
+use App\Session;
 
 class UserController extends BaseController
 {
@@ -20,7 +21,7 @@ class UserController extends BaseController
             $status = $this->user->insert($validData) :
             $status = false;
         if ($status) {
-            $this->session->setSessionMsg('added', $validData['first_name'] . ' ' . $validData['last_name']);
+            Session::createFlash('action', 'added' . $validData['first_name'] . ' ' . $validData['last_name'], Session::FLASH_SUCCESS);
         }
 
         return $this->response->send($status, '/register', $this->user->validator->getErrors());
@@ -28,12 +29,12 @@ class UserController extends BaseController
 
     public function delete(array $args): string
     {
-        $status = $this->user->deleteByID((int)$args['id']);
+        $status = $this->user->deleteByID($args['id']);
         if ($status) {
-            $this->session->setSessionMsg('deleted', (int)$args['id']);
+            $this->session->setSessionMsg('deleted', $args['id']);
         }
 
-        return $this->response->send($status, (int)$args['id'], '/');
+        return $this->response->send($status, '/', [], $args['id']);
     }
 
     public function edit(array $args): string
@@ -57,7 +58,7 @@ class UserController extends BaseController
             $this->session->setSessionMsg('updated', $put_vars['id']);
         }
 
-        return $this->response->send((bool)$status, $put_vars['id'], '/', $this->user->validator->getErrors());
+        return $this->response->send($status, '/', $this->user->validator->getErrors(), $put_vars['id']);
     }
 
     public function show(array $args): string
@@ -72,23 +73,13 @@ class UserController extends BaseController
 
     public function index(array $args = []): string
     {
-        if (isset($_SESSION['action'])) {
-            $args['action'] = $_SESSION['action'];
-            $args['msg'] = $_SESSION['id'];
-            $this->session->stop();
+        $flash = Session::getFlash('action');
+        if ($flash) {
+            $args['flash'] = $flash;
+            //Session::stop();
         }
         $users = $this->user->getAll();
 
         return $this->view->render('User/ViewAll.twig', ['users' => $users, 'args' => $args]);
-    }
-
-    public function register(array $args = []): string
-    {
-        if (isset($_SESSION['action'])) {
-            $args['action'] = $_SESSION['action'];
-            $args['msg'] = $_SESSION['id'];
-            $this->session->stop();
-        }
-        return $this->view->render('User/Register.twig', ['title' => 'User authentication','args' => $args]);
     }
 }

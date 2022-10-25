@@ -8,7 +8,7 @@ return ['get' => [
     '/api/v1/user/{id:\d+}' => [App\Controllers\Api\v1\ApiController::class, 'show'],
     '/api/v1/users' => [App\Controllers\Api\v1\ApiController::class, 'showAll'],
     '/upload' => [App\Controllers\Upload\UploadController::class, 'index'],
-    '/register' => [App\Controllers\User\UserController::class, 'register'],
+    '/register' => [App\Controllers\Auth\AuthController::class, 'register'],
 ],
     'post' => [
         '/user' => [App\Controllers\User\UserController::class, 'store'],
