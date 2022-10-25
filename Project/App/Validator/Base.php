@@ -7,33 +7,34 @@ use App\Controllers\Upload\UploadController;
 
 abstract class Base
 {
-    const FILTERS = [
+    public const FILTERS = [
         'string' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
         'string[]' => [
             'filter' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
-            'flags' => FILTER_REQUIRE_ARRAY
+            'flags' => FILTER_REQUIRE_ARRAY,
         ],
         'email' => FILTER_SANITIZE_EMAIL,
         'int' => [
             'filter' => FILTER_SANITIZE_NUMBER_INT,
-            'flags' => FILTER_REQUIRE_SCALAR
+            'flags' => FILTER_REQUIRE_SCALAR,
         ],
     ];
-    const DEFAULT_VALIDATION_ERRORS = [
+    public const DEFAULT_VALIDATION_ERRORS = [
         'required' => 'Please enter the %s',
         'email' => 'The %s is not a valid email address',
         'min' => 'The %s must have at least %s characters',
         'max' => 'The %s must have at most %s characters',
-        'between' => 'The %s must have between %d and %d characters',
+        'between' => 'This field must have between %2$d and %3$d characters',
         'same' => 'The %s must match with %s',
         'alphanumeric' => 'The %s should have only letters and numbers',
-        'secure' => 'The %s must have between 8 and 64 characters and contain at least one number, one upper case letter, one lower case letter and one special character',
+        'secure' => 'The %s must have between 7 and 64 characters and contain at least one number, one upper case letter, one lower case letter and one special character',
         'unique' => 'The %s already exists',
         'enum' => 'The values of %s field should be %s or %s',
         'image' => 'The file must be image or text',
         'txt' => 'The file must be image or text',
         'enoughLocalStorage' => "There's not enough free space on the disk!",
         'maxSize' => 'The file %s must not exceed %s bytes',
+        'alpha' => 'The %s should contain only letters',
     ];
     protected array $errors = [];
     protected bool $fileTypeChecked = false;
@@ -42,11 +43,10 @@ abstract class Base
 
     protected function validateData(array $data, array $fields, array $messages = []): void
     {
-        $split = fn($str, $separator) => array_map('trim', explode($separator, $str));
-        $rule_messages = array_filter($messages, fn($message) => is_string($message));
+        $split = fn ($str, $separator) => array_map('trim', explode($separator, $str));
+        $rule_messages = array_filter($messages, fn ($message) => is_string($message));
         $validation_errors = array_merge(self::DEFAULT_VALIDATION_ERRORS, $rule_messages);
         foreach ($fields as $field => $option) {
-
             $rules = $split($option, '|');
             foreach ($rules as $rule) {
                 $params = [];
@@ -78,14 +78,15 @@ abstract class Base
                 return trim($item);
             } elseif (is_array($item)) {
                 return $this->array_trim($item);
-            } else
+            } else {
                 return $item;
+            }
         }, $items);
     }
 
     protected function sanitize(array $inputs, array $fields, array $filters, bool $trim = true): array
     {
-        $options = array_map(fn($field) => $filters[trim($field)], $fields);
+        $options = array_map(fn ($field) => $filters[trim($field)], $fields);
         $data = filter_var_array($inputs, $options);
 
         return $trim ? $this->array_trim($data) : $data;
@@ -101,6 +102,7 @@ abstract class Base
         if (str_contains($mimetype, 'image')) {
             unset($this->errors[$field]);
             $this->fileTypeChecked = true;
+
             return true;
         }
 
@@ -159,6 +161,11 @@ abstract class Base
         return strlen($data[$field]) >= $min;
     }
 
+    private function is_alpha(array $data, string $field): bool
+    {
+        return ctype_alpha($data[$field]);
+    }
+
     private function is_max(array $data, string $field, int $max): bool
     {
         if (!isset($data[$field])) {
@@ -175,6 +182,7 @@ abstract class Base
         }
 
         $len = strlen($data[$field]);
+
         return $len >= $min && $len <= $max;
     }
 
@@ -197,7 +205,8 @@ abstract class Base
             return false;
         }
 
-        $pattern = "#.*^(?=.{8,64})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$#";
+        $pattern = "#.*^(?=.{7,64})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$#";
+
         return preg_match($pattern, $data[$field]);
     }
 
@@ -206,9 +215,7 @@ abstract class Base
         if (!isset($data[$field])) {
             return true;
         }
-        if (User::checkEmailExistence($data[$field]) &&
-            (User::getColumnById($this->id, $field)[$field] ?? '') !== $data[$field]) {
-
+        if (User::isRecord($field, $data[$field])) {
             return false;
         }
 
@@ -218,6 +225,7 @@ abstract class Base
     private function is_enum(array $data, string $field, $enumParam1, $enumParam2)
     {
         $checkAgainst = [$enumParam1, $enumParam2];
+
         return in_array($data[$field], $checkAgainst);
     }
 

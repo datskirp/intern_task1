@@ -49,7 +49,7 @@ class ApiController extends BaseController
 
     public function delete(array $args): string
     {
-        $status = $this->user->delete((int)$args['id']);
+        $status = $this->user->deleteByID((int)$args['id']);
         if ($status) {
             return $this->response->sendApi((int)$args['id']);
         }

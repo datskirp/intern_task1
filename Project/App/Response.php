@@ -22,7 +22,7 @@ class Response
         header("Location: $url");
     }
 
-    public function send(bool $status, int $id, string $redirectUri, array $alerts = []): string
+    public function send(bool $status, string $redirectUri, array $alerts = [], int $id = null): string
     {
         header('Content-Type: application/json; charset=utf-8');
 

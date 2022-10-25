@@ -11,11 +11,22 @@ class UserValidator extends Base
     public function __construct()
     {
         $this->fields = [
-            'id' => 'int | required',
-            'name' => 'string | required | between: 2, 120',
+            'first_name' => 'string | alpha | between: 1, 120',
+            'last_name' => 'string | alpha | between: 1, 120',
             'email' => 'email | required | email | unique | max: 320',
-            'gender' => 'string | enum: male, female',
-            'status' => 'string | enum: active, inactive',
+            'confirm_email' => 'email | required | same: email',
+            'password' => 'string | required | secure',
+            'confirm_password' => 'string | required | same: password',
+        ];
+        $this->messages = [
+            'confirm_password' => [
+                'required' => 'Please confirm the password',
+                'same' => "The passwords' fields do not match"
+            ],
+            'confirm_email' => [
+                'required' => 'Please confirm the email',
+                'same' => 'The email fields do not match'
+            ]
         ];
 
     }
@@ -26,7 +37,6 @@ class UserValidator extends Base
         $validation_rules  = [];
         $fields = $this->fields;
         $messages = $this->messages;
-        $this->id = $data['id'];
 
         foreach ($fields as $field=>$rules) {
             if (strpos($rules, '|')) {

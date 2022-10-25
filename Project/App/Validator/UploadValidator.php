@@ -20,9 +20,4 @@ class UploadValidator extends Base
         $this->validateData($inputFields, $this->rules);
         return empty($this->errors);
     }
-
-    public static function uploadDirExists()
-    {
-        return is_dir(ROOT . '/www/uploads');
-    }
 }

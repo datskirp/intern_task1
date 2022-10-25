@@ -20,15 +20,15 @@ class UserController extends BaseController
             $status = $this->user->insert($validData) :
             $status = false;
         if ($status) {
-            $this->session->setSessionMsg('added', $validData['id']);
+            $this->session->setSessionMsg('added', $validData['first_name'] . ' ' . $validData['last_name']);
         }
 
-        return $this->response->send($status, $post_vars['id'], '/', $this->user->validator->getErrors());
+        return $this->response->send($status, '/register', $this->user->validator->getErrors());
     }
 
     public function delete(array $args): string
     {
-        $status = $this->user->delete((int)$args['id']);
+        $status = $this->user->deleteByID((int)$args['id']);
         if ($status) {
             $this->session->setSessionMsg('deleted', (int)$args['id']);
         }
@@ -80,5 +80,15 @@ class UserController extends BaseController
         $users = $this->user->getAll();
 
         return $this->view->render('User/ViewAll.twig', ['users' => $users, 'args' => $args]);
+    }
+
+    public function register(array $args = []): string
+    {
+        if (isset($_SESSION['action'])) {
+            $args['action'] = $_SESSION['action'];
+            $args['msg'] = $_SESSION['id'];
+            $this->session->stop();
+        }
+        return $this->view->render('User/Register.twig', ['title' => 'User authentication','args' => $args]);
     }
 }

@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Models\User;
+namespace App\Models;
 
 use App\Db;
-use App\Validator\ApiValidator;
 
 abstract class Base
 {
@@ -13,6 +12,8 @@ abstract class Base
     {
         self::$db = Db::getInstance();
     }
+
+    abstract protected static function getTableName(): string;
 
     public function getAll(): ?array
     {
@@ -29,7 +30,7 @@ abstract class Base
         return $entities ? $entities[0] : null;
     }
 
-    public function delete(int $id): bool
+    public function deleteByID(int $id): bool
     {
         if (is_null(self::getById($id))) {
             return false;
@@ -40,11 +41,11 @@ abstract class Base
         );
     }
 
-    public static function checkEmailExistence($email): array|false
+    public static function isRecord(string $columnName, mixed $value): array|false
     {
         return self::$db->getRecord(
-            'SELECT * FROM `' . static::getTableName() . '` WHERE `email` = :email',
-            ['email' => $email]
+            'SELECT * FROM `' . static::getTableName() . '` WHERE `' . $columnName . '` = :value',
+            ['value' => $value]
         );
     }
 
@@ -57,9 +58,6 @@ abstract class Base
 
         return $result ?: false;
     }
-
-
-    abstract protected static function getTableName(): string;
 
     public function update(array $data): bool
     {

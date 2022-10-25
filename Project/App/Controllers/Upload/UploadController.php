@@ -14,11 +14,11 @@ class UploadController extends BaseController
 
     public function index(): string
     {
-        if ($this->validator::uploadDirExists()) {
+        if (is_dir(self::UPLOAD_DIR)) {
             return $this->view->render(
                 'Upload.twig',
                 [
-                    'files' => $this->createUploadsDirInfo(ROOT . '/www/uploads/'),
+                    'files' => $this->createUploadsDirInfo(self::UPLOAD_DIR),
                     'tableId' => 'files',
                     'maxSize' => self::MAX_FILE_SIZE,
                 ]
@@ -71,7 +71,7 @@ class UploadController extends BaseController
                 ]
             );
 
-            return $this->validator::uploadDirExists() ?
+            return is_dir(self::UPLOAD_DIR) ?
                 $this->view->render(
                     'Upload.twig',
                     [
@@ -91,7 +91,7 @@ class UploadController extends BaseController
 
     public function createUploadsDir($uploadsDir): void
     {
-        if (!$this->validator::uploadDirExists()) {
+        if (!is_dir($uploadsDir)) {
             @mkdir($uploadsDir, 0744);
         }
     }

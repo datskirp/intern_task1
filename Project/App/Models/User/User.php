@@ -2,15 +2,16 @@
 
 namespace App\Models\User;
 
+use App\Models\Base;
 use App\Validator\UserValidator;
 
 class User extends Base
 {
     private int $id;
     private string $email;
-    private string $name;
-    private string $gender;
-    private string $status;
+    private string $firstname;
+    private string $lastname;
+    private string $password;
     public $validator;
 
     protected static function getTableName(): string
@@ -37,9 +38,9 @@ class User extends Base
     {
         return $this->email;
     }
-    public function getName(): string
+    public function getFirstname(): string
     {
-        return $this->name;
+        return $this->firstname;
     }
     public function getGender(): string
     {
