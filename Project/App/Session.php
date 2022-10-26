@@ -4,12 +4,7 @@ namespace App;
 
 class Session
 {
-    const FLASH = 'FLASH_MESSAGES';
-
-    const FLASH_ERROR = 'error';
-    const FLASH_WARNING = 'warning';
-    const FLASH_INFO = 'info';
-    const FLASH_SUCCESS = 'success';
+    public const FLASH = 'FLASH_MESSAGES';
 
     public function __construct()
     {
@@ -27,14 +22,13 @@ class Session
         session_start();
     }
 
-    public static function createFlash(string $name, string $message, string $type): void
+    public static function createFlash(string $name, string $message): void
     {
-
         if (isset($_SESSION[self::FLASH][$name])) {
             unset($_SESSION[self::FLASH][$name]);
         }
 
-        $_SESSION[self::FLASH][$name] = ['message' => $message, 'type' => $type];
+        $_SESSION[self::FLASH][$name] = ['message' => $message];
     }
 
     public static function getFlash(string $name): ?array
@@ -42,7 +36,6 @@ class Session
         if (!isset($_SESSION[self::FLASH][$name])) {
             return null;
         }
-
         $flash = $_SESSION[self::FLASH][$name];
 
         unset($_SESSION[self::FLASH][$name]);

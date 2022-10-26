@@ -23,10 +23,13 @@
         </div>
         <div class="mt-4 self-center text-xl sm:text-sm text-gray-800">
             Fill out the form to create an account
-            <span id="message" class="mb-4 w-max text-xs text-green-500">{{ msg }}</span>
         </div>
 
-        <div class="mt-10">
+        <div class="mt-4 self-center text-xl sm:text-sm text-gray-800">
+            <span id="message" class="w-max text-center text-xs text-green-500">{{ args.flash.message }}</span>
+        </div>
+
+        <div class="mt-5">
             <form action="/user" method="post" id="addUser" name="addUser">
                 <div class="flex flex-col mb-5">
                     <label
@@ -124,7 +127,6 @@
 
                         <input
                                 id="email"
-                                type="email"
                                 name="email"
                                 class="
                     text-sm
@@ -166,7 +168,6 @@
 
                         <input
                                 id="confirm_email"
-                                type="email"
                                 name="confirm_email"
                                 class="
                     text-sm
@@ -365,21 +366,31 @@
         const response = postData('/register', JSON.stringify(value));
 
         response.then((result) => {
-            if (result.status === 'true') {
+            if (result.status === true) {
+                //form.reset();
+                //message.innerHTML = "";
                 window.location.replace(result.redirect_uri);
             } else {
-                //message.innerHTML = "User was not created! Error occurred.";
+                message.classList.remove('text-green-500');
+                message.classList.add('text-red-500');
+                message.innerHTML = "User was not created! Error occurred.";
+                document.getElementById('password').value = '';
+                document.getElementById('confirm_password').value = '';
                 if (result.alerts.email) {
                     emailError.innerHTML = result.alerts.email;
+                    document.getElementById('email').value = '';
                 }
                 if (result.alerts.first_name) {
                     firstNameError.innerHTML = result.alerts.first_name;
+                    document.getElementById('first_name').value = '';
                 }
                 if (result.alerts.last_name) {
                     lastNameError.innerHTML = result.alerts.last_name;
+                    document.getElementById('last_name').value = '';
                 }
                 if (result.alerts.confirm_email) {
                     confirmEmailError.innerHTML = result.alerts.confirm_email;
+                    document.getElementById('confirm_email').value = '';
                 }
                 if (result.alerts.password) {
                     passwordError.innerHTML = result.alerts.password;

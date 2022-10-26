@@ -25,8 +25,10 @@ class AuthController extends BaseController
         $validData ?
             $status = $this->user->insert($validData) :
             $status = false;
+        //var_dump($status);
+        //var_dump($this->user->validator->getErrors());
         if ($status) {
-            Session::createFlash('action', 'added' . $validData['first_name'] . ' ' . $validData['last_name'], Session::FLASH_SUCCESS);
+            Session::createFlash('action', 'Created ' . $validData['first_name'] . ' ' . $validData['last_name'] . ' successfully');
         }
 
         return $this->response->send($status, '/register', $this->user->validator->getErrors());
