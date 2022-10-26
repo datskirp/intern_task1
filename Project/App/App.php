@@ -11,6 +11,9 @@ class App
         $router = $container->get(Router::class);
         $callback = $router->getCallback();
         if ($callback) {
+            if ($router->request->boolPost()) {
+                $callback[2] = $router->request->getData();
+            }
             echo $container->call([$callback[0], $callback[1]], [$callback[2]]);
         } else {
             if (preg_match('~^api/v1.*$~', $router->getPath())) {

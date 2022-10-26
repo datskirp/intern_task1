@@ -19,6 +19,7 @@ class Response
 
     public function redirect($url): void
     {
+
         header("Location: $url");
     }
 

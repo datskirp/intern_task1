@@ -19,90 +19,19 @@
         "
     >
         <div class="font-medium self-center text-xl sm:text-3xl text-gray-800">
-            Register
+            Log in
         </div>
         <div class="mt-4 self-center text-xl sm:text-sm text-gray-800">
-            Fill out the form to create an account
+            Fill out the form to log in
         </div>
 
         <div class="mt-4 self-center text-xl sm:text-sm text-gray-800">
-            <span id="message" class="w-max text-center text-xs text-green-500">{{ args.flash.message }}</span>
+            <span id="message" class="w-max text-center text-xs text-green-500">{{ args.msg }}</span>
         </div>
 
         <div class="mt-5">
-            <form action="/register" method="post" id="addUser" name="addUser">
-                <div class="flex flex-col mb-5">
-                    <label
-                            for="first_name"
-                            class="mb-1 text-xs tracking-wide text-gray-600"
-                    >First Name:</label
-                    >
-                    <div class="relative">
+            <form action="/authenticate" method="post" id="login" name="login">
 
-                        <input
-                                id="first_name"
-                                type="text"
-                                name="first_name"
-                                class="
-                    text-sm
-                    placeholder-gray-500
-                    pl-10
-                    pr-4
-                    rounded-2xl
-                    border border-gray-400
-                    w-full
-                    py-2
-                    focus:outline-none focus:border-blue-400
-                  "
-                                placeholder="Enter your first name"
-                        />
-
-                        <span id="firstNameError" class="mb-4 w-max text-xs text-red-500"></span>
-
-                    </div>
-                </div>
-                <div class="flex flex-col mb-5">
-                    <label
-                            for="last_name"
-                            class="mb-1 text-xs tracking-wide text-gray-600"
-                    >Last Name:</label
-                    >
-                    <div class="relative">
-                        <div
-                                class="
-                    inline-flex
-                    items-center
-                    justify-center
-                    absolute
-                    left-0
-                    top-0
-                    h-full
-                    w-10
-                    text-gray-400
-                  "
-                        >
-                        </div>
-
-                        <input
-                                id="last_name"
-                                type="text"
-                                name="last_name"
-                                class="
-                    text-sm
-                    placeholder-gray-500
-                    pl-10
-                    pr-4
-                    rounded-2xl
-                    border border-gray-400
-                    w-full
-                    py-2
-                    focus:outline-none focus:border-blue-400
-                  "
-                                placeholder="Enter your last name"
-                        />
-                        <span id="lastNameError" class="mb-4 w-max text-xs text-red-500"></span>
-                    </div>
-                </div>
                 <div class="flex flex-col mb-5">
                     <label
                             for="email"
@@ -127,7 +56,9 @@
 
                         <input
                                 id="email"
+                                type="email"
                                 name="email"
+                                required="required"
                                 class="
                     text-sm
                     placeholder-gray-500
@@ -144,47 +75,7 @@
                         <span id="emailError" class="mb-4 w-max text-xs text-red-500"></span>
                     </div>
                 </div>
-                <div class="flex flex-col mb-5">
-                    <label
-                            for="confirm_email"
-                            class="mb-1 text-xs tracking-wide text-gray-600"
-                    >Confirm Email Address:</label
-                    >
-                    <div class="relative">
-                        <div
-                                class="
-                    inline-flex
-                    items-center
-                    justify-center
-                    absolute
-                    left-0
-                    top-0
-                    h-full
-                    w-10
-                    text-gray-400
-                  "
-                        >
-                        </div>
 
-                        <input
-                                id="confirm_email"
-                                name="confirm_email"
-                                class="
-                    text-sm
-                    placeholder-gray-500
-                    pl-10
-                    pr-4
-                    rounded-2xl
-                    border border-gray-400
-                    w-full
-                    py-2
-                    focus:outline-none focus:border-blue-400
-                  "
-                                placeholder="Confirm your email"
-                        />
-                        <span id="confirmEmailError" class="mb-4 w-max text-xs text-red-500"></span>
-                    </div>
-                </div>
                 <div class="flex flex-col mb-6">
                     <label
                             for="password"
@@ -212,6 +103,7 @@
                                 id="password"
                                 type="password"
                                 name="password"
+                                required="required"
                                 class="
                     text-sm
                     placeholder-gray-500
@@ -226,49 +118,6 @@
                                 placeholder="Enter your password"
                         />
                         <span id="passwordError" class="mb-4 w-max text-xs text-red-500"></span>
-                    </div>
-                </div>
-                <div class="flex flex-col mb-6">
-                    <label
-                            for="confirm_password"
-                            class="mb-1 text-xs sm:text-sm tracking-wide text-gray-600"
-                    >Confirm password:</label
-                    >
-                    <div class="relative">
-                        <div
-                                class="
-                    inline-flex
-                    items-center
-                    justify-center
-                    absolute
-                    left-0
-                    top-0
-                    h-full
-                    w-10
-                    text-gray-400
-                  "
-                        >
-
-                        </div>
-
-                        <input
-                                id="confirm_password"
-                                type="password"
-                                name="confirm_password"
-                                class="
-                    text-sm
-                    placeholder-gray-500
-                    pl-10
-                    pr-4
-                    rounded-2xl
-                    border border-gray-400
-                    w-full
-                    py-2
-                    focus:outline-none focus:border-blue-400
-                  "
-                                placeholder="Confirm your password"
-                        />
-                        <span id="confirmPasswordError" class="mb-4 w-max text-xs text-red-500"></span>
                     </div>
                 </div>
 
@@ -293,7 +142,7 @@
                   ease-in
                 "
                     >
-                        <span class="mr-2 uppercase">Sign Up</span>
+                        <span class="mr-2 uppercase">Log in</span>
                         <span>
                   <svg
                           class="h-6 w-6"
@@ -316,7 +165,7 @@
     </div>
     <div class="flex justify-center items-center mt-6">
         <a
-                href="/login"
+                href="/register"
                 target="_blank"
                 class="
             inline-flex
@@ -327,11 +176,11 @@
           "
         >
           <span class="ml-2"
-          >You have an account?
+          >Not registered?
             <a
-                    href="/login"
+                    href="/register"
                     class="text-xs ml-2 text-blue-500 font-semibold"
-            >Login here</a
+            >Register here</a
             ></span
           >
         </a>
@@ -339,23 +188,15 @@
 </div>
 <script>
 
-    const form = document.getElementById('addUser');
-    form.addEventListener('submit', handleFormSubmit);
+    const form = document.getElementById('login');
+    //form.addEventListener('submit', handleFormSubmit);
     function handleFormSubmit(event) {
         event.preventDefault();
 
         let emailError = document.getElementById('emailError');
         emailError.innerHTML = "";
-        let confirmEmailError = document.getElementById('confirmEmailError');
-        confirmEmailError.innerHTML = "";
-        let firstNameError = document.getElementById('firstNameError');
-        firstNameError.innerHTML = "";
-        let lastNameError = document.getElementById('lastNameError');
-        lastNameError.innerHTML = "";
         let passwordError = document.getElementById('passwordError');
         passwordError.innerHTML = "";
-        let confirmPasswordError = document.getElementById('confirmPasswordError');
-        confirmPasswordError.innerHTML = "";
         let message = document.getElementById('message');
         message.innerHTML = "";
 

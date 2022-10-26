@@ -6,7 +6,7 @@ class Router
 {
     private array $routes;
     private array $requestArgs;
-    private $request;
+    public $request;
     private string $path;
 
     public function __construct(Request $request, $routes)
