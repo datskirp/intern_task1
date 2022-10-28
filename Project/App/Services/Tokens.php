@@ -4,6 +4,15 @@ namespace App\Services;
 
 class Tokens
 {
+    const TOKEN_LIFE = 168 * 60 * 60; // seconds
+    private Db $db;
+
+    public function __construct()
+    {
+        $this->db = Db::getInstance();
+    }
+
+
     function createTokens(): array
     {
         $selector = bin2hex(random_bytes(16));
@@ -22,10 +31,17 @@ class Tokens
         return null;
     }
 
-    function insertToken(int $user_id, string $selector, string $hashed_validator, string $expiry): bool
+    function insertToken(int $user_id, string $selector, string $hashed_validator, string $expiration): bool
     {
-        $sql = 'INSERT INTO user_tokens(user_id, selector, hashed_validator, expiry)
-            VALUES(:user_id, :selector, :hashed_validator, :expiry)';
+        $sql = 'INSERT INTO `user_tokens` (`user_id`, `selector`, `hashed_validator`, `expiration`)
+            VALUES (:user_id, :selector, :hashed_validator, :expiration)';
+
+        return $this->db->changeRecord($sql, [
+            'user_id' => $user_id,
+            'selector' => $selector,
+            'hashed_validator' => $hashed_validator,
+            'expiration' => $expiration,
+            ]);
 
         $statement = db()->prepare($sql);
         $statement->bindValue(':user_id', $user_id);
@@ -53,13 +69,11 @@ class Tokens
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
-    function delete_user_token(int $user_id): bool
+    function deleteToken(int $id): bool
     {
-        $sql = 'DELETE FROM user_tokens WHERE user_id = :user_id';
-        $statement = db()->prepare($sql);
-        $statement->bindValue(':user_id', $user_id);
+        $sql = 'DELETE FROM `user_tokens` WHERE `user_id` = :user_id';
 
-        return $statement->execute();
+        return $this->db->changeRecord($sql, ['user_id' => $id]);
     }
 
     function find_user_by_token(string $token)

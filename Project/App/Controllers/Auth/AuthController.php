@@ -5,13 +5,13 @@ namespace App\Controllers\Auth;
 use App\Services\BlockByIp;
 use App\Controllers\BaseController;
 use App\Services\Session;
-use App\Services\Tokens;
+use App\Services\Login;
 
 class AuthController extends BaseController
 {
     public const ALLOWED_ATTEMPTS = 3;
     public $blockByIp;
-    private $tokens;
+    private $login;
 
     public function register($args = []): string
     {
@@ -57,14 +57,19 @@ class AuthController extends BaseController
     {
         if ($this->blockByIp->isAllowed()) {
             $user = $this->user::isRecord('email', $args['email']);
-            if ($user && isset($args['password']) && password_verify($args['password'], $user['password'])) {
-                // prevent session fixation attack
-                Session::resetId();
-                $_SESSION['email'] = $user['email'];
-                $_SESSION['user_id'] = $user['id'];
-                var_dump($_SESSION);
-                return true;
+            if (!$this->login->login($user, $args['password'], isset($args['remember_me']))) {
+
+                $errors['login'] = 'Invalid username or password';
+
+                redirect_with('login.php', [
+                    'errors' => $errors,
+                    'inputs' => $inputs
+                ]);
             }
+
+            // login successfully
+            redirect_to('index.php');
+
             $attemptsLeft = $this->blockByIp->addAttempt();
             if ($attemptsLeft == self::ALLOWED_ATTEMPTS) {
                 $this->blockByIp->block($args['email']);
@@ -80,13 +85,18 @@ class AuthController extends BaseController
         }
     }
 
+    private function checkPassword()
+    {
+
+    }
+
     public function setBlockByIp(BlockByIp $blockByIp)
     {
         $this->blockByIp = $blockByIp;
     }
 
-    public function setTokens(Tokens $tokens)
+    public function setLogin(Login $login)
     {
-        $this->tokens = $tokens;
+        $this->login = $login;
     }
 }
