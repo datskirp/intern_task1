@@ -20,7 +20,7 @@ class Response
     public function redirect($url): void
     {
 
-        header("Location: $url");
+       header("Location: $url");
     }
 
     public function send(bool $status, string $redirectUri = null, array $alerts = [], int $id = null): string

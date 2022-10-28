@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Services;
 
 class Session
 {
@@ -9,6 +9,11 @@ class Session
     public function __construct()
     {
         session_start();
+    }
+
+    public static function resetId()
+    {
+        session_regenerate_id();
     }
 
     public static function stop(): void

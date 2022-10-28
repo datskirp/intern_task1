@@ -20,11 +20,18 @@ CREATE TABLE IF NOT EXISTS `user_tokens` (
                     REFERENCES `users` (`id`) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `login_block` (
+CREATE TABLE IF NOT EXISTS `login_block_log` (
                    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
                    `ip` INT(4) UNSIGNED NOT NULL ,
                 `email` VARCHAR(320) NOT NULL ,
                 `start_block` TIMESTAMP NOT NULL ,
                 `end_block` TIMESTAMP NOT NULL ,
                 PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `login_block` (
+     `ip` INT(4) UNSIGNED NOT NULL ,
+    `attempts` int(1) UNSIGNED NOT NULL,
+    `end_block` BIGINT ,
+    PRIMARY KEY (`ip`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

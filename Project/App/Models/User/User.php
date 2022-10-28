@@ -24,7 +24,7 @@ class User extends Base
         $this->validator = $validator;
     }
 
-    public function validate($data): array|false
+    public function validateSignUp($data): array|false
     {
         $result =  $this->validator->validate($data);
         if($result) {

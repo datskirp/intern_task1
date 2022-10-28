@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\View;
-use App\Session;
+use App\Services\Session;
 use App\Models\User\User;
 use App\Response;
 

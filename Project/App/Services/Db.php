@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Services;
 
 class Db
 {
@@ -9,7 +9,7 @@ class Db
 
     public function __construct()
     {
-        $dbInit = (require __DIR__ . '/../Config/db.php')['db'];
+        $dbInit = (require ROOT . '/Config/db.php')['db'];
 
         $dsn = 'mysql:host=' . $dbInit['host'] . '; dbname=' . $dbInit['dbname'] .
             '; port=' . $dbInit['port'];
@@ -31,7 +31,7 @@ class Db
     {
         $sth = $this->pdo->prepare($sql);
         $result = $sth->execute($params);
-        if (false === $result) {
+        if ($result === false) {
             return null;
         }
 

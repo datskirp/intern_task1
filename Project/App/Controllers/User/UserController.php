@@ -3,7 +3,7 @@
 namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
-use App\Session;
+use App\Services\Session;
 
 class UserController extends BaseController
 {
@@ -16,7 +16,7 @@ class UserController extends BaseController
     {
         $post_vars = json_decode(file_get_contents('php://input'), true);
         $post_vars['id'] = time();
-        $validData = $this->user->validate($post_vars);
+        $validData = $this->user->validateSignUp($post_vars);
         $validData ?
             $status = $this->user->insert($validData) :
             $status = false;
@@ -51,7 +51,7 @@ class UserController extends BaseController
     {
         $put_vars = json_decode(file_get_contents('php://input'), true);
 
-        $this->user->validate($put_vars) ?
+        $this->user->validateSignUp($put_vars) ?
             $status = $this->user->update($put_vars) :
             $status = false;
         if ($status) {

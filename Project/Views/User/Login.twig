@@ -26,7 +26,7 @@
         </div>
 
         <div class="mt-4 self-center text-xl sm:text-sm text-gray-800">
-            <span id="message" class="w-max text-center text-xs text-green-500">{{ args.msg }}</span>
+            <span id="message" class="w-max text-center text-xs text-red-500">{{ args.flash.message }}</span>
         </div>
 
         <div class="mt-5">
@@ -120,7 +120,14 @@
                         <span id="passwordError" class="mb-4 w-max text-xs text-red-500"></span>
                     </div>
                 </div>
-
+                <div class="mb-3">
+                    <label for="remember_me" class="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">
+                        <input type="checkbox" name="remember_me" id="remember_me"
+                               value="checked">
+                        Remember Me
+                    </label>
+                    <small><?= $errors['agree'] ?? '' ?></small>
+                </div>
                 <div class="flex w-full">
                     <button
                             type="submit"
