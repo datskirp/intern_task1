@@ -52,7 +52,7 @@ class Tokens
         return $statement->execute();
     }
 
-    function find_user_token_by_selector(string $selector)
+    function findUserTokenBySelector(string $selector)
     {
 
         $sql = 'SELECT id, selector, hashed_validator, user_id, expiry
