@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 class Login
@@ -13,7 +14,6 @@ class Login
     public function login(array|false $user, string $password, bool $remember = false): bool
     {
         if ($user && isset($password) && password_verify($password, $user['password'])) {
-
             $this->logUserIn($user);
 
             if ($remember) {
@@ -31,6 +31,7 @@ class Login
         if (session_regenerate_id()) {
             $_SESSION['email'] = $user['email'];
             $_SESSION['id'] = $user['id'];
+
             return true;
         }
 
@@ -40,14 +41,8 @@ class Login
     private function rememberMe(int $id, int $tokenLife)
     {
         [$selector, $validator, $token] = $this->tokens->createTokens();
-
-        // remove all existing token associated with the user id
         $this->tokens->deleteToken($id);
-
-        // set expiration date
         $expired_seconds = time() + $tokenLife;
-
-        // insert a token to the database
         $hash_validator = password_hash($validator, PASSWORD_DEFAULT);
         $expiration = date('Y-m-d H:i:s', $expired_seconds);
 
@@ -55,7 +50,4 @@ class Login
             setcookie('remember_me', $token, $expired_seconds);
         }
     }
-
-
-
 }

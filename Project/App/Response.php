@@ -21,6 +21,7 @@ class Response
     {
 
        header("Location: $url");
+       die();
     }
 
     public function send(bool $status, string $redirectUri = null, array $alerts = [], int $id = null): string

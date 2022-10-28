@@ -35,7 +35,7 @@ class BlockByIp
         return true;
     }
 
-    public function addAttempt(): int
+    public function addAttempt(): int|false
     {
         $record = $this->getRecord();
         if ($record) {
@@ -67,6 +67,11 @@ class BlockByIp
             'UPDATE `' . self::TABLE_NAME . '` SET `end_block` = :endBlock WHERE `ip` = INET_ATON(:ip);',
             ['endBlock' => $timeout, 'ip' => self::$ip]
         );
+        $this->createLogBlock($email, $timeout);
+    }
+
+    private function createLogBlock(string $email, int $timeout)
+    {
         $dateFormat = 'Y-m-d H:i:s';
         $startBlock = date($dateFormat, time());
         $endBlock = date($dateFormat, $timeout);
@@ -101,5 +106,4 @@ class BlockByIp
 
         return false;
     }
-    
 }

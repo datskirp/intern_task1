@@ -49,7 +49,7 @@ abstract class Base
         );
     }
 
-    public static function getColumnById(int $id, $column): array|false
+    public function getColumnById(int $id, $column): array|false
     {
         $result = self::$db->getRecord(
             'SELECT '. $column . ' FROM `' . static::getTableName() . '` WHERE `id` = :id',
