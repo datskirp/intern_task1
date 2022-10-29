@@ -20,17 +20,16 @@ class UserValidator extends Base
         $this->messages = [
             'confirm_password' => [
                 'required' => 'Please confirm the password',
-                'same' => "The passwords' fields do not match"
+                'same' => "The passwords' fields do not match",
             ],
             'confirm_email' => [
                 'required' => 'Please confirm the email',
-                'same' => 'The email fields do not match'
-            ]
+                'same' => 'The email fields do not match',
+            ],
         ];
-
     }
 
-    public function validate(array $data) : array|false
+    public function validate(array $data): array|false
     {
         return $this->filter($data, $this->fields, $this->messages);
     }

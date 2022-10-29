@@ -20,6 +20,7 @@ class View
     public function renderError(int $statusCode, $msg): string
     {
         $view = 'Error.twig';
+
         return $this->twig->render($view, ['statusCode' => $statusCode, 'msg' => $msg]);
     }
 }

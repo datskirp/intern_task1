@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Validator;
+
 use App\Controllers\Upload\UploadController;
 
 class UploadValidator extends Base
@@ -18,6 +19,7 @@ class UploadValidator extends Base
     public function validate(array $inputFields): bool
     {
         $this->validateData($inputFields, $this->rules);
+
         return empty($this->errors);
     }
 }

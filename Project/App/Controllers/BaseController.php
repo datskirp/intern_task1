@@ -19,8 +19,7 @@ abstract class BaseController
         Session $session,
         User $user,
         Response $response,
-    )
-    {
+    ) {
         $this->view = $view;
         $this->session = $session;
         $this->user = $user;

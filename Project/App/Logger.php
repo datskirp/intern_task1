@@ -4,7 +4,7 @@ namespace App;
 
 class Logger
 {
-    const LOG_DIR = ROOT . '/logs/';
+    public const LOG_DIR = ROOT . '/logs/';
 
     public static function writeLog(array $logInfo): void
     {
@@ -19,11 +19,11 @@ class Logger
         }
         $message = sprintf(
             "%s => Upload status: %s. \nFile name: %s \nSize: %s \nErrors occured: %s\n\n",
-                $now,
-                $logInfo['status'],
-                $logInfo['name'],
-                $logInfo['size'],
-                $logInfo['errors'],
+            $now,
+            $logInfo['status'],
+            $logInfo['name'],
+            $logInfo['size'],
+            $logInfo['errors'],
         );
         fwrite($fileToWrite, $message);
         fclose($fileToWrite);

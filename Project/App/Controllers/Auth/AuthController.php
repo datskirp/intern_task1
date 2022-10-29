@@ -12,7 +12,6 @@ class AuthController extends BaseController
         $flash = Session::getFlash('action');
         if ($flash) {
             $args['flash'] = $flash;
-            //Session::stop();
         }
 
         return $this->view->render('User/Register.twig', ['title' => 'User authentication', 'args' => $args]);
@@ -25,8 +24,6 @@ class AuthController extends BaseController
         $validData ?
             $status = $this->user->insert($validData) :
             $status = false;
-        //var_dump($status);
-        //var_dump($this->user->validator->getErrors());
         if ($status) {
             Session::createFlash('action', 'Created ' . $validData['first_name'] . ' ' . $validData['last_name'] . ' successfully');
         }

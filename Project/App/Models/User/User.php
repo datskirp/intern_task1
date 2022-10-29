@@ -12,6 +12,7 @@ class User extends Base
     private string $firstname;
     private string $lastname;
     private string $password;
+    private strign $created_date;
     public $validator;
 
     protected static function getTableName(): string
@@ -26,8 +27,8 @@ class User extends Base
 
     public function validate($data): array|false
     {
-        $result =  $this->validator->validate($data);
-        if($result) {
+        $result = $this->validator->validate($data);
+        if ($result) {
             foreach ($result as $key => $value) {
                 if (str_contains($key, 'confirm')) {
                     unset($result[$key]);
@@ -36,8 +37,10 @@ class User extends Base
                     $result[$key] = password_hash($value, PASSWORD_DEFAULT);
                 }
             }
+
             return $result;
         }
+
         return false;
     }
 
@@ -62,5 +65,4 @@ class User extends Base
     {
         return $this->status;
     }
-
 }
