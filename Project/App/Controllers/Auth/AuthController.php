@@ -33,7 +33,6 @@ class AuthController extends BaseController
         if ($status) {
             Session::createFlash('msg', 'Created ' . $validData['firstname'] . ' ' . $validData['lastname'] . ' successfully');
             Session::createFlash('status', 'true');
-            //$this->response->redirect('/login');
         }
 
         return $this->response->send($status, '/register', $this->user->validator->getErrors());
@@ -44,7 +43,6 @@ class AuthController extends BaseController
         $flash = Session::getFlash('msg');
         if ($flash) {
             $args['flash'] = $flash;
-            //Session::stop();
         }
         if ($this->blockByIp->isBlocked()) {
             return $this->view->renderError(403, 'You are blocked');
@@ -75,10 +73,7 @@ class AuthController extends BaseController
             $msg = 'Invalid email or password' . PHP_EOL;
             $msg .= self::ALLOWED_ATTEMPTS - $attemptsLeft > 1 ? 'There are ' . self::ALLOWED_ATTEMPTS - $attemptsLeft . ' attempts' :
                 'There is one attempt';
-            Session::createFlash(
-                'msg',
-                'Log in failed. ' . $msg . ' left'
-            );
+            Session::createFlash('msg','Log in failed. ' . $msg . ' left');
             $this->response->redirect('/login');
         }
         return true;
