@@ -17,6 +17,10 @@ Go to the downloaded repository:
 
 ```#cd intern_task1```
 
+Create 'dbdata' directory which will be used as shared volume with mysql docker container:
+
+```#mkdir dbdata```
+
 Run docker compose to build and start the containers:
 
 ```#docker compose up -d```
