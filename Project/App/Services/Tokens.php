@@ -80,4 +80,15 @@ class Tokens
 
         return $this->db->query($sql, ['selector' => $tokens[0]]);
     }
+
+    public function isTokenValid(string $token): bool
+    {
+        [$selector, $validator] = $this->splitToken($token);
+        $tokens = $this->findUserTokenBySelector($selector);
+        if (!$tokens) {
+            return false;
+        }
+
+        return password_verify($validator, $tokens['validator']);
+    }
 }

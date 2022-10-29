@@ -41,11 +41,11 @@ abstract class Base
         );
     }
 
-    public static function isRecord(string $columnName, mixed $value): array|false
+    public static function isRecord(string $columnName, mixed $value, string $className = ''): array|false
     {
         return self::$db->getRecord(
             'SELECT * FROM `' . static::getTableName() . '` WHERE `' . $columnName . '` = :value',
-            ['value' => $value]
+            ['value' => $value], $className
         );
     }
 

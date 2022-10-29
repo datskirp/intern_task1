@@ -12,7 +12,8 @@ return [
     App\Controllers\Upload\UploadController::class => DI\autowire()
         ->method('setUploadValidator', DI\get(App\Validator\UploadValidator::class)),
     App\Controllers\Auth\AuthController::class => DI\autowire()
-        ->method('setBlockByIp', DI\get(App\Services\BlockByIp::class))->method('setLogin', DI\get(App\Services\Login::class)),
+        ->method('setBlockByIp', DI\get(App\Services\BlockByIp::class))
+        ->method('setLogin', DI\get(App\Services\Login::class)),
     Environment::class => function () {
         $loader = new FilesystemLoader(ROOT . '/Views');
         return new Environment($loader);

@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS `users` (
                          `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
                          `email` VARCHAR(320) NOT NULL ,
-                         `first_name` VARCHAR(120) NOT NULL ,
-                         `last_name` VARCHAR(120) NOT NULL ,
+                         `firstname` VARCHAR(120) NOT NULL ,
+                         `lastname` VARCHAR(120) NOT NULL ,
                          `password` CHAR(255) NOT NULL,
                         `created_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                          PRIMARY KEY (`id`),

@@ -1,15 +1,17 @@
 <?php
+
 namespace App\Controllers\Upload;
 
 use App\Controllers\BaseController;
+use App\Services\Login;
 use App\Validator\UploadValidator;
-use App\Logger;
+use App\Services\Logger;
 
 class UploadController extends BaseController
 {
-    const MAX_FILE_SIZE = 1 * 1024 * 1024;
-    const FORM_NAME = 'upload';
-    const UPLOAD_DIR = ROOT . '/www/uploads/';
+    public const MAX_FILE_SIZE = 1 * 1024 * 1024;
+    public const FORM_NAME = 'upload';
+    public const UPLOAD_DIR = ROOT . '/www/uploads/';
     private $validator;
 
     public function index(): string
@@ -39,7 +41,9 @@ class UploadController extends BaseController
                     'name' => $file[$formName]['name'],
                     'size' => $file[$formName]['size'],
                     'errors' => 'No file was uploaded',
-                ]);
+                ]
+            );
+
             return $this->view->renderError(400, 'No file was uploaded');
         }
         if ($this->validator->validate($file[$formName])) {

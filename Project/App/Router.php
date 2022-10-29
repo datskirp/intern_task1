@@ -32,7 +32,9 @@ class Router
                 }
                 $this->requestArgs = array_combine($routeParams, $values);
 
-                return [$controllerAndAction[0], $controllerAndAction[1], $this->requestArgs];
+                isset($controllerAndAction[2]) ? $middlewareHandles = $controllerAndAction[2] : $middlewareHandles = [];
+
+                return [$controllerAndAction[0], $controllerAndAction[1], $this->requestArgs, 'middleware' => $middlewareHandles];
             }
         }
 

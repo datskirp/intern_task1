@@ -11,4 +11,4 @@ spl_autoload_register(function (string $className) {
 require __DIR__ . '/../vendor/autoload.php';
 
 $app = new App();
-$app->run();
+echo $app->run();

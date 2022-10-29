@@ -45,10 +45,13 @@ class Db
         return $sth->execute($values);
     }
 
-    public function getRecord(string $sql, array $values): array|false
+    public function getRecord(string $sql, array $values, string $className = ''): array|false
     {
         $sth = $this->pdo->prepare($sql);
         $sth->execute($values);
+        if ($className) {
+            return $sth->fetchAll(\PDO::FETCH_CLASS, $className);
+        }
         return $sth->fetch(\PDO::FETCH_ASSOC);
     }
 }

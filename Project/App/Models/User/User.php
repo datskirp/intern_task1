@@ -12,6 +12,7 @@ class User extends Base
     private string $firstname;
     private string $lastname;
     private string $password;
+    private string $created_date;
     public $validator;
 
     protected static function getTableName(): string
@@ -54,13 +55,17 @@ class User extends Base
     {
         return $this->firstname;
     }
-    public function getGender(): string
+    public function getLastName(): string
     {
-        return $this->gender;
+        return $this->lastname;
     }
-    public function getStatus(): string
+    public function getPassword(): string
     {
-        return $this->status;
+        return $this->password;
+    }
+    public function getDate(): string
+    {
+        return $this->created_date;
     }
 
 }

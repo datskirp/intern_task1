@@ -19,12 +19,24 @@ class Session
     public static function stop(): void
     {
         session_unset();
+        session_destroy();
         unset($_SESSION);
     }
 
     public static function startSession(): void
     {
         session_start();
+    }
+
+    public function setLogin($email, $id): void
+    {
+        $_SESSION['email'] = $email;
+        $_SESSION['id'] = $id;
+    }
+
+    public function getId(): int|false
+    {
+        return isset($_SESSION['id']) ?? false;
     }
 
     public static function createFlash(string $name, string $message): void

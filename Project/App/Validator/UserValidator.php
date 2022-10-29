@@ -10,8 +10,8 @@ class UserValidator extends Base
     public function __construct()
     {
         $this->fields = [
-            'first_name' => 'string | alpha | between: 1, 120',
-            'last_name' => 'string | alpha | between: 1, 120',
+            'firstname' => 'string | alpha | between: 1, 120',
+            'lastname' => 'string | alpha | between: 1, 120',
             'email' => 'email | required | email | unique | max: 320',
             'confirm_email' => 'email | required | same: email',
             'password' => 'string | required | secure',
