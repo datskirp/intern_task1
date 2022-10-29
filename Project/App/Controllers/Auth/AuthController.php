@@ -32,6 +32,8 @@ class AuthController extends BaseController
             $status = false;
         if ($status) {
             Session::createFlash('msg', 'Created ' . $validData['firstname'] . ' ' . $validData['lastname'] . ' successfully');
+            Session::createFlash('status', 'true');
+            //$this->response->redirect('/login');
         }
 
         return $this->response->send($status, '/register', $this->user->validator->getErrors());
@@ -51,7 +53,7 @@ class AuthController extends BaseController
         return $this->view->render('User/Login.twig', ['title' => 'User authentication', 'args' => $args]);
     }
 
-    public function authenticate(array $args = [])
+    public function authenticate(array $args = []): string
     {
         if ($this->blockByIp->isAllowed()) {
             $user = $this->user::isRecord('email', $args['email']);
@@ -79,6 +81,16 @@ class AuthController extends BaseController
             );
             $this->response->redirect('/login');
         }
+        return true;
+    }
+
+    public function logout(): string
+    {
+        if($this->login->isLoggedIn()) {
+            $this->login->logout();
+            $this->response->redirect('/login');
+        }
+        return $this->view->renderError(404, 'Page is not found');
     }
 
     public function setBlockByIp(BlockByIp $blockByIp)

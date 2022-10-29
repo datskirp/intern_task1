@@ -3,7 +3,6 @@
 namespace App\Controllers\Upload;
 
 use App\Controllers\BaseController;
-use App\Services\Login;
 use App\Validator\UploadValidator;
 use App\Services\Logger;
 
@@ -18,7 +17,7 @@ class UploadController extends BaseController
     {
         if (is_dir(self::UPLOAD_DIR)) {
             return $this->view->render(
-                'Upload.twig',
+                'User/Upload.twig',
                 [
                     'files' => $this->createUploadsDirInfo(self::UPLOAD_DIR),
                     'tableId' => 'files',
@@ -27,7 +26,7 @@ class UploadController extends BaseController
             );
         }
 
-        return $this->view->render('Upload.twig', ['maxSize' => self::MAX_FILE_SIZE]);
+        return $this->view->render('User/Upload.twig', ['maxSize' => self::MAX_FILE_SIZE]);
     }
 
     public function upload(array $args = []): string
@@ -44,7 +43,7 @@ class UploadController extends BaseController
                 ]
             );
 
-            return $this->view->renderError(400, 'No file was uploaded');
+            return $this->view->renderError(404, 'No file was uploaded');
         }
         if ($this->validator->validate($file[$formName])) {
             $this->createUploadsDir(self::UPLOAD_DIR);
@@ -59,7 +58,7 @@ class UploadController extends BaseController
             );
 
             return $this->view->render(
-                'Upload.twig',
+                'User/Upload.twig',
                 [
                     'files' => $this->createUploadsDirInfo(self::UPLOAD_DIR),
                     'tableId' => 'files',
@@ -77,7 +76,7 @@ class UploadController extends BaseController
 
             return is_dir(self::UPLOAD_DIR) ?
                 $this->view->render(
-                    'Upload.twig',
+                    'User/Upload.twig',
                     [
                         'errors' => $this->validator->getErrors(),
                         'files' => $this->createUploadsDirInfo(self::UPLOAD_DIR),
@@ -85,7 +84,7 @@ class UploadController extends BaseController
                     ]
                 ) :
                 $this->view->render(
-                    'Upload.twig',
+                    'User/Upload.twig',
                     [
                         'errors' => $this->validator->getErrors(),
                     ]

@@ -126,7 +126,6 @@
                                value="checked">
                         Remember Me
                     </label>
-                    <small><?= $errors['agree'] ?? '' ?></small>
                 </div>
                 <div class="flex w-full">
                     <button
@@ -194,7 +193,11 @@
     </div>
 </div>
 <script>
-
+    const message = document.getElementById('message');
+    if (message.innerHTML.includes('success')) {
+        message.classList.remove('text-green-500');
+        message.classList.add('text-green-500');
+    }
     const form = document.getElementById('login');
     //form.addEventListener('submit', handleFormSubmit);
     function handleFormSubmit(event) {

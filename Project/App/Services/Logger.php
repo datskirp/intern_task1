@@ -9,10 +9,10 @@ class Logger
     public static function writeLog(array $logInfo): void
     {
         $filename = 'upload_' . date('dmY') . '.log';
-        if (!is_dir(self::LOG_DIR)) {
-            @mkdir(self::LOG_DIR);
+        if (!is_dir(self::LOG_DIR . $logInfo['status'])) {
+            @mkdir(self::LOG_DIR . $logInfo['status'], 0744, true);
         }
-        $fileToWrite = fopen(self::LOG_DIR . $filename, 'a');
+        $fileToWrite = fopen(self::LOG_DIR . $logInfo['status'] . '/' . $filename, 'a');
         $now = date('d-m-Y H:i:s');
         if (is_array($logInfo['errors'])) {
             $logInfo['errors'] = self::expandErrorsForLogging($logInfo['errors']);

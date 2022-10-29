@@ -18,10 +18,15 @@ class BlockByIp
 
     public function getRecord(): array|false
     {
-        return self::$db->getRecord(
-            'SELECT `ip`, `attempts`, `end_block` FROM `' . self::TABLE_NAME . '` WHERE `ip` = INET_ATON(:ip);',
+        $record = self::$db->getRecord(
+            'SELECT `ip`, `attempts`, `end_block`, `begin_attempts` FROM `' . self::TABLE_NAME . '` WHERE `ip` = INET_ATON(:ip);',
             ['ip' => self::$ip]
         );
+        if (isset($record['begin_attempts']) && time() - $record['begin_attempts'] > self::BLOCK_TIMEOUT) {
+            $this->unBlock();
+            return false;
+        }
+        return $record;
     }
 
 
@@ -41,7 +46,8 @@ class BlockByIp
         if ($record) {
             $record['attempts']++;
             self::$db->changeRecord(
-                'UPDATE `' . self::TABLE_NAME . '` SET `attempts` = :attempts WHERE `ip` = INET_ATON(:ip);',
+                'UPDATE `' . self::TABLE_NAME . '` SET `attempts` = :attempts,
+                `begin_attempts` = UNIX_TIMESTAMP() WHERE `ip` = INET_ATON(:ip);',
                 ['attempts' => $record['attempts'], 'ip' => self::$ip]
             );
 
@@ -55,7 +61,7 @@ class BlockByIp
     private function addFirstAttempt(): void
     {
         self::$db->changeRecord(
-            'INSERT INTO `' . self::TABLE_NAME . '` (`ip`, `attempts`) VALUES (INET_ATON(:ip), :attempts);',
+            'INSERT INTO `' . self::TABLE_NAME . '` (`ip`, `attempts`, `begin_attempts`) VALUES (INET_ATON(:ip), :attempts, UNIX_TIMESTAMP());',
             ['ip' => self::$ip, 'attempts' => 1]
         );
     }

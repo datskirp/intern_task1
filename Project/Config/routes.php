@@ -10,6 +10,7 @@ return ['get' => [
     '/upload' => [App\Controllers\Upload\UploadController::class, 'index', ['isAuthorized']],
     '/register' => [App\Controllers\Auth\AuthController::class, 'register'],
     '/login' => [App\Controllers\Auth\AuthController::class, 'login'],
+    '/logout' => [App\Controllers\Auth\AuthController::class, 'logout'],
 ],
     'post' => [
         '/user' => [App\Controllers\User\UserController::class, 'store'],

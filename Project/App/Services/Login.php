@@ -54,16 +54,15 @@ class Login
         }
     }
 
-    public function logout(Response $response): void
+    public function logout(): void
     {
         if ($this->isLoggedIn()) {
             $this->tokens->deleteToken($this->session->getId());
             if (isset($_COOKIE['remember_me'])) {
                 unset($_COOKIE['remember_me']);
-                setcookie('remember_user', null, -1);
+                //setcookie('remember_user', null, -1);
             }
             Session::stop();
-            $response->redirect('/login');
         }
     }
 

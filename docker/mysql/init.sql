@@ -33,5 +33,6 @@ CREATE TABLE IF NOT EXISTS `login_block` (
      `ip` INT(4) UNSIGNED NOT NULL ,
     `attempts` int(1) UNSIGNED NOT NULL,
     `end_block` BIGINT ,
+    `begin_attempts` BIGINT,
     PRIMARY KEY (`ip`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
