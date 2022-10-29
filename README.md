@@ -1,4 +1,4 @@
-# Task 1. Iteration3: Basic App for user registration and authentication
+# Task 1. Iteration4: Basic App for user registration and authentication
 
 The application was created for educational purpose. Allows a  user to register, login and
 access a restricted '/upload' page. Features include:
