@@ -2,7 +2,6 @@
 
 The application was created for educational purpose. Allows a  user to register, login and
 access a restricted '/upload' page. Features include:
-* client side email field validation
 * server side validation
     * password to fit predefined rules
     * password and email confirm fields to match their origins
