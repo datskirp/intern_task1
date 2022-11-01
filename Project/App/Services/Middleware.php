@@ -17,8 +17,13 @@ class Middleware
 
     public function isAuthorized()
     {
-        return $this->login->isLoggedIn() ? true :
+        return $this->login->isLoggedIn() ? :
             $this->view->renderError(401, 'You are not authorized for this page');
+    }
+
+    public function isGuest(): int|false
+    {
+        return $this->login->isLoggedIn();
     }
 
 }

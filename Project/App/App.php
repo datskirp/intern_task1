@@ -16,9 +16,10 @@ class App
             if (!empty($callback['middleware'])) {
                 foreach ($callback['middleware'] as $method) {
                     $result = $middleware->$method();
-                    if ($result !== true) {
+                    if (is_string($result)) {
                         return $result;
                     }
+                    $callback[2]['user'] = $result;
                 }
             }
             if ($router->request->boolPost()) {

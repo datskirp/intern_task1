@@ -45,7 +45,7 @@ class Db
         return $sth->execute($values);
     }
 
-    public function getRecord(string $sql, array $values, string $className = ''): array|false
+    public function getRecord(string $sql, array $values = [], string $className = ''): array|false
     {
         $sth = $this->pdo->prepare($sql);
         $sth->execute($values);

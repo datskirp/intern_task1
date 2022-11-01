@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\User\User;
 use App\Services\Db;
 
-abstract class Base
+abstract class AbstractModel
 {
     protected static $db;
 
@@ -20,11 +21,26 @@ abstract class Base
         return self::$db->query('SELECT * FROM `' . static::getTableName() . '`;');
     }
 
+    public function getAllObject(): ?array
+    {
+        return self::$db->getRecord('SELECT * FROM `' . static::getTableName() . '`;', [], static::class);
+    }
+
     public static function getById(int $id): ?array
     {
         $entities = self::$db->query(
             'SELECT * FROM `' . static::getTableName() . '` WHERE id=:id;',
             [':id' => $id],
+        );
+
+        return $entities ? $entities[0] : null;
+    }
+
+    public static function getByIdObject(int $id): ?AbstractModel
+    {
+        $entities = self::$db->getRecord(
+            'SELECT * FROM `' . static::getTableName() . '` WHERE id=:id;',
+            [':id' => $id], static::class
         );
 
         return $entities ? $entities[0] : null;

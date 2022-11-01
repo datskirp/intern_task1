@@ -2,10 +2,10 @@
 
 namespace App\Models\User;
 
-use App\Models\Base;
+use App\Models\AbstractModel;
 use App\Validator\UserValidator;
 
-class User extends Base
+class User extends AbstractModel
 {
     private int $id;
     private string $email;
