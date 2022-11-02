@@ -4,6 +4,7 @@ namespace App\Services;
 
 class Tokens
 {
+    const TOKEN_TABLE = 'user_tokens';
     public const TOKEN_LIFE = 168 * 60 * 60; // seconds
     private Db $db;
 
@@ -34,6 +35,16 @@ class Tokens
 
     public function insertToken(int $user_id, string $selector, string $validator, string $expiration): bool
     {
+        return $this->db->insert(self::TOKEN_TABLE)
+            ->columns(['user_id', 'selector', 'validator', 'expiration'])
+            ->values([
+                'user_id' => $user_id,
+                'selector' => $selector,
+                'validator' => $validator,
+                'expiration' => $expiration,
+            ])
+            ->do();
+        /*
         $sql = 'INSERT INTO `user_tokens` (`user_id`, `selector`, `validator`, `expiration`)
             VALUES (:user_id, :selector, :validator, :expiration)';
 
@@ -43,10 +54,15 @@ class Tokens
             'validator' => $validator,
             'expiration' => $expiration,
         ]);
+        */
     }
 
     public function findUserTokenBySelector(string $selector): ?array
     {
+        return $this->db->select()
+            ->from(self::TOKEN_TABLE)
+            ->where()
+        /*
         $sql = 'SELECT `id`, `selector`, `validator`, `user_id`, `expiration`
                 FROM `user_tokens`
                 WHERE selector = :selector AND
@@ -54,6 +70,7 @@ class Tokens
                 LIMIT 1';
 
         return $this->db->query($sql, ['selector' => $selector]);
+        */
     }
 
     public function deleteToken(int $id): bool
