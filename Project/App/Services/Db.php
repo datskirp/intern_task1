@@ -2,12 +2,14 @@
 
 namespace App\Services;
 
+use function DI\string;
+
 class Db
 {
     private static $instance;
     private object $pdo;
     private string $sql = '';
-    private array $execute;
+    private array $execute = [];
 
     public function __construct()
     {
@@ -133,6 +135,25 @@ class Db
         return $this;
     }
 
+    public function and(array $condition, string $operator = '='): self
+    {
+        if (filter_var($condition[key($condition)], FILTER_VALIDATE_IP)) {
+            $this->sql .= ' AND `' . key($condition) . '` ' . rtrim($operator, ':') . ' ' . sprintf('INET_ATON(:%s)', key($condition));
+            $this->execute[':' . key($condition)] = $condition[key($condition)];
+
+            return $this;
+        }
+
+        if (str_contains($operator, ':')) {
+            $this->sql .= ' AND `' . key($condition) . '` ' . $operator . key($condition);
+            $this->execute[':' . key($condition)] = $condition[key($condition)];
+            return $this;
+        }
+        $this->sql .= ' AND `' . key($condition) . '` ' . $operator . ' ' . $condition[key($condition)];
+
+        return $this;
+    }
+
     public function do(): bool
     {
         $sth = $this->pdo->prepare($this->sql);
@@ -162,18 +183,29 @@ class Db
         return $sth->fetch(\PDO::FETCH_ASSOC);
     }
 
-    public function where(array $condition): self
+    public function where(array $condition, string $operator = '='): self
     {
         if (filter_var($condition[key($condition)], FILTER_VALIDATE_IP)) {
-            $this->sql .= ' WHERE `' . key($condition) . '` = ' . sprintf('INET_ATON(:%s)', key($condition));
+            $this->sql .= ' WHERE `' . key($condition) . '` ' . rtrim($operator, ':') . ' ' . sprintf('INET_ATON(:%s)', key($condition));
             $this->execute[':' . key($condition)] = $condition[key($condition)];
 
             return $this;
         }
 
-        $this->sql .= ' WHERE `' . key($condition) . '` = :' . key($condition);
-        $this->execute[':' . key($condition)] = $condition[key($condition)];
 
+        if (str_contains($operator, ':')) {
+            $this->sql .= ' WHERE `' . key($condition) . '` ' . $operator . key($condition);
+            $this->execute[':' . key($condition)] = $condition[key($condition)];
+            return $this;
+        }
+        $this->sql .= ' WHERE `' . key($condition) . '` ' . $operator . ' ' . $condition[key($condition)];
+
+        return $this;
+    }
+
+    public function join(string  $table, string $column): self
+    {
+        $this->sql .= ' INNER JOIN ' . $table . ' USING (' . $column . ')';
         return $this;
     }
 
@@ -201,6 +233,14 @@ class Db
         $sth = $this->pdo->prepare($sql);
 
         return $sth->execute($values);
+    }
+
+    public function getOneObject(string $className): array|false
+    {
+        $sth = $this->pdo->prepare($this->sql);
+        $sth->execute($this->execute);
+        $this->clear();
+        return $sth->fetch(\PDO::FETCH_CLASS, $className);
     }
 
     public function getRecord(string $sql, array $values, string $className = ''): array|false

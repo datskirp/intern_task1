@@ -20,19 +20,15 @@ class BlockByIp
     {
         $record = self::$db->select(['*'])
             ->from(self::TABLE_NAME)
-            ->where(['ip' => self::$ip])
+            ->where(['ip' => self::$ip], '= :')
             ->getOne();
-        /*
-        $record = self::$db->getRecord(
-            'SELECT `ip`, `attempts`, `end_block`, `begin_attempts` FROM `' . self::TABLE_NAME . '` WHERE `ip` = INET_ATON(:ip);',
-            ['ip' => self::$ip]
-        );
-        */
 
         if (isset($record['begin_attempts']) && time() - $record['begin_attempts'] > self::BLOCK_TIMEOUT) {
             $this->unBlock();
+
             return false;
         }
+
         return $record;
     }
 
@@ -54,15 +50,8 @@ class BlockByIp
             $record['attempts']++;
             self::$db->update(self::TABLE_NAME)
                 ->set(['attempts' => $record['attempts'], 'begin_attempts' => time()])
-                ->where(['ip' => self::$ip])
+                ->where(['ip' => self::$ip], '= :')
                 ->do();
-            /*
-            self::$db->changeRecord(
-                'UPDATE `' . self::TABLE_NAME . '` SET `attempts` = :attempts,
-                `begin_attempts` = UNIX_TIMESTAMP() WHERE `ip` = INET_ATON(:ip);',
-                ['attempts' => $record['attempts'], 'ip' => self::$ip]
-            );
-            */
 
             return $record['attempts'];
         }
@@ -77,12 +66,6 @@ class BlockByIp
             ->columns(['ip', 'attempts', 'begin_attempts'])
             ->values(['ip' => self::$ip, 'attempts' => 1, 'begin_attempts' => time()])
             ->do();
-        /*
-        self::$db->changeRecord(
-            'INSERT INTO `' . self::TABLE_NAME . '` (`ip`, `attempts`, `begin_attempts`) VALUES (INET_ATON(:ip), :attempts, UNIX_TIMESTAMP());',
-            ['ip' => self::$ip, 'attempts' => 1]
-        );
-        */
     }
 
     public function block(string $email): void
@@ -90,14 +73,8 @@ class BlockByIp
         $timeout = time() + self::BLOCK_TIMEOUT;
         self::$db->update(self::TABLE_NAME)
             ->set(['end_block' => $timeout])
-            ->where(['ip' => self::$ip])
+            ->where(['ip' => self::$ip], '= :')
             ->do();
-        /*
-        self::$db->changeRecord(
-            'UPDATE `' . self::TABLE_NAME . '` SET `end_block` = :endBlock WHERE `ip` = INET_ATON(:ip);',
-            ['endBlock' => $timeout, 'ip' => self::$ip]
-        );
-        */
         $this->createLogBlock($email, $timeout);
     }
 
@@ -110,26 +87,13 @@ class BlockByIp
             ->columns(['ip', 'email', 'start_block', 'end_block'])
             ->values(['ip' => self::$ip, 'email' => $email, 'startBlock' => $startBlock, 'endBlock' => $endBlock])
             ->do();
-        /*
-        self::$db->changeRecord(
-            'INSERT INTO `' . self::LOG_TABLE . '` (`ip`, `email`, `start_block`, `end_block`) VALUES
-            (INET_ATON(:ip), :email, :startBlock, :endBlock);',
-            ['ip' => self::$ip, 'email' => $email, 'startBlock' => $startBlock, 'endBlock' => $endBlock]
-        );
-        */
     }
 
     public function unBlock(): void
     {
         self::$db->delete(self::TABLE_NAME)
-            ->where(['ip' => self::$ip])
+            ->where(['ip' => self::$ip], '= :')
             ->do();
-        /*
-        self::$db->changeRecord(
-            'DELETE FROM `' . self::TABLE_NAME . '` WHERE `ip` = INET_ATON(:ip);',
-            ['ip' => self::$ip]
-        );
-        */
     }
 
     public function isBlocked(): bool

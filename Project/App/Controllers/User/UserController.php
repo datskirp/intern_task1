@@ -76,7 +76,6 @@ class UserController extends BaseController
         $flash = Session::getFlash('action');
         if ($flash) {
             $args['flash'] = $flash;
-            //Session::stop();
         }
         $users = $this->user->getAll();
 

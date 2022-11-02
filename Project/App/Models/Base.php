@@ -17,17 +17,17 @@ abstract class Base
 
     public function getAll(): ?array
     {
-        return self::$db->query('SELECT * FROM `' . static::getTableName() . '`;');
+        return self::$db->select()
+            ->from(static::getTableName())
+            ->get();
     }
 
     public static function getById(int $id): ?array
     {
-        $entities = self::$db->query(
-            'SELECT * FROM `' . static::getTableName() . '` WHERE id=:id;',
-            [':id' => $id],
-        );
-
-        return $entities ? $entities[0] : null;
+        return self::$db->select()
+            ->from(static::getTableName())
+            ->where(['id' => $id], '= :')
+            ->getOne() ? : null;
     }
 
     public function deleteByID(int $id): bool
@@ -35,28 +35,18 @@ abstract class Base
         if (is_null(self::getById($id))) {
             return false;
         }
-        return self::$db->changeRecord(
-            'DELETE FROM `' . static::getTableName() . '` WHERE id = :id',
-            [':id' => $id]
-        );
+
+        return self::$db->delete(static::getTableName())
+            ->where(['id' => $id], '= :')
+            ->do();
     }
 
-    public static function isRecord(string $columnName, mixed $value, string $className = ''): array|false
+    public static function isRecord(string $columnName, mixed $value): array|false
     {
-        return self::$db->getRecord(
-            'SELECT * FROM `' . static::getTableName() . '` WHERE `' . $columnName . '` = :value',
-            ['value' => $value], $className
-        );
-    }
-
-    public function getColumnById(int $id, $column): array|false
-    {
-        $result = self::$db->getRecord(
-            'SELECT '. $column . ' FROM `' . static::getTableName() . '` WHERE `id` = :id',
-            [':id' => $id]
-        );
-
-        return $result ?: false;
+        return self::$db->select()
+            ->from(static::getTableName())
+            ->where([$columnName => $value], '= :')
+            ->getOne();
     }
 
     public function update(array $data): bool

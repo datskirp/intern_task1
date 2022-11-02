@@ -4,7 +4,8 @@ namespace App\Services;
 
 class Tokens
 {
-    const TOKEN_TABLE = 'user_tokens';
+    public const TOKEN_TABLE = 'user_tokens';
+    public const USER_TABLE = 'users';
     public const TOKEN_LIFE = 168 * 60 * 60; // seconds
     private Db $db;
 
@@ -44,40 +45,22 @@ class Tokens
                 'expiration' => $expiration,
             ])
             ->do();
-        /*
-        $sql = 'INSERT INTO `user_tokens` (`user_id`, `selector`, `validator`, `expiration`)
-            VALUES (:user_id, :selector, :validator, :expiration)';
-
-        return $this->db->changeRecord($sql, [
-            'user_id' => $user_id,
-            'selector' => $selector,
-            'validator' => $validator,
-            'expiration' => $expiration,
-        ]);
-        */
     }
 
-    public function findUserTokenBySelector(string $selector): ?array
+    public function findUserTokenBySelector(string $selector): array|false
     {
         return $this->db->select()
             ->from(self::TOKEN_TABLE)
-            ->where()
-        /*
-        $sql = 'SELECT `id`, `selector`, `validator`, `user_id`, `expiration`
-                FROM `user_tokens`
-                WHERE selector = :selector AND
-                    expiration >= now()
-                LIMIT 1';
-
-        return $this->db->query($sql, ['selector' => $selector]);
-        */
+            ->where(['selector' => $selector], '= :')
+            ->and(['expiration' => 'now()'], '>=')
+            ->getOne();
     }
 
     public function deleteToken(int $id): bool
     {
-        $sql = 'DELETE FROM `user_tokens` WHERE `user_id` = :user_id';
-
-        return $this->db->changeRecord($sql, ['user_id' => $id]);
+        return $this->db->delete(self::TOKEN_TABLE)
+            ->where(['user_id' => $id], '= :')
+            ->do();
     }
 
     public function findUserByToken(string $token): ?array
@@ -87,15 +70,14 @@ class Tokens
         if (!$tokens) {
             return null;
         }
+        [$selector, $validator] = $tokens;
 
-        $sql = 'SELECT `users.id`, `email`
-            FROM `users`
-            INNER JOIN `user_tokens` ON user_id = users.id
-            WHERE selector = :selector AND
-                expiry > now()
-            LIMIT 1';
-
-        return $this->db->query($sql, ['selector' => $tokens[0]]);
+        return $this->db->select(['user_id', 'email'])
+            ->from(self::USER_TABLE)
+            ->where(['selector' => $selector], '= :')
+            ->and(['expiration' => 'now()'], '>')
+            ->limit(1)
+            ->getOne();
     }
 
     public function isTokenValid(string $token): bool
