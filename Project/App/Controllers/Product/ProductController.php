@@ -10,12 +10,12 @@ class ProductController extends \App\Controllers\BaseController
         if ($flash) {
             $args['flash'] = $flash;
         }
-
+        /*
         $args['user'] = $this->user::getByIdObject($args['user']);
         if (is_null($args['user'])) {
             $arg['user']['id'] = 0; // Guest user
         }
-
+        */
         return $this->view->render('User/Catalog.twig', ['products' => $this->product->getAll(), 'args' => $args]);
     }
 

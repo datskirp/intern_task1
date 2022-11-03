@@ -1,6 +1,6 @@
 {% include 'header.twig' %}
 
-<nav id="header" class="w-full z-30 top-10 py-1 bg-white shadow-lg border-b border-blue-400">
+<nav id="header" class="w-full fixed z-30 py-1 bg-white shadow-lg border-b border-blue-400">
     <div class="w-full flex items-center justify-between mt-0 px-6 py-2">
             <nav>
                 <ul class="md:flex items-center justify-between text-base text-blue-600 pt-4 md:pt-0">
@@ -25,7 +25,7 @@
     </div>
 </nav>
 <br><br>
-<div class="grid grid-cols-1 gap-4 lg:grid-cols-3 sm:grid-cols-2 ">
+<div class="grid mt-20 mx-10 grid-cols-1 gap-4 lg:grid-cols-3 sm:grid-cols-2 ">
     {% for product in products %}
     <div class="w-full px-4 lg:px-0">
         <div class="p-3 bg-white rounded shadow-md">
@@ -34,7 +34,9 @@
                     <div class="flex flex-wrap ">
                         <div class="flex items-center justify-between w-full min-w-0 ">
                             <h2 class="mr-auto text-lg cursor-pointer hover:text-gray-900 ">
+                                <a href="/card/{{ product.id }}">
                                 {{ product.name }}
+                                </a>
                             </h2>
                             <span class="text-left">Category: {{ product.category }}</span>
                         </div>

@@ -1,7 +1,7 @@
 <?php
 
 return ['get' => [
-    '/' => [App\Controllers\Product\ProductController::class, 'index', ['isGuest']],
+    '/' => [App\Controllers\Product\ProductController::class, 'index'],
     '/user/{id:\d+}' => [App\Controllers\User\UserController::class, 'show'],
     '/user/create' => [App\Controllers\User\UserController::class, 'create'],
     '/user/{id:\d+}/edit' => [App\Controllers\User\UserController::class, 'edit'],

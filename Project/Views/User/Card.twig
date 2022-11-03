@@ -1,0 +1,84 @@
+{% include 'header.twig' %}
+
+<nav id="header" class="w-full fixed z-30 py-1 bg-white shadow-lg border-b border-blue-400">
+    <div class="w-full flex items-center justify-between mt-0 px-6 py-2">
+        <nav>
+            <ul class="md:flex items-center justify-between text-base text-blue-600 pt-4 md:pt-0">
+                <li><a class="inline-block no-underline hover:text-black font-medium text-lg py-2 px-4 lg:-ml-2" href="/login">Log in</a></li>
+                <li {% if args.user is not null %} hidden="hidden" {% endif %}>
+                    <a class="inline-block no-underline hover:text-black font-medium text-lg py-2 px-4 lg:-ml-2" href="/register">Register</a>
+                </li>
+                <li>
+                    <a class="inline-block no-underline hover:text-black font-medium text-lg py-2 px-4 lg:-ml-2" href="/logout">
+                        {% if args.user is not null %} Log out {% endif %}
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="order-2 md:order-3 flex flex-wrap items-center justify-end mr-0 md:mr-4" id="nav-content">
+            <div class="auth flex items-center w-full md:w-full">
+                <button class="bg-blue-400 text-white  p-2 rounded border border-gray-300 mr-4 hover:bg-gray-100 hover:text-gray-700">Go to Cart</button>
+                <span>Items in your cart: </span>
+            </div>
+        </div>
+    </div>
+</nav>
+<br><br>
+<div class="grid mt-20 mx-10 grid-cols-1 gap-4 lg:grid-cols-3 sm:grid-cols-2 ">
+
+        <div class="w-full px-4 lg:px-0">
+            <div class="p-3 bg-white rounded shadow-md">
+                <div class="">
+                    <div class="flex-auto p-2 justify-evenly">
+                        <div class="flex flex-wrap ">
+                            <div class="flex items-center justify-between w-full min-w-0 ">
+                                <h2 class="mr-auto text-lg cursor-pointer hover:text-gray-900 ">
+                                    <a href="/card/{{ args.product.id }}">
+                                        {{ args.product.name }}
+                                    </a>
+                                </h2>
+                                <span class="text-left">Category: {{ args.product.category }}</span>
+                            </div>
+                        </div>
+                        <div class="mt-1 text-sm">
+                            {{ args.product.manufacturer }}
+                        </div>
+                        <div class="mt-1 text-lg font-semibold">
+                            {{ args.product.price }}
+                        </div>
+                        <div class="mt-1">
+                            <button id="{{ args.user.id }}" onclick="addToCart(this)"
+                                    class="bg-blue-400 text-white text-sm p-1 rounded border border-gray-300 mr-3 hover:bg-gray-100 hover:text-gray-700">
+                                Add to Cart</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</div>
+
+<script>
+    function addToCart(elem) {
+
+        const response = userDelete("user/" + elem.id);
+
+        response.then((result) => {
+            if (result.status === 'true') {
+                window.location.replace(result.redirect_uri);
+            } else
+                message.innerHTML = "User was not deleted! Error occurred.";
+        });
+
+    }
+    async function userDelete(url = '') {
+        const response = await fetch(url, {
+            method: 'DELETE',
+        });
+        return response.json();
+    }
+</script>
+
+{% include 'footer.twig' %}
