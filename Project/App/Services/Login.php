@@ -64,10 +64,10 @@ class Login
         }
     }
 
-    public function isLoggedIn(): bool
+    public function isLoggedIn(): int|false
     {
         if ($this->session->getId()) {
-            return true;
+            return $this->session->getId();
         }
         $token = filter_input(INPUT_COOKIE, 'remember_me', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
@@ -76,7 +76,7 @@ class Login
             $user = $this->tokens->findUserByToken($token);
 
             if ($user) {
-                return $this->logUserIn($user);
+                return $this->logUserIn($user) ? $this->session->getId() : false;
             }
         }
         return false;

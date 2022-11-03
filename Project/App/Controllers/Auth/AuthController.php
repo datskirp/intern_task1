@@ -57,7 +57,7 @@ class AuthController extends BaseController
             $user = $this->user::isRecord('email', $args['email']);
 
             if ($this->login->login($user, $args['password'], isset($args['remember_me']))) {
-                $this->response->redirect('/upload');
+                $this->response->redirect('/');
             }
 
             $attemptsLeft = $this->blockByIp->addAttempt();

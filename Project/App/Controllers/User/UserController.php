@@ -77,8 +77,9 @@ class UserController extends BaseController
         if ($flash) {
             $args['flash'] = $flash;
         }
-        $users = $this->user->getAll();
+        // user is passed from App class after middleware check guest/auth user
+        //$user = $args['user'];
 
-        return $this->view->render('User/ViewAll.twig', ['users' => $users, 'args' => $args]);
+        return $this->view->render('User/Catalog.twig', ['args' => $args]);
     }
 }

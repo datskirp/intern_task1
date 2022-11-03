@@ -14,7 +14,7 @@ namespace Twig\TokenParser;
 use Twig\Parser;
 
 /**
- * Base class for all token parsers.
+ * AbstractModel class for all token parsers.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */

@@ -235,6 +235,7 @@ class Db
         return $sth->execute($values);
     }
 
+
     public function getOneObject(string $className): array|false
     {
         $sth = $this->pdo->prepare($this->sql);

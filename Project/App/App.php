@@ -15,6 +15,7 @@ class App
 
         $callback = $router->getCallback();
         if ($callback) {
+
             if ($callback['middlewares']) {
                 $middlewareObjects = [];
                 foreach ($callback['middlewares'] as $middleware) {
@@ -27,6 +28,7 @@ class App
                     if ($session->errorView) {
                         return $session->errorView;
                     }
+
                 }
 
             }
