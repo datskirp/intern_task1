@@ -2,25 +2,36 @@
 
 namespace App;
 
+use App\Services\Session;
+use App\Services\Middleware\Pipeline;
+
 class App
 {
     public function run(): string
     {
         $container = require ROOT . '/App/Container.php';
-
+        $session = $container->get(Session::class);
         $router = $container->get(Router::class);
-        $middleware = $container->get(\App\Services\Middleware::class);
+
         $callback = $router->getCallback();
         if ($callback) {
-            // middleware check
-            if (!empty($callback['middleware'])) {
-                foreach ($callback['middleware'] as $method) {
-                    $result = $middleware->$method();
-                    if ($result !== true) {
-                        return $result;
+            if ($callback['middlewares']) {
+                $middlewareObjects = [];
+                foreach ($callback['middlewares'] as $middleware) {
+                    $middlewareObjects[] = $container->get($middleware);
+                }
+                //creating middleware handler object
+                $pipeline = new Pipeline($middlewareObjects);
+                //apply some actions if middleware check didn't pass
+                if (!$pipeline->handle($session)) {
+                    if ($session->errorView) {
+                        return $session->errorView;
                     }
                 }
+
             }
+
+
             if ($router->request->boolPost()) {
                 $callback[2] = $router->request->getData();
             }

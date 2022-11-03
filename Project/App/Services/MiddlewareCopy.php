@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\View;
 
-class Middleware
+class MiddlewareCopy
 {
     private Login $login;
     private View $view;

@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Response;
 
 class Login
 {
@@ -60,7 +59,6 @@ class Login
             $this->tokens->deleteToken($this->session->getId());
             if (isset($_COOKIE['remember_me'])) {
                 unset($_COOKIE['remember_me']);
-                //setcookie('remember_user', null, -1);
             }
             Session::stop();
         }

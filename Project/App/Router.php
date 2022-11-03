@@ -34,7 +34,7 @@ class Router
 
                 isset($controllerAndAction[2]) ? $middlewareHandles = $controllerAndAction[2] : $middlewareHandles = [];
 
-                return [$controllerAndAction[0], $controllerAndAction[1], $this->requestArgs, 'middleware' => $middlewareHandles];
+                return [$controllerAndAction[0], $controllerAndAction[1], $this->requestArgs, 'middlewares' => $middlewareHandles];
             }
         }
 

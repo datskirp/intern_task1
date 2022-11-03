@@ -5,6 +5,7 @@ namespace App\Services;
 class Session
 {
     public const FLASH = 'FLASH_MESSAGES';
+    public string $errorView = '';
 
     public function __construct()
     {
@@ -39,6 +40,16 @@ class Session
         return isset($_SESSION['id']) ?? false;
     }
 
+    public function addItem(string $name, mixed $value): void
+    {
+        $_SESSION[$name] = $value;
+    }
+
+    public function getItem(string $key): mixed
+    {
+        return $_SESSION[$key];
+    }
+
     public static function createFlash(string $name, string $message): void
     {
         if (isset($_SESSION[self::FLASH][$name])) {
@@ -68,4 +79,6 @@ class Session
         $_SESSION['action'] = $action;
         $_SESSION['id'] = $id;
     }
+
+
 }
