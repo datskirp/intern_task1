@@ -52,14 +52,40 @@ INSERT INTO `products`(`name`, `manufacturer`, `release`, `cost`, `category`) VA
 INSERT INTO `products`(`name`, `manufacturer`, `release`, `cost`, `category`) VALUES ('Game-pro','Asus','2022-04-12','1699', 'Laptops');
 INSERT INTO `products`(`name`, `manufacturer`, `release`, `cost`, `category`) VALUES ('RedMe Note 11','Xiaomi','2022-02-22','299', 'Mobile phones');
 INSERT INTO `products`(`name`, `manufacturer`, `release`, `cost`, `category`) VALUES ('Super Frost','Samsung','2021-03-12','499', 'Fridges');
+INSERT INTO `products`(`name`, `manufacturer`, `release`, `cost`, `category`) VALUES ('Clear view','Sony','2022-03-12','399', 'TVs');
+INSERT INTO `products`(`name`, `manufacturer`, `release`, `cost`, `category`) VALUES ('Game-pro','Asus','2022-04-12','1699', 'Laptops');
+INSERT INTO `products`(`name`, `manufacturer`, `release`, `cost`, `category`) VALUES ('RedMe Note 11','Xiaomi','2022-02-22','299', 'Mobile phones');
+INSERT INTO `products`(`name`, `manufacturer`, `release`, `cost`, `category`) VALUES ('Super Frost','Samsung','2021-03-12','499', 'Fridges');
+INSERT INTO `products`(`name`, `manufacturer`, `release`, `cost`, `category`) VALUES ('Clear view','Sony','2022-03-12','399', 'TVs');
+INSERT INTO `products`(`name`, `manufacturer`, `release`, `cost`, `category`) VALUES ('Game-pro','Asus','2022-04-12','1699', 'Laptops');
+INSERT INTO `products`(`name`, `manufacturer`, `release`, `cost`, `category`) VALUES ('RedMe Note 11','Xiaomi','2022-02-22','299', 'Mobile phones');
+INSERT INTO `products`(`name`, `manufacturer`, `release`, `cost`, `category`) VALUES ('Super Frost','Samsung','2021-03-12','499', 'Fridges');
 
 CREATE TABLE IF NOT EXISTS `services` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `type` VARCHAR(120) NOT NULL,
     `cost` DECIMAL(8, 2) NOT NULL,
     `deadline` INT NOT NULL,
+    `category` VARCHAR(120) NOT NULL,
     PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('warranty', 100, 365, 'TVs');
+INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('warranty', 50, 365, 'Laptops');
+INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('warranty', 30, 365, 'Mobile Phones');
+INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('warranty', 50, 365, 'Fridges');
+INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('delivery', 30, 10, 'TVs');
+INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('delivery', 20, 10, 'Laptops');
+INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('delivery', 10, 10, 'Mobile Phones');
+INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('delivery', 50, 15, 'Fridges');
+INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('install', 20, 3, 'TVs');
+INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('install', 20, 3, 'Laptops');
+INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('install', 10, 1, 'Mobile Phones');
+INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('install', 20, 3, 'Fridges');
+INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('configure', 10, 3, 'TVs');
+INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('configure', 15, 3, 'Laptops');
+INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('configure', 10, 1, 'Mobile Phones');
+INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('configure', 10, 3, 'Fridges');
 
 CREATE TABLE IF NOT EXISTS `order` (
       `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -93,23 +119,10 @@ CREATE TABLE IF NOT EXISTS `order_services` (
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `cart` (
-    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `id` INT UNSIGNED NOT NULL,
     `user_id` INT UNSIGNED NOT NULL,
-   `product_id` INT UNSIGNED NOT NULL ,
-   `quantity` INT NOT NULL ,
+   `cart` BLOB NOT NULL ,
    PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`)
-    REFERENCES `users` (`id`),
-    FOREIGN KEY (`product_id`)
-    REFERENCES `products` (`id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `cart_services` (
-    `cart_id` INT UNSIGNED NOT NULL,
-    `services_id` INT UNSIGNED NOT NULL,
-    PRIMARY KEY (`cart_id`, `services_id`),
-    FOREIGN KEY (`cart_id`)
-    REFERENCES `cart` (`id`),
-    FOREIGN KEY (`services_id`)
-    REFERENCES `services` (`id`)
+    REFERENCES `users` (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

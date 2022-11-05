@@ -33,9 +33,8 @@ class App
 
             }
 
-
             if ($router->request->boolPost()) {
-                $callback[2] = $router->request->getData();
+                $callback[2] = $router->request->getData($callback[2]);
             }
 
             return $container->call([$callback[0], $callback[1]], [$callback[2]]);

@@ -23,14 +23,15 @@ class Response
        die();
     }
 
-    public function send(bool $status, string $redirectUri = null, array $alerts = [], int $id = null): string
+    public function send(bool $status, string $redirectUri = null, array $alerts = [], int $id = null, int $quantity = null): string
     {
         header('Content-Type: application/json; charset=utf-8');
         return json_encode([
             'status' => $status,
             'redirect_uri' => $redirectUri,
             'id' => $id,
-            'alerts' => $alerts
+            'alerts' => $alerts,
+            'quantity' => $quantity,
         ]);
     }
 

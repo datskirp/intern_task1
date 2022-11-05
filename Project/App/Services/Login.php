@@ -33,7 +33,6 @@ class Login
     {
         if (session_regenerate_id()) {
             $this->session->setLogin($user['email'], $user['id']);
-
             return true;
         }
 

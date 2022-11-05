@@ -12,20 +12,38 @@ class Product extends \App\Models\AbstractModel implements AddableToCartInterfac
     private string $release;
     private float $cost;
     private string $category;
+    private int $quantity;
+    private array $services = [];
 
     protected static function getTableName(): string
     {
         return 'products';
     }
 
-    public function getItem()
+    public function getItem(int $id)
     {
-        // TODO: Implement getItem() method.
+        return self::getByIdObject($id);
     }
 
     public function getAll(): ?array
     {
         return $this->getAllObject();
+    }
+
+    /**
+     * @return int
+     */
+    public function getQuantity(): int
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * @param int $quantity
+     */
+    public function setQuantity(int $quantity): void
+    {
+        $this->quantity = $quantity;
     }
 
     /**
@@ -74,6 +92,16 @@ class Product extends \App\Models\AbstractModel implements AddableToCartInterfac
     public function getCategory(): string
     {
         return $this->category;
+    }
+
+    public function getServices(): array
+    {
+        return $this->services;
+    }
+
+    public function addService(AddableToCartInterface $service)
+    {
+        $this->services[] = $service;
     }
 
 

@@ -1,7 +1,9 @@
 <?php
 
 return ['get' => [
-    '/' => [App\Controllers\Product\ProductController::class, 'index'],
+    '/' => [App\Controllers\Product\ProductController::class, 'index',
+        [App\Services\Middleware\isGuest::class, App\Services\Middleware\checkCart::class]],
+    '/card/{id:\d+}' => [App\Controllers\Product\ProductController::class, 'card'],
     '/user/{id:\d+}' => [App\Controllers\User\UserController::class, 'show'],
     '/user/create' => [App\Controllers\User\UserController::class, 'create'],
     '/user/{id:\d+}/edit' => [App\Controllers\User\UserController::class, 'edit'],
@@ -11,6 +13,7 @@ return ['get' => [
     '/register' => [App\Controllers\Auth\AuthController::class, 'register'],
     '/login' => [App\Controllers\Auth\AuthController::class, 'login'],
     '/logout' => [App\Controllers\Auth\AuthController::class, 'logout'],
+    '/cart' => [App\Controllers\Cart\CartController::class, 'index'],
 ],
     'post' => [
         '/user' => [App\Controllers\User\UserController::class, 'store'],
@@ -18,6 +21,7 @@ return ['get' => [
         '/upload' => [App\Controllers\Upload\UploadController::class, 'upload'],
         '/register' => [App\Controllers\Auth\AuthController::class, 'signUp'],
         '/authenticate' => [App\Controllers\Auth\AuthController::class, 'authenticate'],
+        '/cart/{id:\d+}' => [App\Controllers\Cart\CartController::class, 'addProduct'],
 
     ],
     'put' => [

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\AbstractModel;
 use function DI\string;
 
 class Db
@@ -236,12 +237,21 @@ class Db
     }
 
 
-    public function getOneObject(string $className): array|false
+    public function getOneObject(string $className)
+    {
+        $sth = $this->pdo->prepare($this->sql);
+        $sth->setFetchMode( \PDO::FETCH_CLASS, $className);
+        $sth->execute($this->execute);
+        $this->clear();
+        return $sth->fetch(\PDO::FETCH_CLASS);
+    }
+
+    public function getAllObject(string $className)
     {
         $sth = $this->pdo->prepare($this->sql);
         $sth->execute($this->execute);
         $this->clear();
-        return $sth->fetch(\PDO::FETCH_CLASS, $className);
+        return $sth->fetchAll(\PDO::FETCH_CLASS, $className);
     }
 
     public function getRecord(string $sql, array $values, string $className = ''): array|false

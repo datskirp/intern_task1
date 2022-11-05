@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Product\Product;
+use App\Models\Service\Service;
 use App\View;
 use App\Services\Session;
 use App\Models\User\User;
@@ -15,6 +16,7 @@ abstract class BaseController
     protected $user;
     protected $response;
     protected $product;
+    protected $services;
 
     public function __construct(
         View $view,
@@ -22,6 +24,7 @@ abstract class BaseController
         User $user,
         Response $response,
         Product $product,
+        Service $services,
     )
     {
         $this->view = $view;
@@ -29,5 +32,6 @@ abstract class BaseController
         $this->user = $user;
         $this->response = $response;
         $this->product = $product;
+        $this->services = $services;
     }
 }

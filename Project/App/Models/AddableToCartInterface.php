@@ -4,5 +4,5 @@ namespace App\Models;
 
 interface AddableToCartInterface
 {
-    public function getItem();
+    public function getId(): int;
 }

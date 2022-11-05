@@ -18,7 +18,7 @@ class Pipeline
     public function handle(Session $session): bool
     {
         $middleware = array_shift($this->middleware);
-        if ($middleware !== false) {
+        if ($middleware !== null) {
             return $middleware->handle($session, [$this, 'handle']);
         }
 

@@ -6,9 +6,24 @@ use App\Models\AddableToCartInterface;
 
 abstract class AbstractCart
 {
-    protected $cart;
-    abstract public function addItem(AddableToCartInterface $item);
-    abstract public function removeItem(AddableToCartInterface $item);
-    abstract public function getCart(): CartInterface;
+    protected $cart = [];
 
+    public function count(): int
+    {
+        return count($this->cart);
+    }
+    public function getItems()
+    {
+        return $this->cart;
+    }
+
+    public function addService(AddableToCartInterface $service, int $productId)
+    {
+        $this->cart[$productId]->addService($service);
+    }
+
+    public function removeService(int $productId, int $serviceId)
+    {
+        $this->cart[$productId]->removeService($serviceId);
+    }
 }

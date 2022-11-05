@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\Cart\CartInterface;
+
 class Session
 {
     public const FLASH = 'FLASH_MESSAGES';
@@ -10,11 +12,6 @@ class Session
     public function __construct()
     {
         session_start();
-    }
-
-    public static function resetId()
-    {
-        session_regenerate_id();
     }
 
     public static function stop(): void
@@ -29,15 +26,25 @@ class Session
         session_start();
     }
 
-    public function setLogin($email, $id): void
+    public function setLogin(string $email, int $id): void
     {
         $_SESSION['email'] = $email;
-        $_SESSION['id'] = $id;
+        $_SESSION['user_id'] = $id;
     }
 
     public function getId(): int|false
     {
-        return isset($_SESSION['id']) ?? false;
+        return isset($_SESSION['user_id']) ? $_SESSION['user_id'] : false;
+    }
+
+    public function getCart(): ?CartInterface
+    {
+        return $_SESSION['cart'] ?? null;
+    }
+
+    public function createCart(CartInterface $cart): void
+    {
+        $_SESSION['cart'] = $cart;
     }
 
     public function addItem(string $name, mixed $value): void

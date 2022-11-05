@@ -24,7 +24,7 @@ class Request
         return $this->getMethod() === 'post';
     }
 
-    public function getData(): array
+    public function getData(array $args): array
     {
         $data = [];
         if ($this->boolGet()) {
@@ -35,6 +35,12 @@ class Request
         if ($this->boolPost()) {
             foreach ($_POST as $key => $value) {
                 $data[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+            }
+        }
+
+        if ($args) {
+            foreach ($args as $key => $value) {
+                $data[$key] = $value;
             }
         }
 

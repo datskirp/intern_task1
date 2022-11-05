@@ -25,7 +25,12 @@ abstract class AbstractModel
 
     public function getAllObject(): ?array
     {
+        return self::$db->select()
+            ->from(static::getTableName())
+            ->getAllObject(static::class);
+        /*
         return self::$db->getRecord('SELECT * FROM `' . static::getTableName() . '`;', [], static::class);
+        */
     }
 
     public static function getById(int $id): ?array
@@ -36,14 +41,20 @@ abstract class AbstractModel
             ->getOne() ? : null;
     }
 
-    public static function getByIdObject(int $id): ?AbstractModel
+    public static function getByIdObject(int $id)
     {
+        return self::$db->select()
+            ->from(static::getTableName())
+            ->where(['id' => $id], '= :')
+            ->getOneObject(static::class);
+        /*
         $entities = self::$db->getRecord(
             'SELECT * FROM `' . static::getTableName() . '` WHERE id=:id;',
             [':id' => $id], static::class
         );
 
         return $entities ? $entities[0] : null;
+        */
     }
 
     public function deleteByID(int $id): bool

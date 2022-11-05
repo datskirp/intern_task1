@@ -4,21 +4,17 @@ namespace App\Models\Cart;
 
 use App\Models\AddableToCartInterface;
 
-class GuestCart extends AbstractCart
+class GuestCart extends AbstractCart implements CartInterface
 {
 
     public function addItem(AddableToCartInterface $item)
     {
-        // TODO: Implement addItem() method.
+        $this->cart[$item->getId()] = $item;
     }
 
     public function removeItem(AddableToCartInterface $item)
     {
-        // TODO: Implement removeItem() method.
+        unset($this->cart[$item->getId()]);
     }
 
-    public function getCart(): CartInterface
-    {
-        // TODO: Implement getCart() method.
-    }
 }
