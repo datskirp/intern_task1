@@ -1,26 +1,11 @@
-# Task 1. Iteration4: Basic App for user registration and authentication
+# Task 1. Iteration5: Basic catalog App
 
-The application was created for educational purpose. Allows a  user to register, login and
-access a restricted '/upload' page. Features include:
-* server side validation
-    * password to fit predefined rules
-    * password and email confirm fields to match their origins
-    * reload the page with invalid fields cleared
-    * error messages below each field
-    * success message if user was registered
-* user authentication
-  * provides access to restricted '/upload' page, if authorized
-  * allows only 3 login attempts (attempts reset after some time)
-  * blocks user by IP for customized time period after 3 failed attempts
-  * blocked IP gets logged in the database
-  * Remember me feature is implemented on Login page
-    * Customized time period
-    * randomly created two parts token (selector:validator(hashed))
-    * client token stored in a cookie, server token - in a database
-* file uploads validated for text and images only
-* logging of files uploaded 
+The application was created for educational purpose. The App displays catalog of different products. A user
+can add any product to a cart, go to cart, add some additional services specific to each product and get total price 
+calculated. The cart was developed for guests and authenticated users. The cart allows a user to delete products, as well as services. 
 
-#### MySQL database table:
+
+#### MySQL database tables:
 * users
     * id
     * email
@@ -52,6 +37,29 @@ access a restricted '/upload' page. Features include:
   * start_block
   * end_block
 
+
+* products
+  * id
+  * name
+  * manufacturer
+  * release
+  * cost
+  * category
+
+
+* services
+  * id
+  * type
+  * cost
+  * deadline
+  * category
+
+
+* cart
+  * id
+  * user_id
+  * cart
+
 #### Libraries loaded with Composer:
 * twig/twig
 * php-di/php-di
@@ -65,7 +73,7 @@ Containers that will be installed: php-fpm, nginx, mysql, phpmyadmin.
 
 Download the repository with git clone:
 
-```#git clone -b iter4 https://github.com/datskirp/intern_task1/```
+```#git clone -b iter5 https://github.com/datskirp/intern_task1/```
 
 Go to the downloaded repository:
 
@@ -85,9 +93,14 @@ To stop and remove the containers:
 
 
 #### Open in browser (after containers are started up):
+http://127.0.0.1:8080
+
+http://127.0.0.1:8080/cart
+
 http://127.0.0.1:8080/register
+
 http://127.0.0.1:8080/login
-http://127.0.0.1:8080/upload
+
 
 #### PhpMyAdmin
 http://127.0.0.1:8081
