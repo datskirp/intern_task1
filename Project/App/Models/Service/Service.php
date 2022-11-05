@@ -17,48 +17,31 @@ class Service extends \App\Models\AbstractModel implements \App\Models\AddableTo
 
     public function getItem(int $id)
     {
-        // TODO: Implement getItem() method.
+        return self::getByIdObject($id);
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @return float
-     */
     public function getCost(): float
     {
         return $this->cost;
     }
 
-    /**
-     * @return int
-     */
     public function getDeadline(): int
     {
         return $this->deadline;
     }
 
-    /**
-     * @return string
-     */
     public function getCategory(): string
     {
         return $this->category;
     }
-
-
 }

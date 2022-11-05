@@ -25,8 +25,7 @@ abstract class BaseController
         Response $response,
         Product $product,
         Service $services,
-    )
-    {
+    ) {
         $this->view = $view;
         $this->session = $session;
         $this->user = $user;

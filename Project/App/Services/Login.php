@@ -31,6 +31,8 @@ class Login
 
     private function logUserIn(array $user): bool
     {
+        $this->session::stop();
+        $this->session::startSession();
         if (session_regenerate_id()) {
             $this->session->setLogin($user['email'], $user['id']);
             return true;
@@ -59,7 +61,7 @@ class Login
             if (isset($_COOKIE['remember_me'])) {
                 unset($_COOKIE['remember_me']);
             }
-            Session::stop();
+            $this->session::stop();
         }
     }
 

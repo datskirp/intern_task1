@@ -30,65 +30,41 @@ class Product extends \App\Models\AbstractModel implements AddableToCartInterfac
         return $this->getAllObject();
     }
 
-    /**
-     * @return int
-     */
     public function getQuantity(): int
     {
         return $this->quantity;
     }
 
-    /**
-     * @param int $quantity
-     */
     public function setQuantity(int $quantity): void
     {
         $this->quantity = $quantity;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getManufacturer(): string
     {
         return $this->manufacturer;
     }
 
-    /**
-     * @return string
-     */
     public function getRelease(): string
     {
         return $this->release;
     }
 
-    /**
-     * @return float
-     */
     public function getCost(): float
     {
         return $this->cost;
     }
 
-    /**
-     * @return string
-     */
     public function getCategory(): string
     {
         return $this->category;
@@ -101,8 +77,21 @@ class Product extends \App\Models\AbstractModel implements AddableToCartInterfac
 
     public function addService(AddableToCartInterface $service)
     {
-        $this->services[] = $service;
+        $this->services[$service->getId()] = $service;
     }
 
+    public function removeService(int $id): void
+    {
+        unset($this->services[$id]);
+    }
 
+    public function servicesSubtotal()
+    {
+        $sum = 0;
+        foreach ($this->services as $service) {
+            $sum += $service->getCost();
+        }
+
+        return round($sum, 2);
+    }
 }

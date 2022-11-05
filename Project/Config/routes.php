@@ -13,7 +13,7 @@ return ['get' => [
     '/register' => [App\Controllers\Auth\AuthController::class, 'register'],
     '/login' => [App\Controllers\Auth\AuthController::class, 'login'],
     '/logout' => [App\Controllers\Auth\AuthController::class, 'logout'],
-    '/cart' => [App\Controllers\Cart\CartController::class, 'index'],
+    '/cart' => [App\Controllers\Cart\CartController::class, 'index', [App\Services\Middleware\blockWithEmptyCart::class]],
 ],
     'post' => [
         '/user' => [App\Controllers\User\UserController::class, 'store'],
@@ -22,6 +22,7 @@ return ['get' => [
         '/register' => [App\Controllers\Auth\AuthController::class, 'signUp'],
         '/authenticate' => [App\Controllers\Auth\AuthController::class, 'authenticate'],
         '/cart/{id:\d+}' => [App\Controllers\Cart\CartController::class, 'addProduct'],
+        '/cart/service/{id:\d+}' => [App\Controllers\Cart\CartController::class, 'addService'],
 
     ],
     'put' => [
@@ -32,5 +33,6 @@ return ['get' => [
         '/user/{id:\d+}' => [App\Controllers\User\UserController::class, 'delete'],
         '/api/v1/user/{id:\d+}' => [App\Controllers\Api\v1\ApiController::class, 'delete'],
         '/cart/{id:\d+}' => [App\Controllers\Cart\CartController::class, 'deleteProduct'],
+        '/cart/service/{id:\d+}' => [App\Controllers\Cart\CartController::class, 'deleteService'],
     ],
 ];

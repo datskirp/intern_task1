@@ -23,6 +23,7 @@ class Authorization implements MiddlewareInterface
             $session->errorView = $this->view->renderError(401, 'You are not authorized for this page');
             return false;
         }
+
         return $next($session);
     }
 }

@@ -6,7 +6,6 @@ use App\Models\AddableToCartInterface;
 
 class GuestCart extends AbstractCart implements CartInterface
 {
-
     public function addItem(AddableToCartInterface $item)
     {
         $this->cart[$item->getId()] = $item;
@@ -16,5 +15,4 @@ class GuestCart extends AbstractCart implements CartInterface
     {
         unset($this->cart[$item->getId()]);
     }
-
 }

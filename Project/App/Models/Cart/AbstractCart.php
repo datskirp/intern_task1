@@ -26,4 +26,14 @@ abstract class AbstractCart
     {
         $this->cart[$productId]->removeService($serviceId);
     }
+
+    public function total(): float
+    {
+        $sum = 0;
+        foreach ($this->cart as $product) {
+            $sum += $product->getCost() + $product->servicesSubtotal();
+        }
+
+        return $sum;
+    }
 }

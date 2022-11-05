@@ -14,9 +14,15 @@ class checkCart implements MiddlewareInterface
     {
         if (!$session->getCart()) {
             $user = $session->getId();
-            $user ? $session->createCart(new UserCart($user)) :
+            if(!$user) {
                 $session->createCart(new GuestCart());
+                return $next($session);
+            }
+            $session->createCart(new UserCart($user));
+            $session->getCart()->loadFromDb($user);
+            return $next($session);
         }
+
         return $next($session);
     }
 }

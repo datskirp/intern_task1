@@ -5,21 +5,31 @@
         <nav>
             <ul class="md:flex items-center justify-between text-base text-blue-600 pt-4 md:pt-0">
                 <li><a class="inline-block no-underline hover:text-black font-medium text-lg py-2 px-4 lg:-ml-2" href="/login">Log in</a></li>
-                <li {% if args.user is not null %} hidden="hidden" {% endif %}>
+                <li {% if args.user %} hidden="hidden" {% endif %}>
                     <a class="inline-block no-underline hover:text-black font-medium text-lg py-2 px-4 lg:-ml-2" href="/register">Register</a>
                 </li>
                 <li>
                     <a class="inline-block no-underline hover:text-black font-medium text-lg py-2 px-4 lg:-ml-2" href="/logout">
-                        {% if args.user is not null %} Log out {% endif %}
+                        {% if args.user %} Log out {% endif %}
                     </a>
+                </li>
+                <li>
+                        <span class="inline-block no-underline hover:text-black text-green-700 font-medium text-lg py-2 px-4 lg:-ml-2">
+                           Welcome, {% if args.user %} {{args.user.firstname }}! {% else %} Guest! Log in to make a purchase {% endif %}
+                        </span>
                 </li>
             </ul>
         </nav>
 
         <div class="order-2 md:order-3 flex flex-wrap items-center justify-end mr-0 md:mr-4" id="nav-content">
             <div class="auth flex items-center w-full md:w-full">
-                <button class="bg-blue-400 text-white  p-2 rounded border border-gray-300 mr-4 hover:bg-gray-100 hover:text-gray-700">Go to Cart</button>
-                <span>Items in your cart: </span>
+                <a href="/cart">
+                    <button id="goToCart" name="{{ args.cartCount }}"
+                            class="bg-blue-400 text-white  p-2 rounded border border-gray-300 mr-4 hover:bg-gray-100 hover:text-gray-700">
+                        Go to Cart
+                    </button>
+                </a>
+                <span>Items in your cart: <span id="quantity">{{ args.cartCount }}</span></span>
             </div>
         </div>
     </div>
@@ -51,8 +61,8 @@
                             {{ product.price }}
                         </div>
                         <div class="mt-1 flow-root">
-                            <button id="{{ user.id }}" onclick="addToCart(this)"
-                                    class="float-left bg-blue-400 text-white text-sm p-1 rounded border border-gray-300 mr-3 hover:bg-gray-100 hover:text-gray-700">
+                            <button id="{{ product.id }}" onclick="addToCart(this)"
+                                    class="bg-blue-400 text-white text-sm p-1 rounded border border-gray-300 mr-3 hover:bg-gray-100 hover:text-gray-700">
                                 Add to Cart</button>
                             <span class="float-right"><a class="text-blue-700" href="/">Back to catalog</a></span>
                         </div>
@@ -65,21 +75,29 @@
 </div>
 
 <script>
+    const goToCart = document.getElementById('goToCart');
+    if (parseInt(goToCart.name) === 0) {
+        goToCart.hidden = true;
+    }
+
     function addToCart(elem) {
-
-        const response = userDelete("user/" + elem.id);
-
+        const response = cartAddProduct("/cart/" + elem.id);
         response.then((result) => {
-            if (result.status === 'true') {
-                window.location.replace(result.redirect_uri);
-            } else
-                message.innerHTML = "User was not deleted! Error occurred.";
+            if (result.status === true) {
+                document.getElementById('quantity').innerHTML = result.quantity;
+                goToCart.hidden = false;
+                document.getElementById(result.id).disabled = true;
+                document.getElementById(result.id).classList.remove('bg-blue-400');
+                document.getElementById(result.id).classList.add('bg-gray-400');
+
+                //window.location.replace(result.redirect_uri);
+            }
         });
 
     }
-    async function userDelete(url = '') {
+    async function cartAddProduct(url = '') {
         const response = await fetch(url, {
-            method: 'DELETE',
+            method: 'post',
         });
         return response.json();
     }

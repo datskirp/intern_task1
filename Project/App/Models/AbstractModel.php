@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\User\User;
 use App\Services\Db;
 
 abstract class AbstractModel
@@ -28,9 +27,6 @@ abstract class AbstractModel
         return self::$db->select()
             ->from(static::getTableName())
             ->getAllObject(static::class);
-        /*
-        return self::$db->getRecord('SELECT * FROM `' . static::getTableName() . '`;', [], static::class);
-        */
     }
 
     public static function getById(int $id): ?array
@@ -38,7 +34,7 @@ abstract class AbstractModel
         return self::$db->select()
             ->from(static::getTableName())
             ->where(['id' => $id], '= :')
-            ->getOne() ? : null;
+            ->getOne() ?: null;
     }
 
     public static function getByIdObject(int $id)
@@ -47,14 +43,6 @@ abstract class AbstractModel
             ->from(static::getTableName())
             ->where(['id' => $id], '= :')
             ->getOneObject(static::class);
-        /*
-        $entities = self::$db->getRecord(
-            'SELECT * FROM `' . static::getTableName() . '` WHERE id=:id;',
-            [':id' => $id], static::class
-        );
-
-        return $entities ? $entities[0] : null;
-        */
     }
 
     public function deleteByID(int $id): bool
