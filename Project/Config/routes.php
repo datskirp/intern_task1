@@ -31,5 +31,6 @@ return ['get' => [
     'delete' => [
         '/user/{id:\d+}' => [App\Controllers\User\UserController::class, 'delete'],
         '/api/v1/user/{id:\d+}' => [App\Controllers\Api\v1\ApiController::class, 'delete'],
+        '/cart/{id:\d+}' => [App\Controllers\Cart\CartController::class, 'deleteProduct'],
     ],
 ];

@@ -7,7 +7,7 @@
                 <h1 class="font-semibold text-2xl">Shopping Cart</h1>
                 <h2 class="font-semibold text-2xl">
                     <span id="productsQuantity">
-
+                        {{ cart|length }}
                     </span> Items</h2>
             </div>
             <div class="flex mt-10 mb-5">
@@ -22,11 +22,9 @@
             <div class="flex items-center hover:bg-gray-100 -mx-8 px-6 py-5">
                 <div class="flex w-2/5"> <!-- product -->
                     <div class="flex flex-col justify-between ml-4 flex-grow">
-                        <span class="font-bold">{{ product.name }}</span>
+                        <span class="font-bold text-xl">{{ product.name }}</span>
                         <span class="text-xs">{{ product.manufacturer }}</span>
                         <span class="text-xs">Category: {{ product.category }}</span>
-                        <button id="{{ product.id }}" onclick="removeFromCart(this)"
-                                class="bg-red-400 w-20 font-semibold hover:bg-indigo-600 text-xs text-white">Remove</button>
                     </div>
                 </div>
                 <div class="flex justify-center w-1/5">
@@ -79,6 +77,48 @@
                 <span id="cost{{ product.id }}" class="text-center text-green-700 w-1/5 font-semibold text-sm">$ {{ product.cost }}</span>
             </div>
 
+                <table>
+                    <tr>
+                        <th class="px-5">
+                            <span class="text-sm">Services to add:</span>
+                        </th>
+                        <th class="px-5">
+                            <span class="text-sm">Cost:</span>
+                        </th>
+                        <th class="px-5">
+                            <span class="text-sm">Duration (days):</span>
+                        </th>
+                    </tr>
+                    {% for service in services %}
+                        {% if service.category == product.category %}
+                            <tr>
+                                <td class="px-5">
+                                    <span class="text-xs">{{ service.type|capitalize }}</span>
+                                </td>
+                                <td class="px-5">
+                                    <span class="text-xs">$</span><span class="text-xs">{{ service.cost|capitalize }}</span>
+                                </td>
+                                <td class="px-5">
+                                    <span class="text-xs">{{ service.deadline|capitalize }}</span>
+                                </td>
+
+                                <td>
+                                    <button id="{{ product.id }}" onclick="removeFromCart(this)"
+                                            class="bg-green-400 w-20 font-semibold hover:bg-indigo-600 text-xs text-white">Add</button>
+                                    <button id="{{ product.id }}" onclick="removeFromCart(this)"
+                                            class="bg-red-400 w-20 font-semibold hover:bg-indigo-600 text-xs text-white">Remove</button>
+                                </td>
+
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+
+                </table>
+
+
+            <button id="{{ product.id }}" onclick="removeFromCart(this)"
+                    class="bg-red-400 w-20 font-semibold hover:bg-indigo-600 text-xs text-white">Remove</button>
+
             {% endfor %}
 
             <a href="/" class="flex font-semibold text-indigo-600 text-sm mt-10">
@@ -126,10 +166,10 @@
 
         const response = removeProduct("cart/" + elem.id);
         response.then((result) => {
-            if (result.status === true) {
-                //window.location.replace(result.redirect_uri);
+            if (result.status === true && result.quantity > 0) {
+                window.location.replace(result.redirect_uri);
             } else
-                message.innerHTML = "User was not deleted! Error occurred.";
+                window.location.replace('/');
         });
 
     }

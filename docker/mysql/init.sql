@@ -72,19 +72,19 @@ CREATE TABLE IF NOT EXISTS `services` (
 
 INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('warranty', 100, 365, 'TVs');
 INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('warranty', 50, 365, 'Laptops');
-INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('warranty', 30, 365, 'Mobile Phones');
+INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('warranty', 30, 365, 'Mobile phones');
 INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('warranty', 50, 365, 'Fridges');
 INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('delivery', 30, 10, 'TVs');
 INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('delivery', 20, 10, 'Laptops');
-INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('delivery', 10, 10, 'Mobile Phones');
+INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('delivery', 10, 10, 'Mobile phones');
 INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('delivery', 50, 15, 'Fridges');
 INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('install', 20, 3, 'TVs');
 INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('install', 20, 3, 'Laptops');
-INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('install', 10, 1, 'Mobile Phones');
+INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('install', 10, 1, 'Mobile phones');
 INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('install', 20, 3, 'Fridges');
 INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('configure', 10, 3, 'TVs');
 INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('configure', 15, 3, 'Laptops');
-INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('configure', 10, 1, 'Mobile Phones');
+INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('configure', 10, 1, 'Mobile phones');
 INSERT INTO `services`(`type`, `cost`, `deadline`, `category`) VALUES ('configure', 10, 3, 'Fridges');
 
 CREATE TABLE IF NOT EXISTS `order` (

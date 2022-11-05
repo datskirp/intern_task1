@@ -61,7 +61,7 @@
 
 
                     <div class="mt-1">
-                        <button id="{{ product.id }}" onclick="addToCart(this, 'quantity{{ product.id }}')"
+                        <button id="{{ product.id }}" onclick="addToCart(this)"
                                 class="bg-blue-400 text-white text-sm p-1 rounded border border-gray-300 mr-3 hover:bg-gray-100 hover:text-gray-700">
                             Add to Cart</button>
                     </div>
@@ -80,26 +80,27 @@
         goToCart.hidden = true;
     }
 
-    function addToCart(elem, id) {
+    function addToCart(elem) {
 
-        const itemQuantity = JSON.stringify({'quantity': document.getElementById(id).value});
-        const response = cartAddProduct("cart/" + elem.id, itemQuantity);
+        //const itemQuantity = JSON.stringify({'quantity': document.getElementById(id).value});
+        const response = cartAddProduct("cart/" + elem.id);
         response.then((result) => {
             if (result.status === true) {
                 document.getElementById('quantity').innerHTML = result.quantity;
+                goToCart.hidden = false;
+                document.getElementById(result.id).disabled = true;
+                document.getElementById(result.id).classList.remove('bg-blue-400');
+                document.getElementById(result.id).classList.add('bg-gray-400');
+
                 //window.location.replace(result.redirect_uri);
             } else
                 message.innerHTML = "User was not deleted! Error occurred.";
         });
 
     }
-    async function cartAddProduct(url = '', data) {
+    async function cartAddProduct(url = '') {
         const response = await fetch(url, {
             method: 'post',
-            headers: {
-                'Content-Type': 'application/json; charset=utf-8'
-            },
-            body: data
         });
         return response.json();
     }

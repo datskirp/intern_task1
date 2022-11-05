@@ -22,15 +22,16 @@ class CartController extends \App\Controllers\BaseController
         //$product->setQuantity($post_vars['quantity']);
         $this->session->getCart()->addItem($product);
 
-        return $this->response->send(true, '/', [], null, $this->session->getCart()->count());
+        return $this->response->send(true, '/', [], $args['id'], $this->session->getCart()->count());
     }
 
     public function deleteProduct($args)
     {
         //$product->setQuantity($post_vars['quantity']);
-        $this->session->getCart()->removeItem($args['id']);
+        $product = $this->product::getByIdObject($args['id']);
+        $this->session->getCart()->removeItem($product);
 
-        return $this->response->send(true, '/cart');
+        return $this->response->send(true, '/cart', [], null, $this->session->getCart()->count());
     }
 
 }
